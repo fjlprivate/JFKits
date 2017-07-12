@@ -18,8 +18,17 @@
 
 @interface JFTextStorage : NSObject
 
-+ (instancetype) jf_textStorageWithText:(NSString*)text;
 
+/**
+ 生成textStorage
+
+ @param text 文本
+ @param frame 文本frame
+ @return textStorage
+ */
++ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame;
+
+@property (nonatomic, assign) CGRect frame;
 
 @property (nonatomic, strong) UIFont* textFont; // 字体
 @property (nonatomic, strong) UIColor* textColor; // 文本色

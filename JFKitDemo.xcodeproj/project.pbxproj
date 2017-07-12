@@ -89,6 +89,8 @@
 		80D537171F146C2B009F5687 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 80D5370D1F146C2B009F5687 /* Info.plist */; };
 		80D5371D1F146C58009F5687 /* TestAsyncDisplayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 80D5371A1F146C58009F5687 /* TestAsyncDisplayLayer.m */; };
 		80D537211F146CC1009F5687 /* AsyncDView.m in Sources */ = {isa = PBXBuildFile; fileRef = 80D537201F146CC1009F5687 /* AsyncDView.m */; };
+		B236064A1F164DF0001121B2 /* NSMutableAttributedString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B23606491F164DF0001121B2 /* NSMutableAttributedString+Extension.m */; };
+		B236064D1F165564001121B2 /* JFTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = B236064C1F165564001121B2 /* JFTextAttachment.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -258,6 +260,10 @@
 		80D5371A1F146C58009F5687 /* TestAsyncDisplayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAsyncDisplayLayer.m; sourceTree = "<group>"; };
 		80D5371F1F146CC1009F5687 /* AsyncDView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncDView.h; sourceTree = "<group>"; };
 		80D537201F146CC1009F5687 /* AsyncDView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncDView.m; sourceTree = "<group>"; };
+		B23606481F164DF0001121B2 /* NSMutableAttributedString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Extension.h"; sourceTree = "<group>"; };
+		B23606491F164DF0001121B2 /* NSMutableAttributedString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Extension.m"; sourceTree = "<group>"; };
+		B236064B1F165564001121B2 /* JFTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextAttachment.h; sourceTree = "<group>"; };
+		B236064C1F165564001121B2 /* JFTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextAttachment.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -486,6 +492,8 @@
 				80D536FC1F146C2B009F5687 /* NSString+Extension.m */,
 				80D536FD1F146C2B009F5687 /* UIView+Extension.h */,
 				80D536FE1F146C2B009F5687 /* UIView+Extension.m */,
+				B23606481F164DF0001121B2 /* NSMutableAttributedString+Extension.h */,
+				B23606491F164DF0001121B2 /* NSMutableAttributedString+Extension.m */,
 			);
 			path = "Category(分类)";
 			sourceTree = "<group>";
@@ -525,6 +533,8 @@
 				807AAE6E1F1604FF0083A384 /* JFTextLayout.m */,
 				807AAE671F15CC090083A384 /* JFTextStorage.h */,
 				807AAE681F15CC090083A384 /* JFTextStorage.m */,
+				B236064B1F165564001121B2 /* JFTextAttachment.h */,
+				B236064C1F165564001121B2 /* JFTextAttachment.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -676,6 +686,7 @@
 				807AAE6F1F1604FF0083A384 /* JFTextLayout.m in Sources */,
 				807FF7761F14BAC5002C57FC /* NSData+ImageContentType.m in Sources */,
 				807FF7841F14BAC5002C57FC /* UIImageView+HighlightedWebCache.m in Sources */,
+				B236064D1F165564001121B2 /* JFTextAttachment.m in Sources */,
 				807FF7FD1F14BBDB002C57FC /* LWTextParser.m in Sources */,
 				807FF7F61F14BBDB002C57FC /* LWStorage.m in Sources */,
 				807FF7F41F14BBDB002C57FC /* LWImageStorage.m in Sources */,
@@ -731,6 +742,7 @@
 				807FF7861F14BAC5002C57FC /* UIView+WebCache.m in Sources */,
 				807FF7EC1F14BBDB002C57FC /* LWGIFImage.m in Sources */,
 				807FF7F51F14BBDB002C57FC /* LWLayout.m in Sources */,
+				B236064A1F164DF0001121B2 /* NSMutableAttributedString+Extension.m in Sources */,
 				807FF7E61F14BBDB002C57FC /* LWAsyncImageView+Display.m in Sources */,
 				80D537141F146C2B009F5687 /* JFAsyncDisplayLayer.m in Sources */,
 				807FF77F1F14BAC5002C57FC /* SDWebImagePrefetcher.m in Sources */,
