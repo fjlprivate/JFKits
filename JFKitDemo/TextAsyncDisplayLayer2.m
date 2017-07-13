@@ -10,6 +10,7 @@
 #import "AsyncDView.h"
 #import "JFKit.h"
 #import "YYFPSLabel.h"
+#import "TestTextStorage.h"
 
 @interface TTCell : UITableViewCell
 @property (nonatomic, strong) AsyncDView* dview;
@@ -66,13 +67,24 @@
     self.tableView.left = 0;
     self.tableView.top = 64;
     self.tableView.right = JFSCREEN_WIDTH;
-    self.tableView.bottom = JFSCREEN_HEIGHT;
+    self.tableView.bottom = JFSCREEN_HEIGHT - 200;
     self.tableView.tableFooterView = [UIView new];
     [self.view addSubview:self.tableView];
     
     YYFPSLabel* fpsLabel = [[YYFPSLabel alloc] init];
     fpsLabel.frame = CGRectMake(100, 100, 60, 30);
     [self.view addSubview:fpsLabel];
+    
+    
+    TestTextStorage* testStorage = [[TestTextStorage alloc] init];
+    testStorage.width = 200;
+    testStorage.height = 100;
+    testStorage.centerX = JFSCREEN_WIDTH * 0.5;
+    testStorage.centerY = JFSCREEN_HEIGHT - 100;
+    testStorage.backgroundColor = JFHexColor(0x00a1dc, 1);
+    [self.view addSubview:testStorage];
+    
+    
     
     
     UISwitch* swith = [[UISwitch alloc] initWithFrame:CGRectMake(0, 0, 60, 20)];

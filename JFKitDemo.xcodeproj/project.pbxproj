@@ -12,6 +12,8 @@
 		807AAE691F15CC090083A384 /* JFTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE681F15CC090083A384 /* JFTextStorage.m */; };
 		807AAE6C1F15CC200083A384 /* JFLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE6B1F15CC200083A384 /* JFLayout.m */; };
 		807AAE6F1F1604FF0083A384 /* JFTextLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE6E1F1604FF0083A384 /* JFTextLayout.m */; };
+		807AAE721F1712FE0083A384 /* TestTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE711F1712FE0083A384 /* TestTextStorage.m */; };
+		807AAE751F1761BD0083A384 /* JFTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE741F1761BD0083A384 /* JFTextLine.m */; };
 		807FF74C1F14B934002C57FC /* AsyncGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74B1F14B934002C57FC /* AsyncGView.m */; };
 		807FF7751F14BAC5002C57FC /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74F1F14BAC5002C57FC /* MKAnnotationView+WebCache.m */; };
 		807FF7761F14BAC5002C57FC /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF7511F14BAC5002C57FC /* NSData+ImageContentType.m */; };
@@ -104,6 +106,10 @@
 		807AAE6B1F15CC200083A384 /* JFLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFLayout.m; sourceTree = "<group>"; };
 		807AAE6D1F1604FF0083A384 /* JFTextLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextLayout.h; sourceTree = "<group>"; };
 		807AAE6E1F1604FF0083A384 /* JFTextLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextLayout.m; sourceTree = "<group>"; };
+		807AAE701F1712FE0083A384 /* TestTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestTextStorage.h; sourceTree = "<group>"; };
+		807AAE711F1712FE0083A384 /* TestTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTextStorage.m; sourceTree = "<group>"; };
+		807AAE731F1761BD0083A384 /* JFTextLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextLine.h; sourceTree = "<group>"; };
+		807AAE741F1761BD0083A384 /* JFTextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextLine.m; sourceTree = "<group>"; };
 		807FF74A1F14B934002C57FC /* AsyncGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGView.h; sourceTree = "<group>"; };
 		807FF74B1F14B934002C57FC /* AsyncGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncGView.m; sourceTree = "<group>"; };
 		807FF74E1F14BAC5002C57FC /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
@@ -533,6 +539,8 @@
 				807AAE6E1F1604FF0083A384 /* JFTextLayout.m */,
 				807AAE671F15CC090083A384 /* JFTextStorage.h */,
 				807AAE681F15CC090083A384 /* JFTextStorage.m */,
+				807AAE731F1761BD0083A384 /* JFTextLine.h */,
+				807AAE741F1761BD0083A384 /* JFTextLine.m */,
 				B236064B1F165564001121B2 /* JFTextAttachment.h */,
 				B236064C1F165564001121B2 /* JFTextAttachment.m */,
 			);
@@ -594,6 +602,8 @@
 				807FF74B1F14B934002C57FC /* AsyncGView.m */,
 				807FF8081F14C650002C57FC /* TextAsyncDisplayLayer2.h */,
 				807FF8091F14C650002C57FC /* TextAsyncDisplayLayer2.m */,
+				807AAE701F1712FE0083A384 /* TestTextStorage.h */,
+				807AAE711F1712FE0083A384 /* TestTextStorage.m */,
 			);
 			name = "测试1";
 			sourceTree = "<group>";
@@ -709,12 +719,14 @@
 				807FF7E21F14BBDB002C57FC /* CALayer+WebCacheOperation.m in Sources */,
 				807FF7F81F14BBDB002C57FC /* LWTextAttachment.m in Sources */,
 				807FF7F31F14BBDB002C57FC /* LWImageProcessor.m in Sources */,
+				807AAE721F1712FE0083A384 /* TestTextStorage.m in Sources */,
 				807FF7E31F14BBDB002C57FC /* GallopUtils.m in Sources */,
 				807FF7E01F14BBDB002C57FC /* CALayer+LWTransaction.m in Sources */,
 				807FF77E1F14BAC5002C57FC /* SDWebImageManager.m in Sources */,
 				807FF7EB1F14BBDB002C57FC /* LWFlag.m in Sources */,
 				807FF7EA1F14BBDB002C57FC /* LWCGRectTransform.m in Sources */,
 				80D537211F146CC1009F5687 /* AsyncDView.m in Sources */,
+				807AAE751F1761BD0083A384 /* JFTextLine.m in Sources */,
 				807AAE691F15CC090083A384 /* JFTextStorage.m in Sources */,
 				807FF8001F14BBDB002C57FC /* LWTransaction.m in Sources */,
 				807FF8011F14BBDB002C57FC /* LWTransactionGroup.m in Sources */,

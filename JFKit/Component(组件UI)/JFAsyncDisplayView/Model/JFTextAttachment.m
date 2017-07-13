@@ -15,6 +15,13 @@
 
 @implementation JFTextHighLight
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.showHighLight = NO;
+    }
+    return self;
+}
 
 @end
 

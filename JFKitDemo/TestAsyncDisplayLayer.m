@@ -11,6 +11,7 @@
 #import "AsyncDView.h"
 #import "AsyncGView.h"
 #import "Gallop.h"
+#import "JFTextAttachment.h"
 
 
 @interface TestAsyncDisplayLayer ()
@@ -54,6 +55,14 @@
     NSMutableAttributedString* attri = [[NSMutableAttributedString alloc] initWithString:@"文本3和文本4"];
     [attri addAttribute:NSFontAttributeName value:[UIFont boldSystemFontOfSize:13] range:NSMakeRange(0, 7)];
     [attri addAttribute:NSForegroundColorAttributeName value:JFHexColor(0x00a1dc, 1) range:NSMakeRange(0, 7)];
+    
+    JFTextAttachment* attachment = [JFTextAttachment new];
+    attachment.range = NSMakeRange(0, 1);
+    attachment.contents = [[UIImage imageNamed:@"selectedBlue"] copy];
+    attachment.contentSize = CGSizeMake(20, 20);
+    attachment.frame = CGRectMake(0, 0, 20, 20);
+    [attri addAttribute:JFTextAttachmentName value:attachment range:NSMakeRange(0, 1)];
+    
     LWTextStorage* tstorage = [LWTextStorage lw_textStorageWithText:attri frame:CGRectMake(10, 10, 100, 40)];
     [layout addStorage:tstorage];
     
@@ -66,7 +75,14 @@
     [self.view addSubview:aaaav];
     
     
-    NSTextStorage
+    
+    
+    NSMutableArray* testArray = [NSMutableArray array];
+    [testArray addObject:attachment];
+    
+    
+    
+    
 }
 
 

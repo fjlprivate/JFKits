@@ -74,8 +74,13 @@
  @param image 图片;
  @param position 指定的位置;
  */
-- (void) setImage:(UIImage*)image atPosition:(NSInteger)position {
-    
+- (void) setImage:(UIImage*)image imageSize:(CGSize)imageSize atPosition:(NSInteger)position {
+    JFTextAttachment* textAttachment = [JFTextAttachment new];
+    textAttachment.contents = image.copy;
+    textAttachment.range = NSMakeRange(position, 1);
+    textAttachment.contentSize = imageSize;
+    [self.attributedString addTextAttachment:textAttachment];
+    [self renewTextLayout];
 }
 
 
@@ -92,7 +97,16 @@
 - (void) addLinkWithData:(id)data
        textSelectedColor:(UIColor*)textSelectedColor
        backSelectedColor:(UIColor*)backSelectedColor
-                 atRange:(NSRange)range;
+                 atRange:(NSRange)range
+{
+    JFTextHighLight* highLight = [JFTextHighLight new];
+    highLight.textSelectedColor = textSelectedColor.copy;
+    highLight.backSelectedColor = backSelectedColor.copy;
+    highLight.range = range;
+    highLight.content = data;
+    [self.attributedString addTextHighLight:highLight];
+    [self renewTextLayout];
+}
 
 
 
@@ -104,7 +118,9 @@
  
  @param context 图形上下文;
  */
-- (void) drawInContext:(CGContextRef)context;
+- (void) drawInContext:(CGContextRef)context {
+    
+}
 
 
 
@@ -116,7 +132,7 @@
  */
 - (void) renewTextLayout {
     JFTextLayout* layout = self.textLayout;
-    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString frame:self.frame numberOfLines:self.numberOfLines];
+    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString frame:self.frame linesCount:self.numberOfLines];
     if (layout) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [layout class];

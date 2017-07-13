@@ -43,6 +43,7 @@ static NSString* const JFTextHighLightName          = @"JFTextHighLightName";
  */
 @interface JFTextHighLight : NSObject
 
+@property (nonatomic, assign) BOOL showHighLight; // 是否显示高亮
 @property (nonatomic, assign) NSRange range;
 @property (nonatomic, strong) UIColor* textSelectedColor; // 文本高亮色
 @property (nonatomic, strong) UIColor* backSelectedColor; // 文本背景色

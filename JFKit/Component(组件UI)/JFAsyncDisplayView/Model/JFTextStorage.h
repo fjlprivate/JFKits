@@ -66,9 +66,10 @@
  如果指定的位置已经有图片了，则替换掉原来的图片;
 
  @param image 图片;
+ @param imageSize 图片大小;
  @param position 指定的位置;
  */
-- (void) setImage:(UIImage*)image atPosition:(NSInteger)position;
+- (void) setImage:(UIImage*)image imageSize:(CGSize)imageSize atPosition:(NSInteger)position;
 
 
 /**

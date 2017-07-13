@@ -8,6 +8,7 @@
 
 #import "AsyncDView.h"
 #import "JFKit.h"
+#import "JFTextAttachment.h"
 
 
 @interface AsyncDView() <JFAsyncDisplayDelegate>
@@ -114,7 +115,20 @@
             // 图片的frame也要翻转
             imageRect = CGRectApplyAffineTransform(frame, tt);
             CGContextDrawImage(context, imageRect, image.CGImage);
+            
+            
+            
+            //////////////
+            NSMutableAttributedString* aatext = [[NSMutableAttributedString alloc] initWithString:@"奥福利卡看见对方"];
+            JFTextAttachment* attachment = [JFTextAttachment new];
+            attachment.range = NSMakeRange(0, 1);
+            attachment.contents = [[UIImage imageNamed:@"selectedBlue"] copy];
+            attachment.contentSize = CGSizeMake(20, 20);
+            attachment.frame = CGRectMake(0, 0, 20, 20);
 
+            frame.origin.x = 15;
+            frame.origin.y += frame.size.height + 4;
+            /////////////
             
             // 边框
             CGFloat borderWidth = 0.8;

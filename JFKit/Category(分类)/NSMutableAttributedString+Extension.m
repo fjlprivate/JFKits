@@ -11,17 +11,15 @@
 
 
 static CGFloat attachmentAscentCallBack(void* config) {
-    CFDictionaryRef size = (CFDictionaryRef)config;
-    NSDictionary* dic = (__bridge_transfer NSDictionary*)size;
-    return [[dic objectForKey:@"height"] floatValue];
+    JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
+    return attachment.contentSize.height;
 }
 static CGFloat attachmentDesentCallBack(void* config) {
     return 0;
 }
 static CGFloat attachmentWidthCallBack(void* config) {
-    CFDictionaryRef size = (CFDictionaryRef)config;
-    NSDictionary* dic = (__bridge_transfer NSDictionary*)size;
-    return [[dic objectForKey:@"width"] floatValue];
+    JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
+    return attachment.contentSize.width;
 }
 static void attachmentDeallocCallBack(void* config) {
     
@@ -50,10 +48,12 @@ static void attachmentDeallocCallBack(void* config) {
     [self setAttribute:JFTextHighLightName withValue:highLight atRange:highLight.range];
 }
 - (void) addTextAttachment:(JFTextAttachment*)textAttachment {
+    //在图片位置填充一个占位符
     NSString* placeholder = @"\ufffc";
     NSMutableAttributedString* spaceAttri = [[NSMutableAttributedString alloc] initWithString:placeholder];
     [self insertAttributedString:spaceAttri atIndex:textAttachment.range.location];
     
+    // run回调，负责提供字形属性
     CTRunDelegateCallbacks runCallBacks;
     memset(&runCallBacks, 0, sizeof(CTRunDelegateCallbacks));
     runCallBacks.getAscent = attachmentAscentCallBack;
@@ -62,12 +62,11 @@ static void attachmentDeallocCallBack(void* config) {
     runCallBacks.dealloc = attachmentDeallocCallBack;
     runCallBacks.version = kCTRunDelegateVersion1;
     
-    NSDictionary* config = @{@"width":@(textAttachment.contentSize.width),@"height":@(textAttachment.contentSize.height)};
-    CFDictionaryRef kConfig = (__bridge_retained CFDictionaryRef)config;
-    CTRunDelegateRef runDelegate = CTRunDelegateCreate(&runCallBacks, (void*)kConfig);
-    // 给
-    [self addAttribute:(__bridge NSString*)kCTRunDelegateAttributeName value:(__bridge id)runDelegate range:textAttachment.range];
+    CTRunDelegateRef runDelegate = CTRunDelegateCreate(&runCallBacks, (__bridge void*)textAttachment);
+    // 给占位符设置runDelegate属性，这个属性提供占位符的字型属性:ascent,desent,width
+    CFAttributedStringSetAttribute((CFMutableAttributedStringRef)self, CFRangeMake(textAttachment.range.location, textAttachment.range.length), kCTRunDelegateAttributeName, runDelegate);
     
+    // 并给这个占位符添加一个包含附件对象的属性，用于后面获取附件并绘制
     [self setAttribute:JFTextAttachmentName withValue:textAttachment atRange:textAttachment.range];
 }
 - (void) addTextBackgroundColor:(JFTextBackgoundColor*)textBackgroundColor {
