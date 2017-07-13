@@ -71,28 +71,79 @@
         textLine.lineRef = line;
         textLine.lineOrigin = linesOrigins[i];
         [textLayout.lines addObject:textLine];
+        CGFloat lineAscent;
+        CGFloat lineDescent;
+        CTLineGetTypographicBounds(line, &lineAscent, &lineDescent, NULL);
         
         // 遍历run
         CFArrayRef runs = CTLineGetGlyphRuns(line);
         CFIndex runsCount = CFArrayGetCount(runs);
         for (CFIndex j = 0; j < runsCount; j++) {
             CTRunRef run = CFArrayGetValueAtIndex(runs, j);
+            CFIndex glyphCount = CTRunGetGlyphCount(run);
+            CGPoint glyphOrigins[glyphCount];
             CGFloat ascent;
             CGFloat desent;
             CGFloat leading;
             CGSize size;
             CTRunGetTypographicBounds(run, CFRangeMake(0, 0), &ascent, &desent, &leading);
             CTRunGetAdvances(run, CFRangeMake(0, 0), &size);
-            CTRunGetPositions(run, <#CFRange range#>, <#CGPoint *buffer#>)
             size.height = ascent + desent;
+            // 获取每个glyph的起点坐标
+            CTRunGetPositions(run, CFRangeMake(0, 0), glyphOrigins);
+            // 计算frame
+            CGRect runFrame = CGRectMake(glyphOrigins[0].x, glyphOrigins[0].y - desent, size.width, size.height);
+            runFrame.origin.x += linesOrigins[i].x;
+            runFrame.origin.y = linesOrigins[i].y - lineDescent + runFrame.origin.y;
+            // 翻转坐标系，需要的是整个view的size
+            CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, textFrame.size.height);
+            tt = CGAffineTransformScale(tt, 1, -1);
+            runFrame = CGRectApplyAffineTransform(runFrame, tt);
+            
+            // 获取当前run的range
+            CFRange runRange = CTRunGetStringRange(run);
             
             // 检查是属性项
             CFDictionaryRef attribute = CTRunGetAttributes(run);
             NSDictionary* attriDic = (__bridge NSDictionary*)attribute;
             
             // 高亮
+            JFTextHighLight* highLight = [attriDic objectForKey:JFTextHighLightName];
+            if (highLight) {
+                if (runRange.location == highLight.range.location) {
+                    highLight.positions = [NSArray array];
+                }
+                NSMutableArray* frames = [NSMutableArray arrayWithArray:highLight.positions];
+                [frames addObject:[NSValue valueWithCGRect:runFrame]];
+                highLight.positions = [frames copy];
+                // 添加高亮对象到缓存
+                if (![textLayout.highLights containsObject:highLight]) {
+                    [textLayout.highLights addObject:highLight];
+                }
+            }
             // 背景
+            JFTextBackgoundColor* background = [attriDic objectForKey:JFTextBackgroundColorName];
+            if (background) {
+                if (runRange.location == background.range.location) {
+                    background.positions = [NSArray array];
+                }
+                NSMutableArray* frames = [NSMutableArray arrayWithArray:background.positions];
+                [frames addObject:[NSValue valueWithCGRect:runFrame]];
+                background.positions = [frames copy];
+                // 添加背景块到缓存
+                if (![textLayout.backgrounds containsObject:background]) {
+                    [textLayout.backgrounds addObject:background];
+                }
+            }
             // 附件
+            JFTextAttachment* attachment = [attriDic objectForKey:JFTextAttachmentName];
+            if (attachment) {
+                attachment.frame = runFrame;
+                // 添加附件到缓存
+                if (![textLayout.attachments containsObject:attachment]) {
+                    [textLayout.attachments addObject:attachment];
+                }
+            }
         }
         
     }
@@ -102,6 +153,34 @@
     CFRelease(frameSetter);
     
     return textLayout;
+}
+
+
+
+- (void)drawInContext:(CGContextRef)context {
+    // 绘制背景
+    // 绘制高亮
+    // 绘制文本
+    // 绘制附件
+}
+
+
+# pragma mask 2 tools
+
+- (void) __drawBackgroundColors {
+    
+}
+
+- (void) __drawHighLights {
+    
+}
+
+- (void) __drawTexts {
+    
+}
+
+- (void) __drawAttachments {
+    
 }
 
 
