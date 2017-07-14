@@ -32,9 +32,10 @@
     if (!text || text.length == 0) {
         return nil;
     }
-    JFTextStorage* textStorage = [JFTextStorage new];
+    JFTextStorage* textStorage = [[JFTextStorage alloc] init];
     textStorage.attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     textStorage.frame = frame;
+    textStorage.numberOfLines = 0;
     return textStorage;
 }
 
@@ -59,6 +60,7 @@
  @param range 指定区间;
  */
 - (void) setBackgroundColor:(UIColor*)backgroundColor atRange:(NSRange)range {
+    
     JFTextBackgoundColor* backColor = [JFTextBackgoundColor new];
     backColor.backgroundColor = backgroundColor;
     backColor.range = range;
@@ -118,8 +120,8 @@
  
  @param context 图形上下文;
  */
-- (void) drawInContext:(CGContextRef)context {
-    
+- (void) drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled {
+    [self.textLayout drawInContext:context isCanceled:canceled];
 }
 
 
@@ -147,7 +149,6 @@
 - (void)setFrame:(CGRect)frame {
     if (!CGRectEqualToRect(self.frame, frame)) {
         _frame = frame;
-        [self renewTextLayout];
     }
 }
 

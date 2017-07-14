@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JFMacro.h"
 
 /**
  * [文本缓存类]
@@ -96,7 +97,8 @@
  分别绘制背景色、文本、边框、附件;
 
  @param context 图形上下文;
+ @param canceled 是否退出任务;
  */
-- (void) drawInContext:(CGContextRef)context;
+- (void) drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled;
 
 @end

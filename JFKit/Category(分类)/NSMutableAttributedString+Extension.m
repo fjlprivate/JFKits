@@ -84,6 +84,7 @@ static void attachmentDeallocCallBack(void* config) {
  @param range 指定的区域;
  */
 - (void) setAttribute:(NSString*)attributeName withValue:(id)value atRange:(NSRange)range {
+    NSLog(@"======给attributeString设置属性range[%@]name[%@]:value{%@}", NSStringFromRange(range), attributeName, value);
     if (!attributeName) {
         return;
     }

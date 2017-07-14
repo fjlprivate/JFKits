@@ -36,3 +36,6 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 
 #import "JFAsyncDisplayLayer.h"
 #import "JFButton.h"
+
+
+#import "JFTextStorage.h"

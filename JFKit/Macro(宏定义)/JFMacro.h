@@ -18,4 +18,9 @@
 
 
 
+
+
+typedef BOOL (^ isCanceledBlock) (void); // 判断是否退出的block
+
+
 #endif /* JFMacro_h */

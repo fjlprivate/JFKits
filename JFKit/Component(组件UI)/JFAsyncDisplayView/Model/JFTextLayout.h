@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JFMacro.h"
 
 @interface JFTextLayout : NSObject
 
@@ -31,7 +32,8 @@
  绘制文本和各附件属性到指定的上下文;
 
  @param context 文本上下文;
+ @param canceled 是否退出的block;
  */
-- (void) drawInContext:(CGContextRef)context;
+- (void) drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled;
 
 @end

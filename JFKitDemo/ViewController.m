@@ -40,6 +40,10 @@
         UIViewController* vc = [[NSClassFromString(@"TextAsyncDisplayLayer2") alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
+    else if ([title isEqualToString:@"TestForTextStorage"]) {
+        UIViewController* vc = [[NSClassFromString(@"TestForTextStorage") alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 
@@ -57,7 +61,7 @@
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"测试layer", @"测试layer2"];
+        _titles = @[@"测试layer", @"测试layer2",@"TestForTextStorage"];
     }
     return _titles;
 }
