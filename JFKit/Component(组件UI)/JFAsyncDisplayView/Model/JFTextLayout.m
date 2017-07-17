@@ -29,8 +29,8 @@
 @property (nonatomic, assign) CGPathRef path; // 用来生成frameRef
 @property (nonatomic, assign) CTFrameRef frameRef; // 缓存了core text的布局属性，包括lines
 
-@property (nonatomic, strong) NSArray<NSNumber*>* lineOrigins; // 每行的起点
-
+@property (nonatomic, strong) NSMutableArray<NSNumber*>* lineOrigins; // 每行的起点
+@property (nonatomic, strong) NSMutableArray<NSNumber*>* lineWidths; // 每行的实际宽度
 
 @end
 

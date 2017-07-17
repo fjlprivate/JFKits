@@ -15,6 +15,8 @@
 		807AAE721F1712FE0083A384 /* TestTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE711F1712FE0083A384 /* TestTextStorage.m */; };
 		807AAE751F1761BD0083A384 /* JFTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE741F1761BD0083A384 /* JFTextLine.m */; };
 		807AAE7C1F1866410083A384 /* TestForTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE7B1F1866410083A384 /* TestForTextStorage.m */; };
+		807AAE7F1F1C6E990083A384 /* JFTextRun.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE7E1F1C6E990083A384 /* JFTextRun.m */; };
+		807AAE821F1C9DE50083A384 /* JFTextGlyph.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE811F1C9DE50083A384 /* JFTextGlyph.m */; };
 		807FF74C1F14B934002C57FC /* AsyncGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74B1F14B934002C57FC /* AsyncGView.m */; };
 		807FF7751F14BAC5002C57FC /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74F1F14BAC5002C57FC /* MKAnnotationView+WebCache.m */; };
 		807FF7761F14BAC5002C57FC /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF7511F14BAC5002C57FC /* NSData+ImageContentType.m */; };
@@ -113,6 +115,10 @@
 		807AAE741F1761BD0083A384 /* JFTextLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextLine.m; sourceTree = "<group>"; };
 		807AAE7A1F1866410083A384 /* TestForTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestForTextStorage.h; sourceTree = "<group>"; };
 		807AAE7B1F1866410083A384 /* TestForTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestForTextStorage.m; sourceTree = "<group>"; };
+		807AAE7D1F1C6E990083A384 /* JFTextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextRun.h; sourceTree = "<group>"; };
+		807AAE7E1F1C6E990083A384 /* JFTextRun.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextRun.m; sourceTree = "<group>"; };
+		807AAE801F1C9DE50083A384 /* JFTextGlyph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextGlyph.h; sourceTree = "<group>"; };
+		807AAE811F1C9DE50083A384 /* JFTextGlyph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFTextGlyph.m; sourceTree = "<group>"; };
 		807FF74A1F14B934002C57FC /* AsyncGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGView.h; sourceTree = "<group>"; };
 		807FF74B1F14B934002C57FC /* AsyncGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncGView.m; sourceTree = "<group>"; };
 		807FF74E1F14BAC5002C57FC /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
@@ -552,10 +558,14 @@
 				807AAE6E1F1604FF0083A384 /* JFTextLayout.m */,
 				807AAE671F15CC090083A384 /* JFTextStorage.h */,
 				807AAE681F15CC090083A384 /* JFTextStorage.m */,
-				807AAE731F1761BD0083A384 /* JFTextLine.h */,
-				807AAE741F1761BD0083A384 /* JFTextLine.m */,
 				B236064B1F165564001121B2 /* JFTextAttachment.h */,
 				B236064C1F165564001121B2 /* JFTextAttachment.m */,
+				807AAE731F1761BD0083A384 /* JFTextLine.h */,
+				807AAE741F1761BD0083A384 /* JFTextLine.m */,
+				807AAE7D1F1C6E990083A384 /* JFTextRun.h */,
+				807AAE7E1F1C6E990083A384 /* JFTextRun.m */,
+				807AAE801F1C9DE50083A384 /* JFTextGlyph.h */,
+				807AAE811F1C9DE50083A384 /* JFTextGlyph.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -694,6 +704,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				807AAE7F1F1C6E990083A384 /* JFTextRun.m in Sources */,
 				80D537131F146C2B009F5687 /* UIView+Extension.m in Sources */,
 				807FF8031F14BBDB002C57FC /* NSMutableAttributedString+Gallop.m in Sources */,
 				807FF7EE1F14BBDB002C57FC /* LWHTMLImageConfig.m in Sources */,
@@ -762,6 +773,7 @@
 				807FF80A1F14C650002C57FC /* TextAsyncDisplayLayer2.m in Sources */,
 				807FF8071F14BBDB002C57FC /* UIImage+Gallop.m in Sources */,
 				807FF7871F14BAC5002C57FC /* UIView+WebCacheOperation.m in Sources */,
+				807AAE821F1C9DE50083A384 /* JFTextGlyph.m in Sources */,
 				807FF7E71F14BBDB002C57FC /* LWAsyncImageView+WebCache.m in Sources */,
 				807FF74C1F14B934002C57FC /* AsyncGView.m in Sources */,
 				807FF7821F14BAC5002C57FC /* UIImage+MultiFormat.m in Sources */,
