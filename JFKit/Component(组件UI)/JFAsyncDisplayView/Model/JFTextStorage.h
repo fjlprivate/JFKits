@@ -25,11 +25,21 @@
 
  @param text 文本
  @param frame 文本frame
+ @param insets 横竖方向的内嵌距离
  @return textStorage
- */
-+ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame;
 
-@property (nonatomic, assign) CGRect frame;
+ */
++ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(CGSize)insets;
+
+@property (nonatomic, assign, readonly) CGRect frame;
+@property (nonatomic, assign, readonly) CGRect suggustFrame;
+@property (nonatomic, assign, readonly) CGFloat top;
+@property (nonatomic, assign, readonly) CGFloat bottom;
+@property (nonatomic, assign, readonly) CGFloat left;
+@property (nonatomic, assign, readonly) CGFloat right;
+@property (nonatomic, assign, readonly) CGFloat width;
+@property (nonatomic, assign, readonly) CGFloat height;
+
 
 @property (nonatomic, strong) UIFont* textFont; // 字体
 @property (nonatomic, strong) UIColor* textColor; // 文本色
@@ -39,9 +49,12 @@
 @property (nonatomic, assign) NSInteger numberOfLines; // 文本行数
 
 // 字间距、行间距、对齐
+@property (nonatomic, assign) CGFloat lineSpace; // 行间距
 
 // 调试模式
 @property (nonatomic, assign) BOOL debugMode; // 是否开启调试模式
+
+
 
 
 /**

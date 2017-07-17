@@ -38,7 +38,14 @@
     // 获取所有字形的advances
     CGSize glyphSizes[glyphCount];
     CTRunGetAdvances(_runRef, CFRangeMake(0, 0), glyphSizes);
-
+    // 字间距
+    CFDictionaryRef attribute = CTRunGetAttributes(_runRef);
+    NSNumber* kern = [((__bridge NSDictionary*)attribute) objectForKey:(NSString*)kCTKernAttributeName];
+    CGFloat cKern = 0;
+    if (kern) {
+        cKern = [kern floatValue];
+    }
+    
     // 坐标系转换
     CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, _textFrame.origin.x, _textFrame.origin.y + _textFrame.size.height);
     tt = CGAffineTransformScale(tt, 1, -1);
@@ -56,11 +63,12 @@
         JFTextGlyph* glyph = [JFTextGlyph new];
         CGRect glyphFrame = CGRectMake(_linePosition.x + glyphPositions[i].x,
                                        _linePosition.y - desent,
-                                       glyphSizes[i].width,
+                                       glyphSizes[i].width - cKern,
                                        ascent + desent);
         glyph.ctGlyphFrame = glyphFrame;
         glyphFrame = CGRectApplyAffineTransform(glyphFrame, tt);
         glyph.uiGlyphFrame = glyphFrame;
+        [glyphRects addObject:glyph];
     }
     _glyphs = [glyphRects copy];
 }

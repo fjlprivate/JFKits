@@ -14,30 +14,35 @@
 
 @property (nonatomic, strong) JFTextLayout* textLayout;
 @property (nonatomic, strong) NSMutableAttributedString* attributedString; // 富文本
-
+@property (nonatomic, assign) CGSize insets;
 @end
 
 @implementation JFTextStorage
 
 # pragma mask 1
 
+
 /**
  生成textStorage
  
  @param text 文本
  @param frame 文本frame
+ @param insets 横竖方向的内嵌距离
  @return textStorage
+ 
  */
-+ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame {
++ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(CGSize)insets {
     if (!text || text.length == 0) {
         return nil;
     }
     JFTextStorage* textStorage = [[JFTextStorage alloc] init];
     textStorage.attributedString = [[NSMutableAttributedString alloc] initWithString:text];
     textStorage.frame = frame;
+    textStorage.insets = insets;
     textStorage.numberOfLines = 0;
     return textStorage;
 }
+
 
 /**
  给文本的指定位置设置属性;
@@ -134,7 +139,10 @@
  */
 - (void) renewTextLayout {
     JFTextLayout* layout = self.textLayout;
-    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString frame:self.frame linesCount:self.numberOfLines];
+    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString frame:self.frame linesCount:self.numberOfLines insets:self.insets];
+    self.textLayout.debugMode = self.debugMode;
+    self.textLayout.backgroundColor = self.backgroundColor;
+    _suggustFrame = self.textLayout.suggestFrame;
     if (layout) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [layout class];
@@ -145,7 +153,6 @@
 
 # pragma mask 4 setter
 
-// 设置frame
 - (void)setFrame:(CGRect)frame {
     if (!CGRectEqualToRect(self.frame, frame)) {
         _frame = frame;
@@ -175,11 +182,7 @@
         return;
     }
     _backgroundColor = backgroundColor;
-    JFTextBackgoundColor* textBack = [JFTextBackgoundColor new];
-    textBack.backgroundColor = backgroundColor;
-    textBack.range = NSMakeRange(0, self.attributedString.length);
-    [self.attributedString addTextBackgroundColor:textBack];
-    [self renewTextLayout];
+    self.textLayout.backgroundColor = backgroundColor;
 }
 
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
@@ -188,6 +191,31 @@
     }
     _numberOfLines = numberOfLines;
     [self renewTextLayout];
+}
+
+- (void)setDebugMode:(BOOL)debugMode {
+    _debugMode = debugMode;
+    self.textLayout.debugMode = debugMode;
+}
+
+# pragma mask 4 getter
+- (CGFloat)top {
+    return self.suggustFrame.origin.y;
+}
+- (CGFloat)bottom {
+    return self.suggustFrame.origin.y + self.suggustFrame.size.height;
+}
+- (CGFloat)left {
+    return self.suggustFrame.origin.x;
+}
+- (CGFloat)right {
+    return self.suggustFrame.origin.x + self.suggustFrame.size.width;
+}
+- (CGFloat)width {
+    return self.suggustFrame.size.width;
+}
+- (CGFloat)height {
+    return self.suggustFrame.size.height;
 }
 
 @end

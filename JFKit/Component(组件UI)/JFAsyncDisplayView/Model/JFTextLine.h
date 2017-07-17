@@ -22,7 +22,10 @@
 
 @property (nonatomic, assign, readonly) CGFloat typographicWidth; // 当前行的排版width
 
-@property (nonatomic, strong, readonly) NSArray<JFTextRun*>* glyphRuns; // 当前行的所有run
+@property (nonatomic, assign, readonly) CGFloat ascent; // 上部
+@property (nonatomic, assign, readonly) CGFloat desent; // 下部
+@property (nonatomic, assign, readonly) CGFloat leading; // 行间距
 
+@property (nonatomic, strong, readonly) NSArray<JFTextRun*>* glyphRuns; // 当前行的所有run
 
 @end

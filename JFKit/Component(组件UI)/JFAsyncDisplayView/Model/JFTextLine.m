@@ -28,10 +28,7 @@
 - (void) calculateRuns {
     
     // 获取当前行的尺寸等属性
-    CGFloat lineAscent; // 上部
-    CGFloat lineDesent; // 下部
-    CGFloat lineLeading; // 行间距
-    _typographicWidth = CTLineGetTypographicBounds(self.lineRef, &lineAscent, &lineDesent, &lineLeading); // 行实际排版的宽度
+    _typographicWidth = CTLineGetTypographicBounds(self.lineRef, &_ascent, &_desent, &_leading); // 行实际排版的宽度
     
     // 生成坐标系翻转
     CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, _textFrame.origin.x, _textFrame.origin.y + _textFrame.size.height);
