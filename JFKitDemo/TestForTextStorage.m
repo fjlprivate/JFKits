@@ -23,7 +23,7 @@
     self = [super init];
     if (self) {
         NSString* text = @"轻轻的我走了，正如我轻轻地来。我招一招手，作别西天的云彩。";
-        _textStorage = [JFTextStorage jf_textStorageWithText:text frame:CGRectMake(10, 10, 100, MAXFLOAT)];
+        _textStorage = [JFTextStorage jf_textStorageWithText:text frame:CGRectMake(10, 10, 120, 1000)];
         _textStorage.textFont = [UIFont systemFontOfSize:14];
         _textStorage.textColor = JFHexColor(0x27384b, 1);
         [_textStorage setBackgroundColor:JFHexColor(0x00a1dc, 1) atRange:[text rangeOfString:@"我招一招手"]];

@@ -40,6 +40,8 @@
 
 // 字间距、行间距、对齐
 
+// 调试模式
+@property (nonatomic, assign) BOOL debugMode; // 是否开启调试模式
 
 
 /**
