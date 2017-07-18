@@ -14,7 +14,7 @@
 
 @property (nonatomic, strong) JFTextLayout* textLayout; // 缓存文本布局属性
 @property (nonatomic, strong) NSMutableAttributedString* attributedString; // 富文本
-@property (nonatomic, assign) CGSize insets; // 保存文本内嵌距离
+@property (nonatomic, assign) UIEdgeInsets insets; // 保存文本内嵌距离
 @property (nonatomic, strong) NSMutableParagraphStyle* paragraphStyle; // 段落属性
 
 @end
@@ -33,7 +33,7 @@
  @return textStorage
  
  */
-+ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(CGSize)insets {
++ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(UIEdgeInsets)insets {
     if (!text || text.length == 0) {
         return nil;
     }

@@ -24,13 +24,13 @@
  @param attributedString 富文本; 包含文本属性、附件、高亮等属性;
  @param textFrame 文本绘制区域;
  @param linesCount 文本行数;如果小于文本实际行数，则截取;
- @param insets 横竖的内嵌距离;
+ @param insets 内嵌距离;
  @return 文本布局对象;
  */
 + (instancetype) jf_textLayoutWithAttributedString:(NSAttributedString*)attributedString
                                              frame:(CGRect)textFrame
                                         linesCount:(NSInteger)linesCount
-                                            insets:(CGSize)insets;
+                                            insets:(UIEdgeInsets)insets;
 
 
 

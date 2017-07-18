@@ -78,7 +78,7 @@
 + (instancetype) jf_textLayoutWithAttributedString:(NSAttributedString*)attributedString
                                              frame:(CGRect)textFrame
                                         linesCount:(NSInteger)linesCount
-                                            insets:(CGSize)insets
+                                            insets:(UIEdgeInsets)insets
 {
     return [[JFTextLayout alloc] initWithAttributedString:attributedString frame:textFrame linesCount:linesCount insets:insets];
 }
@@ -91,7 +91,7 @@
 - (instancetype) initWithAttributedString:(NSAttributedString*)attributedString
                                     frame:(CGRect)textFrame
                                linesCount:(NSInteger)linesCount
-                                   insets:(CGSize)insets
+                                   insets:(UIEdgeInsets)insets
 {
     self = [super init];
     if (self) {
@@ -103,7 +103,13 @@
         _debugColor = JFHexColor(0xEA6956, 1);
         _originFrame = textFrame;
         _linesCount = linesCount;
-        _textFrame = CGRectInset(textFrame, insets.width, insets.height);
+        // 裁剪内嵌边距
+        CGRect newTextFrame = textFrame;
+        newTextFrame.origin.x += insets.left;
+        newTextFrame.size.width -= (insets.left + insets.right);
+        newTextFrame.origin.y += insets.top;
+        newTextFrame.size.height -= (insets.top + insets.bottom);
+        _textFrame = newTextFrame;
         
         // 创建frameSetter
         _frameSetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
@@ -121,9 +127,9 @@
         // 用来缓存最大的line的实际width
         CGFloat maxLineWidth = 0;
         // 实际文本高度
-        CGFloat activeTextHeight = insets.height;
+        CGFloat activeTextHeight = insets.top;
 
-        NSLog(@"***************0, frame[%@]\nattributedString[%@]",NSStringFromCGRect(textFrame), attributedString);
+        NSLog(@"***************0,attributedString[\n%@\n]", attributedString);
         // 遍历到最大行
         NSLog(@"---------line行数:%ld", maxLinesCount);
         for (CFIndex i = 0; i < maxLinesCount; i++) {
@@ -185,9 +191,9 @@
             }
         }
         // 计算文本最终的建议尺寸
-        activeTextHeight += insets.height;
+        activeTextHeight += insets.bottom;
         textFrame.size.height = activeTextHeight;
-        textFrame.size.width = maxLineWidth + insets.width * 2;
+        textFrame.size.width = maxLineWidth + insets.left + insets.right;
         _suggestFrame = textFrame;
     }
     return self;

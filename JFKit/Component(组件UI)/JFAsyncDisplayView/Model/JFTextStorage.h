@@ -23,11 +23,11 @@
 
  @param text 文本
  @param frame 文本frame
- @param insets 横竖方向的内嵌距离
+ @param insets 四边内嵌距离
  @return textStorage
 
  */
-+ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(CGSize)insets;
++ (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(UIEdgeInsets)insets;
 
 
 // 布局属性
