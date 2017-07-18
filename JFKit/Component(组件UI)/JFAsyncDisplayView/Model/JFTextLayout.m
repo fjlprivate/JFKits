@@ -109,7 +109,7 @@
         _frameSetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedString);
         _path = CGPathCreateWithRect(_textFrame, NULL);
         _frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _path, NULL);
-        
+                
         // 获取所有行属性
         CFArrayRef lines = CTFrameGetLines(_frameRef);
         CFIndex originLinesCount = CFArrayGetCount(lines);
@@ -118,7 +118,8 @@
         
         // 计算最大行数,外部参数有限制or无限制
         CFIndex maxLinesCount = linesCount == 0 ? originLinesCount : MIN(linesCount, originLinesCount);
-        
+        // 用来缓存最大的line的实际width
+        CGFloat maxLineWidth = 0;
         // 实际文本高度
         CGFloat activeTextHeight = insets.height;
 
@@ -130,8 +131,10 @@
             CTLineRef line = CFArrayGetValueAtIndex(lines, i);
             JFTextLine* textLine = [[JFTextLine alloc] initWithLine:line origin:linesOrigins[i] textFrame:_textFrame];
             [_lines addObject:textLine];
-            // 总和当前行的有效高度: 上部+下部+行间距
-            activeTextHeight += (textLine.ascent + textLine.desent + textLine.leading);
+            // 总和当前行的有效高度: 上部+下部+行间距; (最后一行不计算行间距)
+            activeTextHeight += (textLine.ascent + textLine.desent + (i == maxLinesCount - 1 ? 0 : textLine.leading));
+            // 比较并保存最大行width到缓存
+            maxLineWidth = MAX(maxLineWidth, textLine.typographicWidth);
             
             for (int j = 0; j < textLine.glyphRuns.count; j++) {
                 JFTextRun* run = [textLine.glyphRuns objectAtIndex:j];
@@ -184,12 +187,7 @@
         // 计算文本最终的建议尺寸
         activeTextHeight += insets.height;
         textFrame.size.height = activeTextHeight;
-        if (maxLinesCount == 1) {
-            JFTextLine* line = _lines[0];
-            if (line.typographicWidth < _textFrame.size.width) {
-                textFrame.size.width = line.typographicWidth + insets.width * 2;
-            }
-        }
+        textFrame.size.width = maxLineWidth + insets.width * 2;
         _suggestFrame = textFrame;
     }
     return self;
@@ -213,7 +211,7 @@
 # pragma mask 2 tools
 
 - (void) __drawBackgroundColors {
-    NSLog(@".....textLayouot:绘制背景色");
+//    NSLog(@".....textLayouot:绘制背景色");
     if (self.backgroundColor) {
         CGContextSaveGState(self.context);
         CGContextSetFillColorWithColor(self.context, self.backgroundColor.CGColor);
@@ -224,7 +222,7 @@
         CGContextSaveGState(self.context);
         for (JFTextBackgoundColor* background in self.backgrounds) {
             for (NSNumber* frameValue in background.positions) {
-                NSLog(@" 绘制背景,frame:%@", frameValue);
+//                NSLog(@" 绘制背景,frame:%@", frameValue);
                 if (self.isCanceled()) {
                     CGContextRestoreGState(self.context);
                     return;
@@ -243,22 +241,22 @@
 }
 
 - (void) __drawHighLights {
-    if (self.highLights.count > 0) {
-        CGContextSaveGState(self.context);
-        for (JFTextHighLight* highLight in self.highLights) {
-            for (NSNumber* frameValue in highLight.positions) {
-                if (self.isCanceled()) {
-                    CGContextRestoreGState(self.context);
-                    return;
-                }
-            }
-        }
-        CGContextRestoreGState(self.context);
-    }
+//    if (self.highLights.count > 0) {
+//        CGContextSaveGState(self.context);
+//        for (JFTextHighLight* highLight in self.highLights) {
+//            for (NSNumber* frameValue in highLight.positions) {
+//                if (self.isCanceled()) {
+//                    CGContextRestoreGState(self.context);
+//                    return;
+//                }
+//            }
+//        }
+//        CGContextRestoreGState(self.context);
+//    }
 }
 
 - (void) __drawTexts {
-    NSLog(@"##绘制文本");
+//    NSLog(@"##绘制文本");
     CGContextSaveGState(self.context);
     CGContextTranslateCTM(self.context, self.textFrame.origin.x, self.textFrame.origin.y);
     CGContextTranslateCTM(self.context, 0, self.textFrame.size.height);
@@ -271,7 +269,7 @@
         JFTextLine* line = [self.lines objectAtIndex:i];
         CGContextSetTextPosition(self.context, line.lineOrigin.x, line.lineOrigin.y);
         CTLineDraw(line.lineRef, self.context);
-        NSLog(@"  +绘制第[%d]行文本:[%lf,%lf]", i, line.lineOrigin.x, line.lineOrigin.y);
+//        NSLog(@"  +绘制第[%d]行文本:[%lf,%lf]", i, line.lineOrigin.x, line.lineOrigin.y);
     }
     CGContextRestoreGState(self.context);
 }
@@ -281,19 +279,19 @@
 }
 
 - (void) __drawDebugs {
-    NSLog(@"##绘制文本,是否绘制:%@", self.debugMode ? @"绘制":@"不绘制");
+//    NSLog(@"##绘制文本,是否绘制:%@", self.debugMode ? @"绘制":@"不绘制");
 
     if (self.debugMode) {
         CGContextSaveGState(self.context);
         for (JFTextLine* line in self.lines) {
-            NSLog(@" =遍历行[%ld]", [self.lines indexOfObject:line]);
+//            NSLog(@" =遍历行[%ld]", [self.lines indexOfObject:line]);
             CGRect baseLineFrame = CGRectMake(line.uiLineOrigin.x, line.uiLineOrigin.y, line.typographicWidth, _debugLineWidth);
             CGContextSetFillColorWithColor(self.context, self.debugColor.CGColor);
             CGContextFillRect(self.context, baseLineFrame);
             for (JFTextRun* run in line.glyphRuns) {
-                NSLog(@"  -遍历run[%ld]", [line.glyphRuns indexOfObject:run]);
+//                NSLog(@"  -遍历run[%ld]", [line.glyphRuns indexOfObject:run]);
                 for (JFTextGlyph* glyph in run.glyphs) {
-                    NSLog(@"   .遍历glyph[%ld]", [run.glyphs indexOfObject:glyph]);
+//                    NSLog(@"   .遍历glyph[%ld]", [run.glyphs indexOfObject:glyph]);
                     CGContextSetStrokeColorWithColor(self.context, self.debugColor.CGColor);
                     CGContextStrokeRect(self.context, glyph.uiGlyphFrame);
                 }

@@ -7,6 +7,7 @@
 //
 
 #import "JFTextRun.h"
+#import <UIKit/UIKit.h>
 
 
 @interface JFTextRun()
@@ -38,12 +39,19 @@
     // 获取所有字形的advances
     CGSize glyphSizes[glyphCount];
     CTRunGetAdvances(_runRef, CFRangeMake(0, 0), glyphSizes);
-    // 字间距
+    // 获取run的属性
     CFDictionaryRef attribute = CTRunGetAttributes(_runRef);
-    NSNumber* kern = [((__bridge NSDictionary*)attribute) objectForKey:(NSString*)kCTKernAttributeName];
+    NSDictionary* runAttribute = (__bridge NSDictionary*)attribute;
+    // 字间距
+    NSNumber* kern = [runAttribute objectForKey:(NSString*)kCTKernAttributeName];
     CGFloat cKern = 0;
     if (kern) {
         cKern = [kern floatValue];
+    }
+    // 段落属性
+    NSMutableParagraphStyle* paragraphStyle = [runAttribute objectForKey:NSParagraphStyleAttributeName];
+    if (paragraphStyle) {
+        _lineSpace = paragraphStyle.lineSpacing; // 行间距
     }
     
     // 坐标系转换
@@ -62,11 +70,11 @@
     for (CFIndex i = 0; i < glyphCount; i++) {
         JFTextGlyph* glyph = [JFTextGlyph new];
         CGRect glyphFrame = CGRectMake(_linePosition.x + glyphPositions[i].x,
-                                       _linePosition.y - desent,
-                                       glyphSizes[i].width - cKern,
+                                       _linePosition.y - desent, // core text坐标系(左下角原点)
+                                       glyphSizes[i].width - cKern, // 字形排版宽度要减去字间距
                                        ascent + desent);
         glyph.ctGlyphFrame = glyphFrame;
-        glyphFrame = CGRectApplyAffineTransform(glyphFrame, tt);
+        glyphFrame = CGRectApplyAffineTransform(glyphFrame, tt); // 转换坐标系
         glyph.uiGlyphFrame = glyphFrame;
         [glyphRects addObject:glyph];
     }

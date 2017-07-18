@@ -13,8 +13,6 @@
  * [文本缓存类]
  *
  * 缓存文本，以及文本属性，还有高亮属性:
- * 文本属性: 
- *      1. NSA
  */
 
 @interface JFTextStorage : NSObject
@@ -31,8 +29,10 @@
  */
 + (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(CGSize)insets;
 
-@property (nonatomic, assign, readonly) CGRect frame;
-@property (nonatomic, assign, readonly) CGRect suggustFrame;
+
+// 布局属性
+@property (nonatomic, assign, readonly) CGRect frame; // 初始化传递的原始frame
+@property (nonatomic, assign, readonly) CGRect suggustFrame; // 按行数、text内容计算的最终frame
 @property (nonatomic, assign, readonly) CGFloat top;
 @property (nonatomic, assign, readonly) CGFloat bottom;
 @property (nonatomic, assign, readonly) CGFloat left;
@@ -50,6 +50,8 @@
 
 // 字间距、行间距、对齐
 @property (nonatomic, assign) CGFloat lineSpace; // 行间距
+@property (nonatomic, assign) CGFloat kernSpace; // 字间距
+
 
 // 调试模式
 @property (nonatomic, assign) BOOL debugMode; // 是否开启调试模式
@@ -58,7 +60,7 @@
 
 
 /**
- 给文本的指定位置设置属性;
+ 给文本的[指定位置]设置属性;
 
  @param attributeName 属性名: NSFontAttributeName, NSForegroundAttributeName等;
  @param value 属性相关值;

@@ -43,11 +43,16 @@
     CFArrayRef runs = CTLineGetGlyphRuns(_lineRef);
     CFIndex runCount = CFArrayGetCount(runs);
     NSMutableArray* lineRuns = [NSMutableArray array];
+    CGFloat lineSpace = 0;
     for (CFIndex i = 0; i < runCount; i++) {
         CTRunRef run = CFArrayGetValueAtIndex(runs, i);
         JFTextRun* textRun = [[JFTextRun alloc] initWithRun:run linePosition:_lineOrigin textFrame:_textFrame];
+        if (textRun.lineSpace > lineSpace) {
+            lineSpace = textRun.lineSpace;
+        }
         [lineRuns addObject:textRun];
     }
+    _leading = lineSpace;
     _glyphRuns = [lineRuns copy];
     
 }

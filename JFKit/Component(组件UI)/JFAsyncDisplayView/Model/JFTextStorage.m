@@ -12,9 +12,11 @@
 
 @interface JFTextStorage()
 
-@property (nonatomic, strong) JFTextLayout* textLayout;
+@property (nonatomic, strong) JFTextLayout* textLayout; // 缓存文本布局属性
 @property (nonatomic, strong) NSMutableAttributedString* attributedString; // 富文本
-@property (nonatomic, assign) CGSize insets;
+@property (nonatomic, assign) CGSize insets; // 保存文本内嵌距离
+@property (nonatomic, strong) NSMutableParagraphStyle* paragraphStyle; // 段落属性
+
 @end
 
 @implementation JFTextStorage
@@ -190,6 +192,28 @@
         return;
     }
     _numberOfLines = numberOfLines;
+    [self renewTextLayout];
+}
+
+- (void)setLineSpace:(CGFloat)lineSpace {
+    if (lineSpace < 0) {
+        return;
+    }
+    _lineSpace = lineSpace;
+    if (!self.paragraphStyle) {
+        self.paragraphStyle = [NSMutableParagraphStyle new];
+    }
+    self.paragraphStyle.lineSpacing = lineSpace;
+    [self.attributedString setAttribute:NSParagraphStyleAttributeName withValue:self.paragraphStyle atRange:NSMakeRange(0, self.attributedString.length)];
+    [self renewTextLayout];
+}
+
+- (void)setKernSpace:(CGFloat)kernSpace {
+    if (kernSpace < 0) {
+        return;
+    }
+    _kernSpace = kernSpace;
+    [self.attributedString setAttribute:NSKernAttributeName withValue:@(kernSpace) atRange:NSMakeRange(0, self.attributedString.length)];
     [self renewTextLayout];
 }
 

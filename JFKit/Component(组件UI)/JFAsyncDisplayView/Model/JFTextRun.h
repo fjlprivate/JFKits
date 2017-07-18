@@ -20,6 +20,8 @@
 
 @property (nonatomic, assign, readonly) CGRect runFrame; // 当前run的frame<UIKit坐标系>
 
+@property (nonatomic, assign, readonly) CGFloat lineSpace; // 行间距
+
 @property (nonatomic, strong, readonly) NSArray<JFTextGlyph*>* glyphs; // 当前run的所有字形
 
 @end
