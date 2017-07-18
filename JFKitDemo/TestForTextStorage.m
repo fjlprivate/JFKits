@@ -90,7 +90,11 @@
         range.location += 1;
         [_textStorage setBackgroundColor:JFHexColor(0x00a1dc, 1) atRange:range];
         range1.location += 1;
-        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:JFHexColor(0x00a1dc, 1) backSelectedColor:JFHexColor(0x00a1dc, 0.8) atRange:range1];
+        
+//        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:[UIColor whiteColor] backSelectedColor:JFHexColor(0x00a1dc, 0.8) atRange:range1];
+//        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:[UIColor whiteColor] backSelectedColor:nil atRange:range1];
+        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:nil backSelectedColor:JFHexColor(0x00a1dc, 0.8) atRange:range1];
+
         
         NSString* tttt = @"jsdxcojljsdfukljdfndjfajdslfsadfasdjmnas;lkdjfahsdfkajbd";
         _tStorage2 = [JFTextStorage jf_textStorageWithText:tttt frame:CGRectMake(120 + 20, 10, 120, 1000) insets:UIEdgeInsetsMake(8, 4, 8, 4)];
