@@ -51,6 +51,7 @@
  @param canceled 判断是否退出绘制
  */
 - (void)drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled{
+    NSLog(@"======绘制textLayout");
     self.context = context;
     self.isCanceled = canceled;
     // 绘制背景
@@ -80,9 +81,73 @@
                                         linesCount:(NSInteger)linesCount
                                             insets:(UIEdgeInsets)insets
 {
+    NSLog(@"--生成textLayout");
     return [[JFTextLayout alloc] initWithAttributedString:attributedString frame:textFrame linesCount:linesCount insets:insets];
 }
 
+
+
+/**
+ 判断是否点击了高亮区;
+ 逐个比较当前缓存中的所有高亮区;
+ 
+ @param position 点击坐标
+ @return 存在任意一个高亮区，则返回YES;否则返回NO;
+ */
+- (BOOL) didClickedHighLightPosition:(CGPoint)position {
+//    NSLog(@"------------判断坐标[%@]是否在当前高亮列表区", NSStringFromCGPoint(position));
+    for (JFTextHighLight* highLight in self.highLights) {
+//        NSLog(@"  --遍历高亮区");
+        for (NSValue* frameValue in highLight.positions) {
+//            NSLog(@"    --判断frame:[%@]和坐标:[]",frameValue);
+            CGRect frame = [frameValue CGRectValue];
+            if (CGRectContainsPoint(frame, position)) {
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+
+/**
+ 获取指定坐标点的高亮属性;
+ 
+ @param position 指定坐标点<UIKit坐标系>;
+ @return 返回符合条件的高亮属性;没有则返回nil;
+ */
+- (JFTextHighLight*) highLightAtPosition:(CGPoint)position {
+    for (JFTextHighLight* highLight in self.highLights) {
+        for (NSValue* frameValue in highLight.positions) {
+            CGRect frame = [frameValue CGRectValue];
+            if (CGRectContainsPoint(frame, position)) {
+                return highLight;
+            }
+        }
+    }
+    return nil;
+}
+
+
+
+/**
+ 更新高亮区的显示开关;
+ 在执行这个方法前，最好先执行上面的判断;
+ 
+ @param switchOn 高亮开关;
+ @param position 高亮区所在的坐标;
+ */
+- (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position {
+    for (JFTextHighLight* highLight in self.highLights) {
+        for (NSValue* frameValue in highLight.positions) {
+            CGRect frame = [frameValue CGRectValue];
+            if (CGRectContainsPoint(frame, position)) {
+                highLight.showHighLight = switchOn;
+                return;
+            }
+        }
+    }
+}
 
 
 
@@ -129,9 +194,9 @@
         // 实际文本高度
         CGFloat activeTextHeight = insets.top;
 
-        NSLog(@"***************0,attributedString[\n%@\n]", attributedString);
+//        NSLog(@"***************0,attributedString[\n%@\n]", attributedString);
         // 遍历到最大行
-        NSLog(@"---------line行数:%ld", maxLinesCount);
+//        NSLog(@"---------line行数:%ld", maxLinesCount);
         for (CFIndex i = 0; i < maxLinesCount; i++) {
             // 创建一个line对象，并添加到数组
             CTLineRef line = CFArrayGetValueAtIndex(lines, i);
@@ -227,7 +292,7 @@
     if (self.backgrounds.count > 0) {
         CGContextSaveGState(self.context);
         for (JFTextBackgoundColor* background in self.backgrounds) {
-            for (NSNumber* frameValue in background.positions) {
+            for (NSValue* frameValue in background.positions) {
 //                NSLog(@" 绘制背景,frame:%@", frameValue);
                 if (self.isCanceled()) {
                     CGContextRestoreGState(self.context);
@@ -247,18 +312,29 @@
 }
 
 - (void) __drawHighLights {
-//    if (self.highLights.count > 0) {
-//        CGContextSaveGState(self.context);
-//        for (JFTextHighLight* highLight in self.highLights) {
-//            for (NSNumber* frameValue in highLight.positions) {
-//                if (self.isCanceled()) {
-//                    CGContextRestoreGState(self.context);
-//                    return;
-//                }
-//            }
-//        }
-//        CGContextRestoreGState(self.context);
-//    }
+    if (self.highLights.count > 0) {
+        CGContextSaveGState(self.context);
+        for (JFTextHighLight* highLight in self.highLights) {
+//            NSLog(@"-----正在检查是否需要高亮显示:[%@]",highLight.showHighLight ? @"显示": @"不显示");
+            if (!highLight.showHighLight) {
+                continue;
+            }
+            for (NSValue* frameValue in highLight.positions) {
+                if (self.isCanceled()) {
+                    CGContextRestoreGState(self.context);
+                    return;
+                }
+                CGRect frame = [frameValue CGRectValue];
+                UIColor* backgroundColor = highLight.backSelectedColor;
+                if (!backgroundColor) {
+                    backgroundColor = [UIColor clearColor];
+                }
+                CGContextSetFillColorWithColor(self.context, backgroundColor.CGColor);
+                CGContextFillRect(self.context, frame);
+            }
+        }
+        CGContextRestoreGState(self.context);
+    }
 }
 
 - (void) __drawTexts {

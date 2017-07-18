@@ -14,6 +14,7 @@ typedef BOOL (^IsCanceled)(void); // 退出block
 
 @interface JFAsyncDisplayLayer : CALayer
 @property (nonatomic, assign) BOOL displayedAsyncchronous;
+
 @end
 
 

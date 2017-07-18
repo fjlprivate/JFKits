@@ -58,17 +58,34 @@
 
 
 
+# pragma mask : 设置属性方法
+
 
 /**
- 给文本的[指定位置]设置属性;
+ 设置[字体]到文本的指定位置;
 
- @param attributeName 属性名: NSFontAttributeName, NSForegroundAttributeName等;
- @param value 属性相关值;
+ @param textFont 字体;
  @param range 指定的区间;
  */
-- (void) setAttribute:(NSString*)attributeName withValue:(id)value atRange:(NSRange)range;
+- (void) setTextFont:(UIFont *)textFont atRange:(NSRange)range;
 
+/**
+ 设置[字颜色]到文本的指定位置;
+ 
+ @param textColor 字颜色;
+ @param range 指定的区间;
+ */
+- (void) setTextColor:(UIColor *)textColor atRange:(NSRange)range;
 
+/**
+ 插入[图片]到指定的位置;
+ 如果指定的位置已经有图片了，则替换掉原来的图片;
+ 
+ @param image 图片;
+ @param imageSize 图片大小;
+ @param position 指定的位置;
+ */
+- (void) setImage:(UIImage*)image imageSize:(CGSize)imageSize atPosition:(NSInteger)position;
 
 /**
  设置[背景色]到指定的区间;
@@ -77,17 +94,6 @@
  @param range 指定区间;
  */
 - (void) setBackgroundColor:(UIColor*)backgroundColor atRange:(NSRange)range;
-
-
-/**
- 插入[图片]到指定的位置;
- 如果指定的位置已经有图片了，则替换掉原来的图片;
-
- @param image 图片;
- @param imageSize 图片大小;
- @param position 指定的位置;
- */
-- (void) setImage:(UIImage*)image imageSize:(CGSize)imageSize atPosition:(NSInteger)position;
 
 
 /**
@@ -106,8 +112,31 @@
                  atRange:(NSRange)range;
 
 
+# pragma mask : 校验和开关方法
 
 
+/**
+ 判断是否点击了高亮区;
+ 逐个比较当前缓存中的所有高亮区;
+
+ @param position 点击坐标
+ @return 存在任意一个高亮区，则返回YES;否则返回NO;
+ */
+- (BOOL) didClickedHighLightPosition:(CGPoint)position;
+
+
+
+/**
+ 更新高亮区的显示开关;
+ 在执行这个方法前，最好先执行上面的判断;
+
+ @param switchOn 高亮开关;
+ @param position 高亮区所在的坐标;
+ */
+- (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position;
+
+
+# pragma mask : 绘制方法
 
 /**
  绘制文本缓存到上下文;

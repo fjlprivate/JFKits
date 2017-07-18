@@ -46,15 +46,13 @@
 }
 
 
-/**
- 给文本的指定位置设置属性;
- 
- @param attributeName 属性名: NSFontAttributeName, NSForegroundAttributeName等;
- @param value 属性相关值;
- @param range 指定的区间;
- */
-- (void) setAttribute:(NSString*)attributeName withValue:(id)value atRange:(NSRange)range {
-    [self.attributedString setAttribute:attributeName withValue:value atRange:range];
+- (void) setTextFont:(UIFont *)textFont atRange:(NSRange)range {
+    [self.attributedString setAttribute:NSFontAttributeName withValue:textFont atRange:range];
+    [self renewTextLayout];
+}
+
+- (void) setTextColor:(UIColor *)textColor atRange:(NSRange)range {
+    [self.attributedString setAttribute:NSForegroundColorAttributeName withValue:textColor atRange:range];
     [self renewTextLayout];
 }
 
@@ -118,6 +116,30 @@
 }
 
 
+/**
+ 判断是否点击了高亮区;
+ 逐个比较当前缓存中的所有高亮区;
+ 
+ @param position 点击坐标
+ @return 存在任意一个高亮区，则返回YES;否则返回NO;
+ */
+- (BOOL) didClickedHighLightPosition:(CGPoint)position {
+    return [self.textLayout didClickedHighLightPosition:position];
+}
+
+
+
+/**
+ 更新高亮区的显示开关;
+ 在执行这个方法前，最好先执行上面的判断;
+ 
+ @param switchOn 高亮开关;
+ @param position 高亮区所在的坐标;
+ */
+- (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position {
+    
+    [self.textLayout turnningHightLightSwitch:switchOn atPosition:position];
+}
 
 
 
