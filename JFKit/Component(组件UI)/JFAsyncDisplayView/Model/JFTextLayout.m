@@ -175,7 +175,7 @@
                     // 附件
                     JFTextAttachment* attachment = [attriDic objectForKey:JFTextAttachmentName];
                     if (attachment) {
-                        attachment.frame = run.runFrame;
+                        attachment.frame = run.ctRunFrame;
                         // 添加附件到缓存
                         if (![_attachments containsObject:attachment]) {
                             [_attachments addObject:attachment];
@@ -275,7 +275,24 @@
 }
 
 - (void) __drawAttachments {
-    
+    CGContextSaveGState(self.context);
+    CGContextTranslateCTM(self.context, self.textFrame.origin.x, self.textFrame.origin.y);
+    CGContextTranslateCTM(self.context, 0, self.textFrame.size.height);
+    CGContextScaleCTM(self.context, 1, -1);
+
+    for (JFTextAttachment* attachment in self.attachments) {
+        if (self.isCanceled()) {
+            CGContextRestoreGState(self.context);
+            return;
+        }
+        if ([attachment.contents isKindOfClass:[UIImage class]]) { // UIImage
+            UIImage* image = attachment.contents;
+            CGContextDrawImage(self.context, attachment.frame, image.CGImage);
+        } else { // NSURL
+            
+        }
+    }
+    CGContextRestoreGState(self.context);
 }
 
 - (void) __drawDebugs {

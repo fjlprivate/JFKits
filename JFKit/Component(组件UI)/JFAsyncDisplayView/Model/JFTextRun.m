@@ -63,6 +63,7 @@
                            _linePosition.y - desent,
                            runWidth,
                            ascent + desent);
+    _ctRunFrame = _runFrame;
     _runFrame = CGRectApplyAffineTransform(_runFrame, tt);
         
     // 生成所有字形

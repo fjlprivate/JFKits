@@ -18,6 +18,8 @@
 
 @property (nonatomic, assign, readonly) CGPoint linePosition; // 当前run所属的line的起点坐标<Core text坐标系>
 
+@property (nonatomic, assign, readonly) CGRect ctRunFrame; // 当前run的frame<Core text坐标系>
+
 @property (nonatomic, assign, readonly) CGRect runFrame; // 当前run的frame<UIKit坐标系>
 
 @property (nonatomic, assign, readonly) CGFloat lineSpace; // 行间距
