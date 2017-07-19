@@ -11,6 +11,7 @@
 
 @interface TestImageView : UIView
 @property (nonatomic, strong) UIImageView* imageView;
+@property (nonatomic, strong) JFImageStorage* imageStorage;
 @end
 
 
@@ -26,12 +27,12 @@
     self.view.backgroundColor = [UIColor whiteColor];
 
     UIView* backview = [UIView new];
-    backview.backgroundColor = JFHexColor(0x00a1dc, 1);
+    backview.backgroundColor = JFHexColor(0xe0e0e0, 1);
     backview.centerX = JFSCREEN_WIDTH * 0.5;
     backview.centerY = JFSCREEN_HEIGHT * 0.5;
     backview.width = JFSCREEN_WIDTH;
     backview.height = JFSCREEN_WIDTH * 0.5 * 2;
-    [self.view addSubview:backview];
+//    [self.view addSubview:backview];
     
     TestImageView* imageView = [[TestImageView alloc] init];
 //    imageView.top = 64 + 20;
@@ -78,7 +79,7 @@
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     // 绘制背景
-    CGContextSetFillColorWithColor(context, JFHexColor(0x00a1dc, 1).CGColor);
+    CGContextSetFillColorWithColor(context, JFHexColor(0xe0e0e0, 1).CGColor);
     CGContextFillRect(context, rect);
     
     
@@ -91,17 +92,28 @@
                               200, 200);
     CGPathAddRoundedRect(path, NULL, frame, 100, 100);
     CGContextAddPath(context, path);
-    CGContextClip(context);
+//    CGContextClip(context);
     // 转换坐标系
-    CGContextTranslateCTM(context, 0, rect.size.height);
-    CGContextScaleCTM(context, 1, -1);
-    // 将图片填充到这个裁剪后的圆形区域
-    CGContextDrawImage(context, frame, _imageView.image.CGImage);
+//    CGContextTranslateCTM(context, 0, rect.size.height);
+//    CGContextScaleCTM(context, 1, -1);
+//    // 将图片填充到这个裁剪后的圆形区域
+//    CGContextDrawImage(context, frame, _imageView.image.CGImage);
+//    [_imageView.image drawInRect:frame];
     
 //    [_imageView.image drawInRect:frame];
+    [self.imageStorage drawInContext:context isCanceled:^BOOL{
+        return NO;
+    }];
     
 }
 
+
+- (JFImageStorage *)imageStorage {
+    if (!_imageStorage) {
+        _imageStorage = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"selectedBlue"] frame:CGRectMake(10, 10, 24, 24)];
+    }
+    return _imageStorage;
+}
 
 
 @end

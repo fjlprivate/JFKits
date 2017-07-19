@@ -31,4 +31,4 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 #import "JFButton.h"
 
 
-#import "JFTextStorage.h"
+#import "JFLayout.h"

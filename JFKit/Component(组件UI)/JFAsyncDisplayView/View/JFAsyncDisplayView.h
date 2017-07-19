@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JFLayout.h"
 
 @interface JFAsyncDisplayView : UIView
+
+@property (nonatomic, strong) JFLayout* layout; // 混排布局对象;setter中刷新绘制;
 
 @end

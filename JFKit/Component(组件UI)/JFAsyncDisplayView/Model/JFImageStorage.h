@@ -21,6 +21,7 @@ typedef BOOL (^ isCanceledBlock) ();
 @property (nonatomic, assign) UIViewContentMode contentMode; // 图片布局类型;默认:UIViewContentModeScaleAspectFit
 
 
+
 /**
  绘制图片到图形上下文;
  只有当contents是UIImage类型时才允许绘制;
