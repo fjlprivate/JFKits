@@ -11,6 +11,11 @@
 #import "JFTextAttachment.h"
 
 
+// 判断是否退出的block
+typedef BOOL (^ IsCanceled) ();
+
+
+
 @interface AsyncDView() <JFAsyncDisplayDelegate>
 
 @property (nonatomic, strong) JFAsyncDisplayCallBacks* asyncDisplayCallBack;

@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "JFMacro.h"
+
+
+// 判断是否退出的block
+typedef BOOL (^ isCanceledBlock) ();
 
 @class JFTextHighLight;
 

@@ -9,8 +9,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreFoundation/CoreFoundation.h>
 
-
-//typedef BOOL (^IsCanceled)(void); // 退出block
+// 判断是否退出的block
+typedef BOOL (^ isCanceledBlock) ();
 
 
 @interface JFAsyncDisplayLayer : CALayer
@@ -24,7 +24,7 @@
 
 @property (nonatomic, copy) void (^ willDisplay) (JFAsyncDisplayLayer* layer);
 
-@property (nonatomic, copy) void (^ display) (CGContextRef context, CGSize size, IsCanceled isCanceled);
+@property (nonatomic, copy) void (^ display) (CGContextRef context, CGSize size, isCanceledBlock isCanceled);
 
 @property (nonatomic, copy) void (^ didDisplayed) (JFAsyncDisplayLayer* layer, BOOL finished);
 

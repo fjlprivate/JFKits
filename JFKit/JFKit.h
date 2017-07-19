@@ -15,14 +15,7 @@ FOUNDATION_EXPORT double JFKitVersionNumber;
 //! Project version string for JFKit.
 FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <JFKit/PublicHeader.h>
 
-//#import <JFKit/Macro/JFMacro.h>
-//
-//#import <JFKit/Helper/JFHelper.h>
-//
-//#import <JFKit/Category/NSString+Extension.h>
-//#import <JFKit/Category/UIView+Extension.h>
 
 #import "JFMacro.h"
 

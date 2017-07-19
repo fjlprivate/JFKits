@@ -6,8 +6,13 @@
 //  Copyright © 2017年 warmjar. All rights reserved.
 //
 
-#import "JFMacro.h"
 #import "JFStorage.h"
+
+// 判断是否退出的block
+typedef BOOL (^ isCanceledBlock) ();
+
+
+
 
 /**
  * [文本缓存类]

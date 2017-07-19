@@ -34,7 +34,7 @@
         layer.displayedAsyncchronous = YES;
     };
     
-    callBack.display = ^(CGContextRef context, CGSize size, IsCanceled isCanceled) {
+    callBack.display = ^(CGContextRef context, CGSize size, isCanceledBlock isCanceled) {
         
         
         

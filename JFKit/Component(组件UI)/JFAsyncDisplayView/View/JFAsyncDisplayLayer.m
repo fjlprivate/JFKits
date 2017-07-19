@@ -56,7 +56,7 @@
     
     // 生成判断绘制是否中断的block
     int32_t flag = displayFlag_;
-    IsCanceled isCanceled = ^BOOL() {
+    isCanceledBlock isCanceled = ^BOOL() {
         return flag != displayFlag_;
     };
     

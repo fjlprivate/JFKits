@@ -132,7 +132,7 @@
         layer.displayedAsyncchronous = YES;
     };
     
-    callBack.display = ^(CGContextRef context, CGSize size, IsCanceled isCanceled) {
+    callBack.display = ^(CGContextRef context, CGSize size, isCanceledBlock isCanceled) {
         __strong typeof(wself) sself = wself;
         [sself.textStorage drawInContext:context isCanceled:isCanceled];
         [sself.tStorage2 drawInContext:context isCanceled:isCanceled];
