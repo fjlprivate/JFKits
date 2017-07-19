@@ -44,6 +44,11 @@
         UIViewController* vc = [[NSClassFromString(@"TestForTextStorage") alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
+    else if ([title isEqualToString:@"TestForImageDraw"]) {
+        UIViewController* vc = [[NSClassFromString(@"TestForImageDraw") alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
 }
 
 
@@ -61,7 +66,7 @@
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"测试layer", @"测试layer2",@"TestForTextStorage"];
+        _titles = @[@"测试layer", @"测试layer2",@"TestForTextStorage", @"TestForImageDraw"];
     }
     return _titles;
 }

@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) JFTextLayout* textLayout; // 缓存文本布局属性
 @property (nonatomic, strong) NSMutableAttributedString* attributedString; // 富文本
-@property (nonatomic, assign) UIEdgeInsets insets; // 保存文本内嵌距离
 @property (nonatomic, strong) NSMutableParagraphStyle* paragraphStyle; // 段落属性
 
 @end
@@ -37,11 +36,7 @@
     if (!text || text.length == 0) {
         return nil;
     }
-    JFTextStorage* textStorage = [[JFTextStorage alloc] init];
-    textStorage.attributedString = [[NSMutableAttributedString alloc] initWithString:text];
-    textStorage.frame = frame;
-    textStorage.insets = insets;
-    textStorage.numberOfLines = 0;
+    JFTextStorage* textStorage = [[JFTextStorage alloc] initWithText:text frame:frame insets:insets];
     return textStorage;
 }
 
@@ -165,14 +160,17 @@
 
 
 /**
- 重新生成
+ 重新生成文本布局属性
  */
 - (void) renewTextLayout {
     JFTextLayout* layout = self.textLayout;
-    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString frame:self.frame linesCount:self.numberOfLines insets:self.insets];
+    self.textLayout = [JFTextLayout jf_textLayoutWithAttributedString:self.attributedString
+                                                                frame:self.frame
+                                                           linesCount:self.numberOfLines
+                                                               insets:self.insets];
     self.textLayout.debugMode = self.debugMode;
     self.textLayout.backgroundColor = self.backgroundColor;
-    _suggustFrame = self.textLayout.suggestFrame;
+    self.suggustFrame = self.textLayout.suggestFrame;
     if (layout) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [layout class];
@@ -181,13 +179,17 @@
 }
 
 
-# pragma mask 4 setter
-
-- (void)setFrame:(CGRect)frame {
-    if (!CGRectEqualToRect(self.frame, frame)) {
-        _frame = frame;
+# pragma mask 3 life cycle 
+- (instancetype) initWithText:(NSString*)text frame:(CGRect)frame insets:(UIEdgeInsets)insets {
+    self = [super initWithFrame:frame insets:insets];
+    if (self) {
+        _attributedString = [[NSMutableAttributedString alloc] initWithString:text];
+        _numberOfLines = 0;
     }
+    return self;
 }
+
+# pragma mask 4 setter
 
 - (void)setTextFont:(UIFont *)textFont {
     if (textFont == _textFont) {
@@ -250,24 +252,5 @@
     self.textLayout.debugMode = debugMode;
 }
 
-# pragma mask 4 getter
-- (CGFloat)top {
-    return self.suggustFrame.origin.y;
-}
-- (CGFloat)bottom {
-    return self.suggustFrame.origin.y + self.suggustFrame.size.height;
-}
-- (CGFloat)left {
-    return self.suggustFrame.origin.x;
-}
-- (CGFloat)right {
-    return self.suggustFrame.origin.x + self.suggustFrame.size.width;
-}
-- (CGFloat)width {
-    return self.suggustFrame.size.width;
-}
-- (CGFloat)height {
-    return self.suggustFrame.size.height;
-}
 
 @end

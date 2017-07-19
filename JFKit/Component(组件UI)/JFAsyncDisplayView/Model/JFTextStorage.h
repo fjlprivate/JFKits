@@ -6,8 +6,8 @@
 //  Copyright © 2017年 warmjar. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "JFMacro.h"
+#import "JFStorage.h"
 
 /**
  * [文本缓存类]
@@ -15,7 +15,7 @@
  * 缓存文本，以及文本属性，还有高亮属性:
  */
 
-@interface JFTextStorage : NSObject
+@interface JFTextStorage : JFStorage
 
 
 /**
@@ -30,15 +30,6 @@
 + (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(UIEdgeInsets)insets;
 
 
-// 布局属性
-@property (nonatomic, assign, readonly) CGRect frame; // 初始化传递的原始frame
-@property (nonatomic, assign, readonly) CGRect suggustFrame; // 按行数、text内容计算的最终frame
-@property (nonatomic, assign, readonly) CGFloat top;
-@property (nonatomic, assign, readonly) CGFloat bottom;
-@property (nonatomic, assign, readonly) CGFloat left;
-@property (nonatomic, assign, readonly) CGFloat right;
-@property (nonatomic, assign, readonly) CGFloat width;
-@property (nonatomic, assign, readonly) CGFloat height;
 
 
 @property (nonatomic, strong) UIFont* textFont; // 字体

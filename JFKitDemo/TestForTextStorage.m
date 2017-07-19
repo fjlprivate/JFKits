@@ -77,20 +77,20 @@
     if (self) {
         self.backgroundColor = JFHexColor(0, 0.05);
         NSString* text = @"轻轻的我走了，正如我轻轻地来。我招一招手，作别西天的云彩。";
-        NSRange range = [text rangeOfString:@"我招一招手"];
-        NSRange range1 = [text rangeOfString:@"西天"];
         _textStorage = [JFTextStorage jf_textStorageWithText:text frame:CGRectMake(10, 10, 120, 1000) insets:UIEdgeInsetsMake(4, 4, 4, 4)];
         _textStorage.textFont = [UIFont systemFontOfSize:16];
         _textStorage.textColor = JFHexColor(0x27384b, 1);
-        _textStorage.backgroundColor = JFHexColor(0xe0e0e0, 1);
+//        _textStorage.backgroundColor = JFHexColor(0xe0e0e0, 1);
         _textStorage.lineSpace = 3;
         _textStorage.kernSpace = 1.5;
-        _textStorage.debugMode = NO;
+//        _textStorage.debugMode = NO;
         [_textStorage setImage:[UIImage imageNamed:@"selectedBlue"] imageSize:CGSizeMake(30, 30) atPosition:7]; // 添加一个图片，会给原始的text追加一个占位符，长度会加1，所以图片附件要优先添加;
-        range.location += 1;
-        [_textStorage setBackgroundColor:JFHexColor(0x00a1dc, 1) atRange:range];
-        range1.location += 1;
+        NSRange range = [text rangeOfString:@"我招一招手"];
+//        range.location += 1;
         
+        [_textStorage setBackgroundColor:JFHexColor(0x00a1dc, 1) atRange:range];
+        NSRange range1 = [text rangeOfString:@"西天"];
+//        range1.location += 1;
 //        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:[UIColor whiteColor] backSelectedColor:JFHexColor(0x00a1dc, 0.8) atRange:range1];
 //        [_textStorage addLinkWithData:@"点击西天" textSelectedColor:[UIColor whiteColor] backSelectedColor:nil atRange:range1];
         [_textStorage addLinkWithData:@"点击西天" textSelectedColor:nil backSelectedColor:JFHexColor(0x00a1dc, 0.8) atRange:range1];
@@ -116,7 +116,6 @@
         _tStorage3.numberOfLines = 2;
         _tStorage3.debugMode = NO;
 
-        
     }
     return self;
 }

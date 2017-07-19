@@ -9,7 +9,8 @@
 #import <QuartzCore/QuartzCore.h>
 #import <CoreFoundation/CoreFoundation.h>
 
-typedef BOOL (^IsCanceled)(void); // 退出block
+
+//typedef BOOL (^IsCanceled)(void); // 退出block
 
 
 @interface JFAsyncDisplayLayer : CALayer
