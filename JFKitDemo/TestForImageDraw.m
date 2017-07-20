@@ -35,13 +35,11 @@
 //    [self.view addSubview:backview];
     
     TestImageView* imageView = [[TestImageView alloc] init];
-//    imageView.top = 64 + 20;
-//    imageView.left = 20;
-//    imageView.right = JFSCREEN_WIDTH - 20;
-//    imageView.bottom = JFSCREEN_HEIGHT * 0.618;
     imageView.centerX = JFSCREEN_WIDTH * 0.5;
     imageView.centerY = JFSCREEN_HEIGHT * 0.5;
-    imageView.width = JFSCREEN_WIDTH * 0.8;
+//    imageView.width = JFSCREEN_WIDTH * 0.5;
+//    imageView.height = imageView.width;
+    imageView.width = backview.height * 0.5;
     imageView.height = backview.height;
     [self.view addSubview:imageView];
     
@@ -61,50 +59,108 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        _imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IMG_0618"]];
-        // UIViewContentModeScaleToFill: 完全填充，不考虑宽高比
-        // UIViewContentModeScaleAspectFit: 按宽高比：图片比视图胖，则按image.width填充；图片比视图瘦，则按image.height填充;
-        // UIViewContentModeScaleAspectFill: 首先，图片是按原始比例填充；其次，图片会按自己的比例占满视图的最小边长
-        _imageView.contentMode = UIViewContentModeScaleAspectFit;
+//        UIImage* originImage = [UIImage imageNamed:@"noData"];
+//        UIImage* image = [self circleImage:originImage withParam:0];
+////            CGSize imageCutSize = CGSizeMake(originImage.size.width * 0.8, originImage.size.height * 0.8);
+//////            UIImage* image = [originImage imageCutedWithContentMode:UIViewContentModeCenter
+//////                                                            newSize:imageCutSize
+//////                                                       cornerRadius:CGSizeMake(10, 10)
+//////                                                        borderWidth:2
+//////                                                        borderColor:[UIColor orangeColor]
+//////                                                    backgroundColor:JFHexColor(0x27384b, 1)];
+////        UIImage* image = [originImage imageCutedWithCornerRadius:CGSizeMake(10, 10) borderWidth:2 borderColor:JFHexColor(0x27384b, 1) backgroundColor:[UIColor orangeColor]];
+//        _imageView = [[UIImageView alloc] initWithImage:image];
+//        // UIViewContentModeScaleToFill: 完全填充，不考虑宽高比
+//        // UIViewContentModeScaleAspectFit: 按宽高比：图片比视图胖，则按image.width填充；图片比视图瘦，则按image.height填充;
+//        // UIViewContentModeScaleAspectFill: 首先，图片是按原始比例填充；其次，图片会按自己的比例占满视图的最小边长
+////        _imageView.contentMode = UIViewContentModeScaleAspectFit;
 //        [self addSubview:_imageView];
+        
+        
+        
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.imageView.frame = self.bounds;
+//    self.imageView.frame = self.bounds;
+//    self.imageView.image = [self circleImage:[UIImage imageNamed:@"noData"] withParam:0] ;
 }
 
 - (void)drawRect:(CGRect)rect {
+    UIImage* originImage = [UIImage imageNamed:@"noData"];
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
-    // 绘制背景
-    CGContextSetFillColorWithColor(context, JFHexColor(0xe0e0e0, 1).CGColor);
+    CGContextSetFillColorWithColor(context, JFHexColor(0x00a1dc, 1).CGColor);
     CGContextFillRect(context, rect);
+    // 绘制上边框
+    CGRect upFrame = CGRectMake(0, 0, rect.size.width, rect.size.height * 0.5);
+    CGContextSetStrokeColorWithColor(context, JFHexColor(0x27384b, 1).CGColor);
+    CGContextStrokeRect(context, upFrame);
+    // 绘制下边框
+    CGRect downFrame = CGRectMake(0, upFrame.size.height, upFrame.size.width, upFrame.size.height);
+    CGContextSetStrokeColorWithColor(context, JFHexColor(0x27384b, 1).CGColor);
+    CGContextStrokeRect(context, downFrame);
+
+    
+    // 原图绘制到上部
+    [originImage drawInRect:upFrame];
     
     
     
+    // 裁剪图绘制到下部
+    CGSize imageSize = originImage.size;
+    CGSize imageCutSize = CGSizeMake(imageSize.width * 0.8, imageSize.height * 0.8);
+//    UIImage* image = [_imageView.image imageCutedWithNewSize:CGSizeMake(imageSize.width * 1, imageSize.height * 0.5)];
+//    UIImage* image = [self.imageView.image imageCutedWithNewSize:imageCutSize contentMode:UIViewContentModeRight];
+    UIImage* image = [originImage imageCutedWithContentMode:UIViewContentModeCenter
+                                                             newSize:imageCutSize
+                                                        cornerRadius:CGSizeMake(20, 20)
+                                                         borderWidth:4
+                                                         borderColor:[UIColor orangeColor]
+                                                     backgroundColor:JFHexColor(0x00a1dc, 1)];
     
-    // 裁剪一个圆形
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGRect frame = CGRectMake((rect.size.width - 200)/2,
-                              (rect.size.height - 200)/2,
-                              200, 200);
-    CGPathAddRoundedRect(path, NULL, frame, 100, 100);
-    CGContextAddPath(context, path);
+    CGFloat drawWidth = downFrame.size.width * (imageCutSize.width / imageSize.width);
+    CGFloat drawHeight = downFrame.size.height * (imageCutSize.height / imageSize.height);
+    CGRect drawRect = CGRectMake((downFrame.size.width - drawWidth)/2,
+                                 (downFrame.size.height - drawHeight)/2 + downFrame.origin.y,
+                                 drawWidth, drawHeight);
+    
+//    CGContextAddEllipseInRect(context, drawRect);
+//    CGMutablePathRef path = CGPathCreateMutable();
+//    CGPathAddRoundedRect(path, NULL, drawRect, 10, 10);
+//    CGContextAddPath(context, path);
 //    CGContextClip(context);
-    // 转换坐标系
-//    CGContextTranslateCTM(context, 0, rect.size.height);
-//    CGContextScaleCTM(context, 1, -1);
-//    // 将图片填充到这个裁剪后的圆形区域
-//    CGContextDrawImage(context, frame, _imageView.image.CGImage);
-//    [_imageView.image drawInRect:frame];
     
-//    [_imageView.image drawInRect:frame];
-    [self.imageStorage drawInContext:context isCanceled:^BOOL{
-        return NO;
-    }];
+    [image drawInRect:drawRect];
+//    CGContextDrawImage(context, drawRect, image.CGImage);
     
+    
+    
+    
+}
+
+-(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset {
+    UIGraphicsBeginImageContext(image.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    
+    CGContextSetLineWidth(context, 2);
+    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
+    CGRect rect = CGRectMake(inset, inset, image.size.width - inset * 2.0f, image.size.height - inset * 2.0f);
+    CGContextAddEllipseInRect(context, rect);
+    CGContextClip(context);
+    
+    CGContextSetFillColorWithColor(context, [UIColor orangeColor].CGColor);
+    CGContextFillRect(context, CGRectMake(0, 0, image.size.width, image.size.height));
+    
+    [image drawInRect:rect];
+    CGContextAddEllipseInRect(context, rect);
+    CGContextStrokePath(context);
+    UIImage *newimg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newimg;
 }
 
 

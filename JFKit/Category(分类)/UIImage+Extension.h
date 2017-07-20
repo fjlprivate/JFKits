@@ -11,6 +11,29 @@
 @interface UIImage (Extension)
 
 
+
+/**
+ 裁剪出指定size的图片;
+ 从左上角开始;
+
+ @param newSize 裁剪size;
+ @return 裁剪后的图片;
+ */
+- (UIImage*) imageCutedWithNewSize:(CGSize)newSize;
+
+
+/**
+ 裁剪出指定size的图片;
+ 按指定的位置;
+ 
+ @param newSize 裁剪size;
+ @param contentMode 指定位置;
+ @return 裁剪后的图片;
+ */
+- (UIImage*) imageCutedWithNewSize:(CGSize)newSize contentMode:(UIViewContentMode)contentMode;
+
+
+
 /**
  裁剪当前image;
  按下列属性裁剪;
@@ -29,6 +52,7 @@
                            borderWidth:(CGFloat)borderWidth
                            borderColor:(UIColor*)borderColor
                        backgroundColor:(UIColor*)backgroundColor;
+
 
 
 @end

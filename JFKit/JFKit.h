@@ -23,7 +23,7 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 
 #import "NSString+Extension.h"
 #import "UIView+Extension.h"
-
+#import "UIImage+Extension.h"
 
 // *****  组件
 

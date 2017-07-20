@@ -16,7 +16,7 @@
 #define JFSCREEN_WIDTH          [UIScreen mainScreen].bounds.size.width
 #define JFSCREEN_HEIGHT         [UIScreen mainScreen].bounds.size.height
 
-
+#define JFSCREEN_SCALE           [UIScreen mainScreen].scale
 
 
 #endif /* JFMacro_h */
