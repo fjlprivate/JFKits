@@ -121,8 +121,8 @@
 //                                                         borderColor:[UIColor orangeColor]
 //                                                     backgroundColor:JFHexColor(0x00a1dc, 1)];
     UIImage* image = [originImage imageCutedWithContentMode:UIViewContentModeCenter
-                                               cornerRadius:CGSizeMake(50, 50)
-                                                borderWidth:15
+                                               cornerRadius:CGSizeMake(imageSize.height * 0.5, imageSize.height * 0.5)
+                                                borderWidth:30
                                                 borderColor:[UIColor orangeColor] backgroundColor:JFHexColor(0xffffff, 1)];
     
     
@@ -153,11 +153,12 @@
 
 - (JFImageStorage *)imageStorage {
     if (!_imageStorage) {
-        _imageStorage = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"noData"] frame:CGRectMake(10, 10, 100, 100)];
+        _imageStorage = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"IMG_0618"] frame:CGRectMake(10, 10, 100, 100)];
         _imageStorage.cornerRadius = CGSizeMake(50, 50);
-        _imageStorage.borderWidth = 3;
-        _imageStorage.borderColor = [UIColor colorWithWhite:0 alpha:0.1];
-        _imageStorage.backgroundColor = JFHexColor(0x00a1dc, 1);
+        _imageStorage.borderWidth = 2;
+        _imageStorage.borderColor = JFHexColor(0x00a1dc, 1);
+        _imageStorage.backgroundColor = JFHexColor(0xffffff, 1);
+        _imageStorage.contentMode = UIViewContentModeRight;
     }
     return _imageStorage;
 }

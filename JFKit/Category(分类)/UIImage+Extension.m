@@ -187,135 +187,7 @@
  @param backgroundColor 背景色
  @return 裁剪后的图片
  */
-//- (UIImage*) imageCutedWithContentMode:(UIViewContentMode)contentMode
-//                               newSize:(CGSize)newSize
-//                          cornerRadius:(CGSize)cornerRadius
-//                           borderWidth:(CGFloat)borderWidth
-//                           borderColor:(UIColor*)borderColor
-//                       backgroundColor:(UIColor*)backgroundColor
-//{
-//    if (CGSizeEqualToSize(newSize, CGSizeZero)) {
-//        return nil;
-//    }
-//    if (newSize.width > self.size.width) {
-//        newSize.width = self.size.width;
-//    }
-//    if (newSize.height > self.size.height) {
-//        newSize.height = self.size.height;
-//    }
-//    
-//    UIGraphicsBeginImageContextWithOptions(newSize, YES, self.scale);
-//    CGContextRef context = UIGraphicsGetCurrentContext();
-//    CGRect imageFrame = CGRectMake(0, 0, newSize.width, newSize.height);
-//    
-//    
-//    // 绘制背景色
-//    if (backgroundColor) {
-//        CGContextSetFillColorWithColor(context, backgroundColor.CGColor);
-//        CGContextFillRect(context, CGRectInset(imageFrame, -2, -2));
-//    }
-//    
-//
-//    // 裁剪图片
-//    CGSize imageSize = CGSizeMake(self.size.width * self.scale, self.size.height * self.scale);
-//    CGRect bounds =  CGRectMake(0, 0, newSize.width * self.scale, newSize.height * self.scale);
-//    
-//    switch (contentMode) {
-//        case UIViewContentModeCenter:       // 中点
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-//            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-//        }
-//            break;
-//        case UIViewContentModeTop:          // 中上
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-//        }
-//            break;
-//        case UIViewContentModeBottom:       // 中下
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-//            bounds.origin.y = (imageSize.height - bounds.size.height);
-//        }
-//            break;
-//        case UIViewContentModeLeft:         // 中左
-//        {
-//            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-//        }
-//            break;
-//        case UIViewContentModeRight:        // 中右
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width);
-//            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-//        }
-//            break;
-//        case UIViewContentModeTopRight:     // 右上
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width);
-//        }
-//            break;
-//        case UIViewContentModeBottomLeft:   // 左下
-//        {
-//            bounds.origin.y = (imageSize.height - bounds.size.height);
-//        }
-//            break;
-//        case UIViewContentModeBottomRight:  // 右下
-//        {
-//            bounds.origin.x = (imageSize.width - bounds.size.width);
-//            bounds.origin.y = (imageSize.height - bounds.size.height);
-//        }
-//            break;
-//        default:                            // 左上
-//            break;
-//    }
-//    
-//    // 裁剪cornerRadius
-//    CGMutablePathRef path = CGPathCreateMutable();
-//    if (cornerRadius.width > 0 || cornerRadius.height > 0) {
-//        CGPathAddRoundedRect(path, NULL, imageFrame, cornerRadius.width, cornerRadius.height);
-//        CGContextAddPath(context, path);
-//        // 裁剪
-//        CGContextClip(context);
-//    } else {
-//        CGPathAddRect(path, NULL, imageFrame);
-//        CGContextAddPath(context, path);
-//    }
-//    
-//    
-//    // 绘制图片
-//    if (CGSizeEqualToSize(newSize, self.size)) {
-//        [self drawInRect:imageFrame];
-//    } else {
-//        // 裁剪图片
-//        CGImageRef imageRef = CGImageCreateWithImageInRect(self.CGImage, bounds);
-//        // 绘制图片
-//        CGContextTranslateCTM(context, 0, newSize.height);
-//        CGContextScaleCTM(context, 1, -1);
-//        CGContextDrawImage(context, imageFrame, imageRef);
-//        // 释放图片
-//        CGImageRelease(imageRef);
-//    }
-//    
-//    
-//    // 绘制边框
-//    if (borderWidth > 0 && borderColor) {
-//        CGRect borderRect = CGRectInset(imageFrame, borderWidth, borderWidth);
-//        CGPathAddRoundedRect(path, NULL, borderRect, cornerRadius.width - borderWidth, cornerRadius.height - borderWidth);
-//        CGContextAddPath(context, path);
-//        
-//        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
-//        CGContextSetLineWidth(context, borderWidth);
-//        CGContextStrokePath(context);
-//    }
-//    
-//    UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
-//    
-//    // 释放资源
-//    CFRelease(path);
-//    UIGraphicsEndImageContext();
-//    
-//    return image;
-//}
+
 - (UIImage*) imageCutedWithContentMode:(UIViewContentMode)contentMode
                                newSize:(CGSize)newSize
                           cornerRadius:(CGSize)cornerRadius
@@ -326,137 +198,33 @@
     if (CGSizeEqualToSize(newSize, CGSizeZero)) {
         return nil;
     }
-//    if (newSize.width > self.size.width) {
-//        newSize.width = self.size.width;
-//    }
-//    if (newSize.height > self.size.height) {
-//        newSize.height = self.size.height;
-//    }
-    
+    CGRect contextFrame = CGRectMake(0, 0, newSize.width, newSize.height);
+
     UIGraphicsBeginImageContextWithOptions(newSize, YES, self.scale);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    
-    /*
-     newSize有下列几种情况
-     1. newSize小于当前图片size
-        需要裁剪
-     2. newSize大于当前图片size
-        无需裁剪
-     3. newSize有一边大于当前图片size
-        无需裁剪
-     */
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    CGRect imageFrame = CGRectMake(0, 0, newSize.width, newSize.height);
-    
-    
+    CGRect imageFrame = [self newImageFrameWithContentMode:contentMode newSize:newSize];
+ 
     // 绘制背景色
     if (backgroundColor) {
         CGContextSetFillColorWithColor(context, backgroundColor.CGColor);
-        CGContextFillRect(context, CGRectInset(imageFrame, -2, -2));
-    }
-    
-    
-    /*
-     如果需要裁剪图片，裁剪图片
-     绘制背景色
-     如果需要裁剪上下文，裁剪上下文
-     绘制边框
-     */
-    
-    // 裁剪图片
-    CGSize imageSize = CGSizeMake(self.size.width * self.scale, self.size.height * self.scale);
-    CGRect bounds =  CGRectMake(0, 0, newSize.width * self.scale, newSize.height * self.scale);
-    
-    switch (contentMode) {
-        case UIViewContentModeCenter:       // 中点
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-        }
-            break;
-        case UIViewContentModeTop:          // 中上
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-        }
-            break;
-        case UIViewContentModeBottom:       // 中下
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width)/2.0;
-            bounds.origin.y = (imageSize.height - bounds.size.height);
-        }
-            break;
-        case UIViewContentModeLeft:         // 中左
-        {
-            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-        }
-            break;
-        case UIViewContentModeRight:        // 中右
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width);
-            bounds.origin.y = (imageSize.height - bounds.size.height)/2.0;
-        }
-            break;
-        case UIViewContentModeTopRight:     // 右上
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width);
-        }
-            break;
-        case UIViewContentModeBottomLeft:   // 左下
-        {
-            bounds.origin.y = (imageSize.height - bounds.size.height);
-        }
-            break;
-        case UIViewContentModeBottomRight:  // 右下
-        {
-            bounds.origin.x = (imageSize.width - bounds.size.width);
-            bounds.origin.y = (imageSize.height - bounds.size.height);
-        }
-            break;
-        default:                            // 左上
-            break;
+        CGContextFillRect(context, CGRectInset(contextFrame, -2, -2));
     }
     
     // 裁剪cornerRadius
     CGMutablePathRef path = CGPathCreateMutable();
     if (cornerRadius.width > 0 || cornerRadius.height > 0) {
-        CGPathAddRoundedRect(path, NULL, imageFrame, cornerRadius.width, cornerRadius.height);
+        CGPathAddRoundedRect(path, NULL, contextFrame, cornerRadius.width, cornerRadius.height);
         CGContextAddPath(context, path);
         // 裁剪
         CGContextClip(context);
-    } else {
-        CGPathAddRect(path, NULL, imageFrame);
-        CGContextAddPath(context, path);
     }
-    
     
     // 绘制图片
-    if (CGSizeEqualToSize(newSize, self.size)) {
-        [self drawInRect:imageFrame];
-    } else {
-        // 裁剪图片
-        CGImageRef imageRef = CGImageCreateWithImageInRect(self.CGImage, bounds);
-        // 绘制图片
-        CGContextTranslateCTM(context, 0, newSize.height);
-        CGContextScaleCTM(context, 1, -1);
-        CGContextDrawImage(context, imageFrame, imageRef);
-        // 释放图片
-        CGImageRelease(imageRef);
-    }
-    
+    [self drawInRect:imageFrame];
     
     // 绘制边框
     if (borderWidth > 0 && borderColor) {
-        CGRect borderRect = CGRectInset(imageFrame, borderWidth, borderWidth);
+        CGRect borderRect = CGRectInset(contextFrame, borderWidth, borderWidth);
         CGPathAddRoundedRect(path, NULL, borderRect, cornerRadius.width - borderWidth, cornerRadius.height - borderWidth);
         CGContextAddPath(context, path);
         
@@ -596,6 +364,295 @@
     return newFrame;
 }
 
+
+
+
+/**
+ 根据长宽比，计算需要绘制的大小；并计算图片在绘制区的Frame；
+ 绘制大小通过width和height参数返回；
+
+ @param contentMode 图片布局属性;
+ @param w2h 长宽比;
+ @param width 绘制区的width(回参);
+ @param height 绘制区的height(回参);
+ @return 图片在绘制区的frame;
+ */
+- (CGRect) newImageFrameWithContentMode:(UIViewContentMode)contentMode w2h:(CGFloat)w2h newImageWidth:(CGFloat*)width  newImageHeight:(CGFloat*)height{
+    CGSize imageSize = self.size;
+    CGRect newFrame = CGRectMake(0, 0, imageSize.width, imageSize.height);
+    CGFloat curW2H = imageSize.width / imageSize.height;
+    
+    switch (contentMode) {
+        case UIViewContentModeScaleToFill: // 直接填充
+        {
+            *width = MIN(imageSize.width, imageSize.height);
+            *height = *width / w2h;
+            newFrame.size.width = *width;
+            newFrame.size.height = *height;
+        }
+            break;
+        case UIViewContentModeScaleAspectFit:
+        case UIViewContentModeScaleAspectFill:
+        case UIViewContentModeRedraw:
+        case UIViewContentModeCenter:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = (*width - newFrame.size.height)/2;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeTop:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeBottom:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = *height - imageSize.height;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeLeft:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = (*height - newFrame.size.height)/2;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+            }
+        }
+            break;
+        case UIViewContentModeRight:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = (*height - newFrame.size.height)/2;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width);
+            }
+        }
+            break;
+        case UIViewContentModeTopLeft:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+            }
+        }
+            break;
+        case UIViewContentModeTopRight:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width);
+            }
+        }
+            break;
+        case UIViewContentModeBottomLeft:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = (*height - newFrame.size.height);
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+            }
+        }
+            break;
+        case UIViewContentModeBottomRight:
+        {
+            if (curW2H > w2h) {
+                *width = imageSize.width;
+                *height = *width / w2h;
+                newFrame.origin.y = (*height - newFrame.size.height);
+            } else {
+                *height = imageSize.height;
+                *width = *height * w2h;
+                newFrame.origin.x = (*width - newFrame.size.width);
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    return newFrame;
+}
+
+
+
+/**
+ 根据提供的尺寸大小和布局生成图片的区域;
+ 图片需要按实际比例缩放，填充在指定的尺寸里面;
+
+ @param contentMode 图片布局属性;
+ @param newSize 指定的尺寸大小;
+ @return 缩放后的图片在指定尺寸中的区域;
+ */
+- (CGRect) newImageFrameWithContentMode:(UIViewContentMode)contentMode newSize:(CGSize)newSize{
+    CGSize imageSize = self.size;
+    CGRect newFrame = CGRectZero;
+    CGFloat w2h = newSize.width / newSize.height;
+    CGFloat curW2H = imageSize.width / imageSize.height;
+    
+    switch (contentMode) {
+        case UIViewContentModeScaleToFill: // 直接填充
+        {
+            newFrame.size.width = newSize.width;
+            newFrame.size.height = newSize.height;
+        }
+            break;
+        case UIViewContentModeScaleAspectFit:
+        case UIViewContentModeScaleAspectFill:
+        case UIViewContentModeRedraw:
+        case UIViewContentModeCenter:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = (newSize.height - newFrame.size.height)/2;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeTop:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeBottom:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = newSize.height - newFrame.size.height;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width)/2;
+            }
+        }
+            break;
+        case UIViewContentModeLeft:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = (newSize.height - newFrame.size.height)/2;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+            }
+        }
+            break;
+        case UIViewContentModeRight:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = (newSize.height - newFrame.size.height)/2;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width);
+            }
+        }
+            break;
+        case UIViewContentModeTopLeft:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+            }
+        }
+            break;
+        case UIViewContentModeTopRight:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width);
+            }
+        }
+            break;
+        case UIViewContentModeBottomLeft:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = (newSize.height - newFrame.size.height);
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+            }
+        }
+            break;
+        case UIViewContentModeBottomRight:
+        {
+            if (curW2H > w2h) {
+                newFrame.size.width = newSize.width;
+                newFrame.size.height = newSize.width / curW2H;
+                newFrame.origin.y = (newSize.height - newFrame.size.height);
+            } else {
+                newFrame.size.height = newSize.height;
+                newFrame.size.width = newSize.height * curW2H;
+                newFrame.origin.x = (newSize.width - newFrame.size.width);
+            }
+        }
+            break;
+        default:
+            break;
+    }
+    return newFrame;
+}
 
 
 @end
