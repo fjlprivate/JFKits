@@ -7,6 +7,7 @@
 //
 
 #import "JFImageStorage.h"
+#import "UIImage+Extension.h"
 
 @implementation JFImageStorage
 
@@ -27,9 +28,19 @@
         return;
     }
     
-    CGContextSaveGState(context);
     
-    UIImage* image = self.contents;
+    CGContextSaveGState(context);
+//    UIImage* image = self.contents;
+    UIImage* originImage = (UIImage*)self.contents;
+    CGSize imageSize = originImage.size;
+    CGSize newCornerRadius = CGSizeMake(self.cornerRadius.width * imageSize.height / self.frame.size.height,
+                                        self.cornerRadius.height * imageSize.width / self.frame.size.width);
+    UIImage* image = [originImage imageCutedWithContentMode:self.contentMode
+                                                    newSize:originImage.size
+                                               cornerRadius:self.cornerRadius
+                                                borderWidth:self.borderWidth
+                                                borderColor:self.borderColor
+                                            backgroundColor:self.backgroundColor];
     [image drawInRect:self.frame];
     
     CGContextRestoreGState(context);

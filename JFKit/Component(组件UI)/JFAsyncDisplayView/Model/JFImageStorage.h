@@ -18,8 +18,20 @@ typedef BOOL (^ isCanceledBlock) ();
 
 @property (nonatomic, strong) id contents; // 图片内容; UIImage or NSURL
 
-@property (nonatomic, assign) UIViewContentMode contentMode; // 图片布局类型;默认:UIViewContentModeScaleAspectFit
 
+/**
+ 图片布局类型;默认:UIViewContentModeScaleAspectFit;
+ UIViewContentModeScaleAspectFill同UIViewContentModeScaleAspectFit效果一样;
+ */
+@property (nonatomic, assign) UIViewContentMode contentMode;
+
+@property (nonatomic, strong) UIColor* backgroundColor; // 背景色
+
+
+@property (nonatomic, assign) CGSize cornerRadius; // 圆角值
+
+@property (nonatomic, assign) CGFloat borderWidth; // 边框宽度
+@property (nonatomic, strong) UIColor* borderColor; // 边框颜色
 
 
 /**

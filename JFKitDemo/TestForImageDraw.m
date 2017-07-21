@@ -89,10 +89,10 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    UIImage* originImage = [UIImage imageNamed:@"noData"];
+    UIImage* originImage = [UIImage imageNamed:@"IMG_0618"]; //IMG_0618  noData
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, JFHexColor(0x00a1dc, 1).CGColor);
+    CGContextSetFillColorWithColor(context, JFHexColor(0xffffff, 1).CGColor);
     CGContextFillRect(context, rect);
     // 绘制上边框
     CGRect upFrame = CGRectMake(0, 0, rect.size.width, rect.size.height * 0.5);
@@ -100,26 +100,31 @@
     CGContextStrokeRect(context, upFrame);
     // 绘制下边框
     CGRect downFrame = CGRectMake(0, upFrame.size.height, upFrame.size.width, upFrame.size.height);
-    CGContextSetStrokeColorWithColor(context, JFHexColor(0x27384b, 1).CGColor);
+    CGContextSetStrokeColorWithColor(context, JFHexColor(0xffffff, 1).CGColor);
     CGContextStrokeRect(context, downFrame);
 
     
     // 原图绘制到上部
-    [originImage drawInRect:upFrame];
+//    [originImage drawInRect:upFrame];
     
     
     
     // 裁剪图绘制到下部
     CGSize imageSize = originImage.size;
-    CGSize imageCutSize = CGSizeMake(imageSize.width * 0.8, imageSize.height * 0.8);
+    CGSize imageCutSize = CGSizeMake(imageSize.width * 1, imageSize.height * 1);
 //    UIImage* image = [_imageView.image imageCutedWithNewSize:CGSizeMake(imageSize.width * 1, imageSize.height * 0.5)];
 //    UIImage* image = [self.imageView.image imageCutedWithNewSize:imageCutSize contentMode:UIViewContentModeRight];
+//    UIImage* image = [originImage imageCutedWithContentMode:UIViewContentModeCenter
+//                                                             newSize:imageCutSize
+//                                                        cornerRadius:CGSizeMake(20, 20)
+//                                                         borderWidth:4
+//                                                         borderColor:[UIColor orangeColor]
+//                                                     backgroundColor:JFHexColor(0x00a1dc, 1)];
     UIImage* image = [originImage imageCutedWithContentMode:UIViewContentModeCenter
-                                                             newSize:imageCutSize
-                                                        cornerRadius:CGSizeMake(20, 20)
-                                                         borderWidth:4
-                                                         borderColor:[UIColor orangeColor]
-                                                     backgroundColor:JFHexColor(0x00a1dc, 1)];
+                                               cornerRadius:CGSizeMake(50, 50)
+                                                borderWidth:15
+                                                borderColor:[UIColor orangeColor] backgroundColor:JFHexColor(0xffffff, 1)];
+    
     
     CGFloat drawWidth = downFrame.size.width * (imageCutSize.width / imageSize.width);
     CGFloat drawHeight = downFrame.size.height * (imageCutSize.height / imageSize.height);
@@ -137,36 +142,22 @@
 //    CGContextDrawImage(context, drawRect, image.CGImage);
     
     
+    [self.imageStorage drawInContext:context isCanceled:^BOOL{
+        return NO;
+    }];
+    
+    
     
     
 }
-
--(UIImage*) circleImage:(UIImage*) image withParam:(CGFloat) inset {
-    UIGraphicsBeginImageContext(image.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    
-    CGContextSetLineWidth(context, 2);
-    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
-    CGRect rect = CGRectMake(inset, inset, image.size.width - inset * 2.0f, image.size.height - inset * 2.0f);
-    CGContextAddEllipseInRect(context, rect);
-    CGContextClip(context);
-    
-    CGContextSetFillColorWithColor(context, [UIColor orangeColor].CGColor);
-    CGContextFillRect(context, CGRectMake(0, 0, image.size.width, image.size.height));
-    
-    [image drawInRect:rect];
-    CGContextAddEllipseInRect(context, rect);
-    CGContextStrokePath(context);
-    UIImage *newimg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newimg;
-}
-
 
 - (JFImageStorage *)imageStorage {
     if (!_imageStorage) {
-        _imageStorage = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"selectedBlue"] frame:CGRectMake(10, 10, 24, 24)];
+        _imageStorage = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"noData"] frame:CGRectMake(10, 10, 100, 100)];
+        _imageStorage.cornerRadius = CGSizeMake(50, 50);
+        _imageStorage.borderWidth = 3;
+        _imageStorage.borderColor = [UIColor colorWithWhite:0 alpha:0.1];
+        _imageStorage.backgroundColor = JFHexColor(0x00a1dc, 1);
     }
     return _imageStorage;
 }

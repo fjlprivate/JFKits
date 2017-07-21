@@ -10,7 +10,30 @@
 
 @interface UIImage (Extension)
 
+# pragma mask : 缩放
 
+# pragma mask : 裁剪形状
+
+/**
+ 裁剪圆角(包括圆形);
+ 按下列属性裁剪;
+ 
+ @param contentMode 布局模式
+ @param cornerRadius 圆角大小，分横竖
+ @param borderWidth 边线宽度
+ @param borderColor 边线颜色
+ @param backgroundColor 背景色
+ @return 裁剪后的图片
+ */
+- (UIImage*) imageCutedWithContentMode:(UIViewContentMode)contentMode
+                          cornerRadius:(CGSize)cornerRadius
+                           borderWidth:(CGFloat)borderWidth
+                           borderColor:(UIColor*)borderColor
+                       backgroundColor:(UIColor*)backgroundColor;
+
+
+
+# pragma mask : 裁剪部分图片
 
 /**
  裁剪出指定size的图片;
@@ -31,6 +54,7 @@
  @return 裁剪后的图片;
  */
 - (UIImage*) imageCutedWithNewSize:(CGSize)newSize contentMode:(UIViewContentMode)contentMode;
+
 
 
 
