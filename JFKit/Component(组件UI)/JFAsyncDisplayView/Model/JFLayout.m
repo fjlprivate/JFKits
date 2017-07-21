@@ -18,8 +18,6 @@
 
 
 
-
-
 # pragma mask 4 getter
 
 - (NSMutableArray<JFStorage *> *)storages {

@@ -32,23 +32,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString* title = self.titles[indexPath.row];
-    if ([title isEqualToString:@"测试layer"]) {
-        UIViewController* vc = [[NSClassFromString(@"TestAsyncDisplayLayer") alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if ([title isEqualToString:@"测试layer2"]) {
-        UIViewController* vc = [[NSClassFromString(@"TextAsyncDisplayLayer2") alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if ([title isEqualToString:@"TestForTextStorage"]) {
-        UIViewController* vc = [[NSClassFromString(@"TestForTextStorage") alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-    else if ([title isEqualToString:@"TestForImageDraw"]) {
-        UIViewController* vc = [[NSClassFromString(@"TestForImageDraw") alloc] init];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-
+    UIViewController* vc = [[NSClassFromString(title) alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -66,7 +51,11 @@
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"测试layer", @"测试layer2",@"TestForTextStorage", @"TestForImageDraw"];
+        _titles = @[@"TestAsyncDisplayLayer",
+                    @"TextAsyncDisplayLayer2",
+                    @"TestForTextStorage",
+                    @"TestForImageDraw",
+                    @"TestForImageStorage"];
     }
     return _titles;
 }

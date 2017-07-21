@@ -21,6 +21,7 @@
 		807AAE891F1F17260083A384 /* UIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE881F1F17260083A384 /* UIImage+Extension.m */; };
 		807AAE8C1F1F59950083A384 /* JFStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE8B1F1F59950083A384 /* JFStorage.m */; };
 		807AAE8F1F1F59AF0083A384 /* JFImageStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE8E1F1F59AF0083A384 /* JFImageStorage.m */; };
+		807AAE931F21FB7E0083A384 /* TestForImageStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE921F21FB7E0083A384 /* TestForImageStorage.m */; };
 		807FF74C1F14B934002C57FC /* AsyncGView.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74B1F14B934002C57FC /* AsyncGView.m */; };
 		807FF7751F14BAC5002C57FC /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF74F1F14BAC5002C57FC /* MKAnnotationView+WebCache.m */; };
 		807FF7761F14BAC5002C57FC /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 807FF7511F14BAC5002C57FC /* NSData+ImageContentType.m */; };
@@ -131,6 +132,8 @@
 		807AAE8B1F1F59950083A384 /* JFStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFStorage.m; sourceTree = "<group>"; };
 		807AAE8D1F1F59AF0083A384 /* JFImageStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFImageStorage.h; sourceTree = "<group>"; };
 		807AAE8E1F1F59AF0083A384 /* JFImageStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFImageStorage.m; sourceTree = "<group>"; };
+		807AAE911F21FB7E0083A384 /* TestForImageStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestForImageStorage.h; sourceTree = "<group>"; };
+		807AAE921F21FB7E0083A384 /* TestForImageStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestForImageStorage.m; sourceTree = "<group>"; };
 		807FF74A1F14B934002C57FC /* AsyncGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncGView.h; sourceTree = "<group>"; };
 		807FF74B1F14B934002C57FC /* AsyncGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncGView.m; sourceTree = "<group>"; };
 		807FF74E1F14BAC5002C57FC /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
@@ -323,6 +326,15 @@
 			name = "测试image绘制";
 			sourceTree = "<group>";
 		};
+		807AAE901F21FB610083A384 /* 测试ImageStorage */ = {
+			isa = PBXGroup;
+			children = (
+				807AAE911F21FB7E0083A384 /* TestForImageStorage.h */,
+				807AAE921F21FB7E0083A384 /* TestForImageStorage.m */,
+			);
+			name = "测试ImageStorage";
+			sourceTree = "<group>";
+		};
 		807FF74D1F14BAC5002C57FC /* SDWebImage */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +502,7 @@
 		80D536E11F146BFA009F5687 /* JFKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				807AAE901F21FB610083A384 /* 测试ImageStorage */,
 				807AAE831F1F0EB80083A384 /* 测试image绘制 */,
 				807AAE761F1866130083A384 /* 测试TextLayout */,
 				80D537181F146C4C009F5687 /* 测试1 */,
@@ -812,6 +825,7 @@
 				807FF7861F14BAC5002C57FC /* UIView+WebCache.m in Sources */,
 				807FF7EC1F14BBDB002C57FC /* LWGIFImage.m in Sources */,
 				807FF7F51F14BBDB002C57FC /* LWLayout.m in Sources */,
+				807AAE931F21FB7E0083A384 /* TestForImageStorage.m in Sources */,
 				B236064A1F164DF0001121B2 /* NSMutableAttributedString+Extension.m in Sources */,
 				807FF7E61F14BBDB002C57FC /* LWAsyncImageView+Display.m in Sources */,
 				80D537141F146C2B009F5687 /* JFAsyncDisplayLayer.m in Sources */,

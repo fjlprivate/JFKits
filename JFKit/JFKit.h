@@ -27,7 +27,7 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 
 // *****  组件
 
-#import "JFAsyncDisplayLayer.h"
+#import "JFAsyncDisplayView.h"
 #import "JFButton.h"
 
 

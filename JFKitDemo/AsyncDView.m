@@ -9,7 +9,7 @@
 #import "AsyncDView.h"
 #import "JFKit.h"
 #import "JFTextAttachment.h"
-
+#import "JFAsyncDisplayLayer.h"
 
 // 判断是否退出的block
 typedef BOOL (^ IsCanceled) ();

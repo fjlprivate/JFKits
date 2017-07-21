@@ -24,6 +24,11 @@
     return self;
 }
 
+- (void) drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled {
+    
+}
+
+
 # pragma mask 4 getter
 - (CGFloat)top {
     return self.suggustFrame.origin.y;

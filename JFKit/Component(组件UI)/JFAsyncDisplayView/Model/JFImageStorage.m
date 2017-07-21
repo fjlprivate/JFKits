@@ -58,7 +58,7 @@
 - (instancetype) initWithContents:(id)contents frame:(CGRect)frame {
     self = [super initWithFrame:frame insets:UIEdgeInsetsZero];
     if (self) {
-        self.contents = contents;
+        _contents = contents;
         self.contentMode = UIViewContentModeScaleAspectFit;
     }
     return self;

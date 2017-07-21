@@ -16,4 +16,20 @@ typedef void (^ BlockTouchUpInside)(void);
 // 点击事件回调: touch up in-side
 @property (nonatomic, copy) BlockTouchUpInside didTouchedUpInside;
 
+
+// [self titleForState:UIControlStateNormal]
+@property (nonatomic, strong) NSString* normalTitle;
+
+// [self titleColorForState:UIControlStateNormal]
+@property (nonatomic, strong) UIColor* normalTitleColor;
+
+// [self titleColorForState:UIControlStateHighlighted]
+@property (nonatomic, strong) UIColor* highLightTitleColor;
+
+// [self titleColorForState:UIControlStateDisabled]
+@property (nonatomic, strong) UIColor* disableTitleColor;
+
+// self.titleLabel.font
+@property (nonatomic, strong) UIFont* titleFont;
+
 @end

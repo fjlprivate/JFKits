@@ -8,11 +8,6 @@
 
 #import "JFStorage.h"
 
-// 判断是否退出的block
-typedef BOOL (^ isCanceledBlock) ();
-
-
-
 
 /**
  * [文本缓存类]
@@ -132,15 +127,5 @@ typedef BOOL (^ isCanceledBlock) ();
 - (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position;
 
 
-# pragma mask : 绘制方法
-
-/**
- 绘制文本缓存到上下文;
- 分别绘制背景色、文本、边框、附件;
-
- @param context 图形上下文;
- @param canceled 是否退出任务;
- */
-- (void) drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled;
 
 @end

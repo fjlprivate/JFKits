@@ -10,6 +10,7 @@
 #import "JFKit.h"
 #import <CoreText/CoreText.h>
 #import "JFTextLayout.h"
+#import "JFAsyncDisplayLayer.h"
 
 
 @interface ViewForTestStorage : UIView <JFAsyncDisplayDelegate>
@@ -125,6 +126,7 @@
 }
 
 - (JFAsyncDisplayCallBacks*) asyncDisplayCallBacks {
+    
     JFAsyncDisplayCallBacks* callBack = [JFAsyncDisplayCallBacks new];
     __weak typeof(self) wself = self;
     callBack.willDisplay = ^(JFAsyncDisplayLayer *layer) {
