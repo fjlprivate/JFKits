@@ -35,7 +35,7 @@
         _asyncView.left = 15;
         _asyncView.right = JFSCREEN_WIDTH - 15;
         _asyncView.bottom = self.asyncBtn.top - 15;
-        _asyncView.backgroundColor = JFHexColor(0xeeeeee, 1);
+//        _asyncView.backgroundColor = JFHexColor(0xeeeeee, 1);
     }
     return _asyncView;
 }
@@ -56,7 +56,7 @@
             JFLayout* layout = [JFLayout new];
             JFImageStorage* img1 = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"headWoman"] frame:CGRectMake(10, 10, 50, 50)];
             img1.cornerRadius = CGSizeMake(25, 25);
-            img1.backgroundColor = JFHexColor(0xeeeeee, 1);
+            img1.backgroundColor = JFHexColor(0xffffff, 1);
             img1.borderColor = JFHexColor(0xea6956, 1);
             img1.borderWidth = 2;
             [layout addStorage:img1];
@@ -64,14 +64,19 @@
             JFTextStorage* t1 = [JFTextStorage jf_textStorageWithText:@"我是一个傻妹儿" frame:CGRectMake(10 + img1.right, 10 + img1.top, 1000, 50) insets:UIEdgeInsetsZero];
             t1.textColor = JFHexColor(0x27384b, 1);
             t1.textFont = [UIFont boldSystemFontOfSize:14];
+            [t1 addLinkWithData:@"傻妹" textSelectedColor:JFHexColor(0x27384b, 0.5) backSelectedColor:JFHexColor(0, 0.1) atRange:NSMakeRange(4, 2)];
+            t1.debugMode = NO;
             [layout addStorage:t1];
             
             NSString* tt2 =@"来自: iphone6 Plus";
             JFTextStorage* t2 = [JFTextStorage jf_textStorageWithText:tt2 frame:CGRectMake(t1.left, t1.bottom + 5, 1000, 50) insets:UIEdgeInsetsZero];
             [t2 setTextFont:[UIFont systemFontOfSize:13] atRange:[tt2 rangeOfString:@"来自: "]];
-            [t2 setTextFont:[UIFont boldSystemFontOfSize:14] atRange:[tt2 rangeOfString:@"iphone6 Plus"]];
+            NSRange fromRange = [tt2 rangeOfString:@"iphone6 Plus"];
+            [t2 setTextFont:[UIFont boldSystemFontOfSize:14] atRange:fromRange];
             [t2 setTextColor:JFHexColor(0x999999, 1) atRange:[tt2 rangeOfString:@"来自: "]];
-            [t2 setTextColor:JFHexColor(0xEA6956, 1) atRange:[tt2 rangeOfString:@"iphone6 Plus"]];
+            [t2 setTextColor:JFHexColor(0xEA6956, 1) atRange:fromRange];
+            [t2 addLinkWithData:@"from" textSelectedColor:JFHexColor(0xEA6956, 0.9) backSelectedColor:JFHexColor(0xeeeeee, 1) atRange:fromRange];
+            t2.debugMode = NO;
             [layout addStorage:t2];
 
             wself.asyncView.layout = layout;

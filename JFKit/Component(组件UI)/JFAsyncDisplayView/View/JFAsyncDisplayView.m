@@ -11,10 +11,51 @@
 #import "JFMacro.h"
 
 @interface JFAsyncDisplayView() <JFAsyncDisplayDelegate>
-
+@property (nonatomic, assign) CGPoint clickedPosition;
 @end
 
 @implementation JFAsyncDisplayView
+
+
+# pragma mask 2 touchs
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch* touch = [touches anyObject];
+    CGPoint curP = [touch locationInView:self];
+    for (JFStorage* storage in self.layout.storages) {
+        if ([storage isKindOfClass:[JFTextStorage class]]) {
+            JFTextStorage* textStorage = (JFTextStorage*)storage;
+            if ([textStorage didClickedHighLightPosition:curP]) {
+                [textStorage turnningHightLightSwitch:YES atPosition:curP];
+                self.clickedPosition = curP;
+                [self.layer setNeedsDisplay];
+                return;
+            }
+        }
+    }
+}
+
+- (void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+}
+
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (!CGPointEqualToPoint(self.clickedPosition, CGPointZero)) {
+        for (JFStorage* storage in self.layout.storages) {
+            if ([storage isKindOfClass:[JFTextStorage class]]) {
+                JFTextStorage* textStorage = (JFTextStorage*)storage;
+                if ([textStorage didClickedHighLightPosition:self.clickedPosition]) {
+                    [textStorage turnningHightLightSwitch:NO atPosition:self.clickedPosition];
+                    self.clickedPosition = CGPointZero;
+                    [self.layer setNeedsDisplay];
+                    return;
+                }
+            }
+        }
+
+    }
+    
+}
 
 
 # pragma mask 2 JFAsyncDisplayDelegate
@@ -45,6 +86,14 @@
 }
 
 # pragma mask 3 life cycle
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
+    if (self) {
+        _clickedPosition = CGPointZero;
+    }
+    return self;
+}
 
 + (Class)layerClass {
     return [JFAsyncDisplayLayer class];

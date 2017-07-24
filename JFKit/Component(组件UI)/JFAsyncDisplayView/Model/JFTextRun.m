@@ -61,7 +61,7 @@
     // run frame
     _runFrame = CGRectMake(_linePosition.x + glyphPositions[0].x,
                            _linePosition.y - desent,
-                           runWidth,
+                           runWidth - cKern, // 要不要减去一个字间距
                            ascent + desent);
     _ctRunFrame = _runFrame;
     _runFrame = CGRectApplyAffineTransform(_runFrame, tt);

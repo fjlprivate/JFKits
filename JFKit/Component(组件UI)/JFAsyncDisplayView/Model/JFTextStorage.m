@@ -132,10 +132,20 @@
 - (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position {
     JFTextHighLight* highLight = [self.textLayout highLightAtPosition:position];
     if (highLight && highLight.textSelectedColor) {
+        NSRange range = highLight.range;
+        NSDictionary* attribution = [self.attributedString attributesAtIndex:highLight.range.location effectiveRange:&range];
+        UIColor* curTextColor = [attribution objectForKey:NSForegroundColorAttributeName];
+        UIColor* lastTextColor = [attribution objectForKey:JFTextLastTextColorName];
+        if (!lastTextColor) {
+            lastTextColor = self.textColor;
+        }
         if (switchOn) {
-            [self.attributedString setTextColor:highLight.textSelectedColor atRange:highLight.range];
+            // 保存当前文本色为历史色，用于取消高亮时显示
+            [self.attributedString setAttribute:JFTextLastTextColorName withValue:curTextColor atRange:range];
+            // 显示高亮色
+            [self.attributedString setTextColor:highLight.textSelectedColor atRange:range];
         } else {
-            [self.attributedString setTextColor:self.textColor atRange:highLight.range];
+            [self.attributedString setTextColor:lastTextColor atRange:range];
         }
         [self renewTextLayout];
     }

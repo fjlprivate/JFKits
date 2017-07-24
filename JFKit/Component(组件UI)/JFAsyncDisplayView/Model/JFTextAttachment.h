@@ -11,6 +11,7 @@
 static NSString* const JFTextAttachmentName         = @"JFTextAttachmentName";
 static NSString* const JFTextBackgroundColorName    = @"JFTextBackgroundColorName";
 static NSString* const JFTextHighLightName          = @"JFTextHighLightName";
+static NSString* const JFTextLastTextColorName      = @"JFTextLastTextColorName";
 
 
 /**

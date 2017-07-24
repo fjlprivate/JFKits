@@ -51,7 +51,6 @@
  @param canceled 判断是否退出绘制
  */
 - (void)drawInContext:(CGContextRef)context isCanceled:(isCanceledBlock)canceled{
-    NSLog(@"======绘制textLayout");
     self.context = context;
     self.isCanceled = canceled;
     // 绘制背景
@@ -81,7 +80,6 @@
                                         linesCount:(NSInteger)linesCount
                                             insets:(UIEdgeInsets)insets
 {
-    NSLog(@"--生成textLayout");
     return [[JFTextLayout alloc] initWithAttributedString:attributedString frame:textFrame linesCount:linesCount insets:insets];
 }
 
@@ -95,11 +93,8 @@
  @return 存在任意一个高亮区，则返回YES;否则返回NO;
  */
 - (BOOL) didClickedHighLightPosition:(CGPoint)position {
-//    NSLog(@"------------判断坐标[%@]是否在当前高亮列表区", NSStringFromCGPoint(position));
     for (JFTextHighLight* highLight in self.highLights) {
-//        NSLog(@"  --遍历高亮区");
         for (NSValue* frameValue in highLight.positions) {
-//            NSLog(@"    --判断frame:[%@]和坐标:[]",frameValue);
             CGRect frame = [frameValue CGRectValue];
             if (CGRectContainsPoint(frame, position)) {
                 return YES;
@@ -194,9 +189,7 @@
         // 实际文本高度
         CGFloat activeTextHeight = insets.top;
 
-//        NSLog(@"***************0,attributedString[\n%@\n]", attributedString);
         // 遍历到最大行
-//        NSLog(@"---------line行数:%ld", maxLinesCount);
         for (CFIndex i = 0; i < maxLinesCount; i++) {
             // 创建一个line对象，并添加到数组
             CTLineRef line = CFArrayGetValueAtIndex(lines, i);
@@ -282,7 +275,6 @@
 # pragma mask 2 tools
 
 - (void) __drawBackgroundColors {
-//    NSLog(@".....textLayouot:绘制背景色");
     if (self.backgroundColor) {
         CGContextSaveGState(self.context);
         CGContextSetFillColorWithColor(self.context, self.backgroundColor.CGColor);
@@ -293,7 +285,6 @@
         CGContextSaveGState(self.context);
         for (JFTextBackgoundColor* background in self.backgrounds) {
             for (NSValue* frameValue in background.positions) {
-//                NSLog(@" 绘制背景,frame:%@", frameValue);
                 if (self.isCanceled()) {
                     CGContextRestoreGState(self.context);
                     return;
@@ -304,7 +295,15 @@
                     backgroundColor = [UIColor clearColor];
                 }
                 CGContextSetFillColorWithColor(self.context, backgroundColor.CGColor);
-                CGContextFillRect(self.context, frame);
+                CGMutablePathRef path = CGPathCreateMutable();
+                if (CGRectGetWidth(frame) >= 4 && CGRectGetHeight(frame) >= 4) {
+                    CGPathAddRoundedRect(path, NULL, frame, 2, 2);
+                } else {
+                    CGPathAddRect(path, NULL, frame);
+                }
+                CGContextAddPath(self.context, path);
+                CGContextFillPath(self.context);
+                CGPathRelease(path);
             }
         }
         CGContextRestoreGState(self.context);
@@ -315,7 +314,6 @@
     if (self.highLights.count > 0) {
         CGContextSaveGState(self.context);
         for (JFTextHighLight* highLight in self.highLights) {
-//            NSLog(@"-----正在检查是否需要高亮显示:[%@]",highLight.showHighLight ? @"显示": @"不显示");
             if (!highLight.showHighLight) {
                 continue;
             }
@@ -330,7 +328,15 @@
                     backgroundColor = [UIColor clearColor];
                 }
                 CGContextSetFillColorWithColor(self.context, backgroundColor.CGColor);
-                CGContextFillRect(self.context, frame);
+                CGMutablePathRef path = CGPathCreateMutable();
+                if (CGRectGetWidth(frame) >= 4 && CGRectGetHeight(frame) >= 4) {
+                    CGPathAddRoundedRect(path, NULL, frame, 2, 2);
+                } else {
+                    CGPathAddRect(path, NULL, frame);
+                }
+                CGContextAddPath(self.context, path);
+                CGContextFillPath(self.context);
+                CGPathRelease(path);
             }
         }
         CGContextRestoreGState(self.context);
@@ -338,7 +344,6 @@
 }
 
 - (void) __drawTexts {
-//    NSLog(@"##绘制文本");
     CGContextSaveGState(self.context);
     CGContextTranslateCTM(self.context, self.textFrame.origin.x, self.textFrame.origin.y);
     CGContextTranslateCTM(self.context, 0, self.textFrame.size.height);
@@ -351,7 +356,6 @@
         JFTextLine* line = [self.lines objectAtIndex:i];
         CGContextSetTextPosition(self.context, line.lineOrigin.x, line.lineOrigin.y);
         CTLineDraw(line.lineRef, self.context);
-//        NSLog(@"  +绘制第[%d]行文本:[%lf,%lf]", i, line.lineOrigin.x, line.lineOrigin.y);
     }
     CGContextRestoreGState(self.context);
 }
@@ -378,19 +382,14 @@
 }
 
 - (void) __drawDebugs {
-//    NSLog(@"##绘制文本,是否绘制:%@", self.debugMode ? @"绘制":@"不绘制");
-
     if (self.debugMode) {
         CGContextSaveGState(self.context);
         for (JFTextLine* line in self.lines) {
-//            NSLog(@" =遍历行[%ld]", [self.lines indexOfObject:line]);
             CGRect baseLineFrame = CGRectMake(line.uiLineOrigin.x, line.uiLineOrigin.y, line.typographicWidth, _debugLineWidth);
             CGContextSetFillColorWithColor(self.context, self.debugColor.CGColor);
             CGContextFillRect(self.context, baseLineFrame);
             for (JFTextRun* run in line.glyphRuns) {
-//                NSLog(@"  -遍历run[%ld]", [line.glyphRuns indexOfObject:run]);
                 for (JFTextGlyph* glyph in run.glyphs) {
-//                    NSLog(@"   .遍历glyph[%ld]", [run.glyphs indexOfObject:glyph]);
                     CGContextSetStrokeColorWithColor(self.context, self.debugColor.CGColor);
                     CGContextStrokeRect(self.context, glyph.uiGlyphFrame);
                 }
