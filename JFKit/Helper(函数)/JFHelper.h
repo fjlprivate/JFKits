@@ -56,6 +56,20 @@ static inline CGSize JFTextSizeInFont(NSString* text, UIFont* font) {
 
 
 
+/**
+ 转换日期格式: date -> 可视的日期时间格式
+
+ @param date 日期时间
+ @param format 时间格式
+ @return 格式化的时间
+ */
+static inline NSString* JFTimeStringWithFormat(NSDate* date, NSString* format) {
+    NSDateFormatter* dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:format];
+    return [dateFormat stringFromDate:date];
+}
+
+
 @interface JFHelper : NSObject
 
 

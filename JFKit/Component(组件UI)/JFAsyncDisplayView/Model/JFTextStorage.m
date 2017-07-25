@@ -181,6 +181,7 @@
     self.textLayout.debugMode = self.debugMode;
     self.textLayout.backgroundColor = self.backgroundColor;
     self.suggustFrame = self.textLayout.suggestFrame;
+    _isTrancated = self.textLayout.isTrancated;
     if (layout) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [layout class];
@@ -195,6 +196,7 @@
     if (self) {
         _attributedString = [[NSMutableAttributedString alloc] initWithString:text];
         _numberOfLines = 0;
+        _isTrancated = NO;
     }
     return self;
 }

@@ -62,7 +62,6 @@
     
     
     if (asynchronous) {
-        NSLog(@"--异步绘制");
         // 清除原来的contents
         CGImageRef image = (__bridge_retained CGImageRef)self.contents;
         self.contents = nil;
@@ -78,10 +77,9 @@
         
         __weak typeof(self) wself = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            //
             if (isCanceled()) {
                 if (asyncDisplayBlock.didDisplayed) {
-                    asyncDisplayBlock.didDisplayed(self, NO);
+                    asyncDisplayBlock.didDisplayed(wself, NO);
                 }
                 return ;
             }
@@ -111,7 +109,7 @@
             if (isCanceled()) {
                 UIGraphicsEndImageContext();
                 if (asyncDisplayBlock.didDisplayed) {
-                    asyncDisplayBlock.didDisplayed(self, NO);
+                    asyncDisplayBlock.didDisplayed(wself, NO);
                 }
                 return ;
             }
@@ -133,13 +131,12 @@
                 __strong typeof(wself) sself = wself;
                 sself.contents = (__bridge id)image.CGImage;
                 if (asyncDisplayBlock.didDisplayed) {
-                    asyncDisplayBlock.didDisplayed(self, NO);
+                    asyncDisplayBlock.didDisplayed(sself, NO);
                 }
             });
         });
     }
     else {
-        NSLog(@"--同步绘制");
         if (asyncDisplayBlock.display) {
             UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, self.contentsScale);
             CGContextRef context = UIGraphicsGetCurrentContext();

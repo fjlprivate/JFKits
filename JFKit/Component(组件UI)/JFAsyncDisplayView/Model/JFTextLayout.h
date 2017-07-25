@@ -22,6 +22,8 @@ typedef BOOL (^ isCanceledBlock) ();
 
 @property (nonatomic, assign) BOOL debugMode; // 是否开启调试模式
 
+@property (nonatomic, assign, readonly) BOOL isTrancated; // 被截取行数
+
 
 /**
  文本布局生成器;

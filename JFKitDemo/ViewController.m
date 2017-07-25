@@ -55,7 +55,8 @@
                     @"TextAsyncDisplayLayer2",
                     @"TestForTextStorage",
                     @"TestForImageDraw",
-                    @"TestForImageStorage"];
+                    @"TestForImageStorage",
+                    @"TestForAsyncDisplayView"];
     }
     return _titles;
 }

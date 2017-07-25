@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong, readonly) id contents; // 图片内容; UIImage or NSURL
 
+@property (nonatomic, strong) UIImage* placeHolder; // 占用图
+
 @property (nonatomic, assign) UIViewContentMode contentMode; // 图片布局类型;默认:UIViewContentModeScaleAspectFit;
 
 @property (nonatomic, strong) UIColor* backgroundColor; // 背景色

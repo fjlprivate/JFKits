@@ -184,6 +184,7 @@
         
         // 计算最大行数,外部参数有限制or无限制
         CFIndex maxLinesCount = linesCount == 0 ? originLinesCount : MIN(linesCount, originLinesCount);
+        _isTrancated = maxLinesCount < originLinesCount;
         // 用来缓存最大的line的实际width
         CGFloat maxLineWidth = 0;
         // 实际文本高度

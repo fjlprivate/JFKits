@@ -39,6 +39,8 @@
 
 @property (nonatomic, assign) NSInteger numberOfLines; // 文本行数
 
+@property (nonatomic, assign, readonly) BOOL isTrancated; // 被截取行数
+
 // 字间距、行间距、对齐
 @property (nonatomic, assign) CGFloat lineSpace; // 行间距
 @property (nonatomic, assign) CGFloat kernSpace; // 字间距
