@@ -29,8 +29,7 @@
  */
 + (instancetype) jf_textStorageWithText:(NSString*)text frame:(CGRect)frame insets:(UIEdgeInsets)insets;
 
-
-
+@property (nonatomic, strong, readonly) NSMutableAttributedString* attributedString; // 富文本
 
 @property (nonatomic, strong) UIFont* textFont; // 字体
 @property (nonatomic, strong) UIColor* textColor; // 文本色
@@ -79,6 +78,8 @@
  @param position 指定的位置;
  */
 - (void) setImage:(UIImage*)image imageSize:(CGSize)imageSize atPosition:(NSInteger)position;
+
+- (void) replaceTextAtRange:(NSRange)range withImage:(UIImage*)image imageSize:(CGSize)imageSize;
 
 /**
  设置[背景色]到指定的区间;

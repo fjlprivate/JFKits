@@ -9,19 +9,22 @@
 #import "NSMutableAttributedString+Extension.h"
 #import <CoreText/CoreText.h>
 
-
+// ascent回调
 static CGFloat attachmentAscentCallBack(void* config) {
     JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
     return attachment.contentSize.height * 0.77;
 }
+// desent回调
 static CGFloat attachmentDesentCallBack(void* config) {
     JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
     return attachment.contentSize.height * 0.23;
 }
+// width回调
 static CGFloat attachmentWidthCallBack(void* config) {
     JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
     return attachment.contentSize.width;
 }
+// dealloc回调
 static void attachmentDeallocCallBack(void* config) {
     
 }
@@ -70,10 +73,35 @@ static void attachmentDeallocCallBack(void* config) {
     // 并给这个占位符添加一个包含附件对象的属性，用于后面获取附件并绘制
     [self setAttribute:JFTextAttachmentName withValue:textAttachment atRange:textAttachment.range];
 }
+
 - (void) addTextBackgroundColor:(JFTextBackgoundColor*)textBackgroundColor {
     [self setAttribute:JFTextBackgroundColorName withValue:textBackgroundColor atRange:textBackgroundColor.range];
 }
 
+
+/**
+ 用[附件]替换掉指定区间的文本;
+ 
+ @param range 文本区间:指定要替换的;
+ @param textAttachment 替换的附件;
+ */
+- (BOOL) replayceTextAtRange:(NSRange)range withAttachment:(JFTextAttachment*)textAttachment {
+    if (range.location == NSNotFound || range.location > self.length || range.location + range.length > self.length) {
+        return NO;
+    }
+    if (range.length == 0) {
+        [self addTextAttachment:textAttachment];
+    } else {
+        [self deleteCharactersInRange:range];
+        if (range.location != textAttachment.range.location) {
+            NSRange newRange = textAttachment.range;
+            newRange.location = range.location;
+            textAttachment.range = newRange;
+        }
+        [self addTextAttachment:textAttachment];
+    }
+    return YES;
+}
 
 
 
@@ -85,7 +113,6 @@ static void attachmentDeallocCallBack(void* config) {
  @param range 指定的区域;
  */
 - (void) setAttribute:(NSString*)attributeName withValue:(id)value atRange:(NSRange)range {
-//    NSLog(@"======给attributeString设置属性range[%@]name[%@]:value{%@}", NSStringFromRange(range), attributeName, value);
     if (!attributeName) {
         return;
     }

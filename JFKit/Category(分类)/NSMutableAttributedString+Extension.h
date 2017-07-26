@@ -32,4 +32,16 @@
 - (void) addTextAttachment:(JFTextAttachment*)textAttachment;
 - (void) addTextBackgroundColor:(JFTextBackgoundColor*)textBackgroundColor;
 
+
+
+/**
+ 用[附件]替换掉指定区间的文本;
+
+ @param range 文本区间:指定要替换的;
+ @param textAttachment 替换的附件;
+ @return 有替换:返回YES;无替换:返回NO;
+ */
+- (BOOL) replayceTextAtRange:(NSRange)range withAttachment:(JFTextAttachment*)textAttachment;
+
+
 @end

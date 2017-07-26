@@ -9,8 +9,16 @@
 #import "MFeedLayout.h"
 #import "TMFeedNode.h"
 
-@interface MFeedLayout()
 
+
+#define MFeedLayoutFontSizeName 15
+#define MFeedLayoutFontSizeContent 14
+#define MFeedLayoutFontSizeComment 13
+
+
+
+@interface MFeedLayout()
+@property (nonatomic, strong) NSArray* imageNameList;
 @end
 
 @implementation MFeedLayout
@@ -59,7 +67,7 @@
     
     // 名字
     JFTextStorage* nameTxt = [JFTextStorage jf_textStorageWithText:node.name frame:frame insets:UIEdgeInsetsZero];
-    nameTxt.textFont = [UIFont boldSystemFontOfSize:14];
+    nameTxt.textFont = [UIFont boldSystemFontOfSize:MFeedLayoutFontSizeName];
     nameTxt.textColor = JFHexColor(0x6b7ca5, 1);
     [nameTxt addLinkWithData:@"href://nameUrl" textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0x999999, 1) atRange:NSMakeRange(0, node.name.length)];
     [self addStorage:nameTxt];
@@ -70,11 +78,14 @@
     // 正文
     if (node.content && node.content.length > 0) {
         JFTextStorage* contentTxt = [JFTextStorage jf_textStorageWithText:node.content frame:frame insets:UIEdgeInsetsZero];
+        // 替换表情符号
+        [self replaceEmojPicWithTextStorage:contentTxt];
+        
         contentTxt.numberOfLines = 5;
         contentTxt.lineSpace = 1.4;
         contentTxt.debugMode = NO;
         contentTxt.textColor = JFHexColor(0x27384b, 1);
-        contentTxt.textFont = [UIFont systemFontOfSize:13.4];
+        contentTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeContent];
         [self addStorage:contentTxt];
         
         frame.size.height = contentTxt.height;
@@ -136,7 +147,7 @@
         // 网页标题
         if (node.detail && node.detail.length > 0) {
             JFTextStorage* webContentTxt = [JFTextStorage jf_textStorageWithText:node.detail frame:webTxtFrame insets:UIEdgeInsetsZero];
-            webContentTxt.textFont = [UIFont systemFontOfSize:12.8];
+            webContentTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeComment];
             webContentTxt.textColor = JFHexColor(0x27384b, 1);
             webContentTxt.lineSpace = 1;
             [webContentTxt addLinkWithData:@"href://webContent" textSelectedColor:JFHexColor(0x27384b, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:NSMakeRange(0, node.detail.length)];
@@ -157,7 +168,7 @@
         NSString* dateString = JFTimeStringWithFormat(date, @"yyyy-MM-dd");
         JFTextStorage* dateTxt = [JFTextStorage jf_textStorageWithText:dateString frame:frame insets:UIEdgeInsetsZero];
         dateTxt.textColor = JFHexColor(0x999999, 1);
-        dateTxt.textFont = [UIFont systemFontOfSize:13];
+        dateTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeComment];
         [self addStorage:dateTxt];
         
     }
@@ -171,7 +182,7 @@
     [self addStorage:menuImg];
     
     frame.origin.x = startX;
-    frame.origin.y += frame.size.height + hInset;
+    frame.origin.y += frame.size.height + 5;
     
     // 回复信息
     CGRect commentBackFrame = CGRectMake(frame.origin.x, frame.origin.y, avalibleWidth, 0);
@@ -194,7 +205,7 @@
         JFTextStorage* likeListTxt = [JFTextStorage jf_textStorageWithText:nameList frame:likeListFrame insets:UIEdgeInsetsZero];
         [likeListTxt setImage:[UIImage imageNamed:@"Like"] imageSize:CGSizeMake(15, 15) atPosition:0];
         likeListTxt.textColor = JFHexColor(0x27384b, 1);
-        likeListTxt.textFont = [UIFont boldSystemFontOfSize:13];
+        likeListTxt.textFont = [UIFont boldSystemFontOfSize:MFeedLayoutFontSizeComment];
         likeListTxt.lineSpace = 2.f;
         likeListTxt.debugMode = NO;
         for (NSString* name in node.likeList) {
@@ -227,18 +238,18 @@
             
             frame.size.height = 1000;
             JFTextStorage* commentTxt = [JFTextStorage jf_textStorageWithText:commentText frame:frame insets:UIEdgeInsetsZero];
-            commentTxt.textFont = [UIFont systemFontOfSize:13];
+            commentTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeComment];
             commentTxt.textColor = JFHexColor(0x27384b, 1);
             
             if (commentNode.to && commentNode.to.length > 0) {
                 NSRange toRange = [commentText rangeOfString:commentNode.to];
-                [commentTxt setTextFont:[UIFont boldSystemFontOfSize:13] atRange:toRange];
+                [commentTxt setTextFont:[UIFont boldSystemFontOfSize:MFeedLayoutFontSizeComment] atRange:toRange];
                 [commentTxt setTextColor:JFHexColor(0x6b7ca5, 1) atRange:toRange];
                 NSString* toData = [NSString stringWithFormat:@"href://%@", commentNode.to];
                 [commentTxt addLinkWithData:toData textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:toRange];
             }
             NSRange fromRange = [commentText rangeOfString:commentNode.from];
-            [commentTxt setTextFont:[UIFont boldSystemFontOfSize:13] atRange:fromRange];
+            [commentTxt setTextFont:[UIFont boldSystemFontOfSize:MFeedLayoutFontSizeComment] atRange:fromRange];
             [commentTxt setTextColor:JFHexColor(0x6b7ca5, 1) atRange:fromRange];
             NSString* fromData = [NSString stringWithFormat:@"href://%@", commentNode.from];
             [commentTxt addLinkWithData:fromData textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:fromRange];
@@ -257,6 +268,33 @@
     _cellHeight = self.bottom + 5 + 15;
 }
 
+- (void) replaceEmojPicWithTextStorage:(JFTextStorage*)textStorage {
+    while (YES) {
+        BOOL finded = NO;
+        for (NSString* imageName in self.imageNameList) {
+            NSString* text = textStorage.attributedString.string;
+            NSRange range = [text rangeOfString:imageName options:NSCaseInsensitiveSearch range:NSMakeRange(0, text.length)];
+            if (range.length > 0) {
+                finded = YES;
+                [textStorage replaceTextAtRange:range withImage:[UIImage imageNamed:imageName] imageSize:CGSizeMake(16, 16)];
+            }
+        }
+        if (!finded) {
+            break;
+        }
+    }
+    
+}
 
+
+# pragma mask 4 getter
+
+- (NSArray *)imageNameList {
+    if (!_imageNameList) {
+        _imageNameList = @[@"[心]",
+                           @"[face]"];
+    }
+    return _imageNameList;
+}
 
 @end

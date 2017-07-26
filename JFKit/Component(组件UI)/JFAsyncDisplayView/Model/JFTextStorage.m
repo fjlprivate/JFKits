@@ -13,7 +13,6 @@
 @interface JFTextStorage()
 
 @property (nonatomic, strong) JFTextLayout* textLayout; // 缓存文本布局属性
-@property (nonatomic, strong) NSMutableAttributedString* attributedString; // 富文本
 @property (nonatomic, strong) NSMutableParagraphStyle* paragraphStyle; // 段落属性
 
 @end
@@ -84,6 +83,18 @@
     [self.attributedString addTextAttachment:textAttachment];
     [self renewTextLayout];
 }
+
+- (void) replaceTextAtRange:(NSRange)range withImage:(UIImage*)image imageSize:(CGSize)imageSize {
+    JFTextAttachment* textAttachment = [JFTextAttachment new];
+    textAttachment.contents = image.copy;
+    textAttachment.range = NSMakeRange(range.location, 1);
+    textAttachment.contentSize = imageSize;
+    if ([self.attributedString replayceTextAtRange:range withAttachment:textAttachment]) {
+        [self renewTextLayout];
+    }
+}
+
+
 
 
 /**
