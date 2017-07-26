@@ -53,7 +53,6 @@
         asyncDisplayBlock.willDisplay(self);
     }
     
-    
     // 生成判断绘制是否中断的block
     int32_t flag = displayFlag_;
     isCanceledBlock isCanceled = ^BOOL() {
@@ -98,7 +97,8 @@
                     CGContextSetFillColorWithColor(context, [UIColor whiteColor].CGColor);
                 }
                 // 绘制背景色
-                CGContextFillRect(context, CGRectMake(0, 0, size.width * scale, size.height * scale));
+                CGRect bounds = CGRectMake(0, 0, size.width * scale, size.height * scale);
+                CGContextFillRect(context, CGRectInset(bounds, -2, -2));
                 CGContextRestoreGState(context);
                 CGColorRelease(backcolor);
             }
@@ -147,7 +147,7 @@
                 
                 // 绘制背景色
                 CGContextSetFillColorWithColor(context, backColor);
-                CGContextFillRect(context, self.bounds);
+                CGContextFillRect(context, CGRectInset(self.bounds, -2, -2));
                 CGColorRelease(backColor);
                 
             }

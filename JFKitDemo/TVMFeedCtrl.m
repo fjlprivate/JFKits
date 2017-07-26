@@ -29,7 +29,7 @@
     dispatch_queue_t dispathQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
     dispatch_async(dispathQ, ^{
         __strong typeof(wself) sself = wself;
-        [NSThread sleepForTimeInterval:2];
+        [NSThread sleepForTimeInterval:0.5];
         [sself transDatasToLayouts];
         dispatch_async(dispatch_get_main_queue(), ^{
             if (finishedBlock) {
@@ -47,7 +47,7 @@
 }
 
 // 获取指定序号的布局属性
-- (JFLayout*) layoutAtIndex:(NSInteger)index
+- (MFeedLayout*) layoutAtIndex:(NSInteger)index
 {
     if (self.layouts && self.layouts.count > index) {
         return [self.layouts objectAtIndex:index];
@@ -62,124 +62,12 @@
     NSMutableArray* datas = [NSMutableArray array];
     for (NSDictionary* data in self.originDatas) {
         TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
-        JFLayout* layout = [self makeLayoutWithNode:node];
+        JFLayout* layout = [[MFeedLayout alloc] initWithFeedNode:node];
         [datas addObject:layout];
     }
     if (datas.count > 0) {
         self.layouts = datas;
     }
-}
-
-- (JFLayout*) makeLayoutWithNode:(TMFeedNode*)node {
-    /*
-     头像 名字
-         正文
-         图片 or 图片+描述
-         日期时间               发表评论
-         回复信息:绘制底色边框
-         点赞图片 回复人。。
-         谁回复谁:回复了什么信息
-     */
-    CGFloat hInset = 10;
-    CGFloat vInset = 15;
-    CGRect frame = CGRectMake(hInset, vInset, 44, 44);
-    CGFloat avalibleWidth = JFSCREEN_WIDTH - hInset - 44 - hInset - vInset;
-    CGFloat startX = hInset + 44 + hInset;
-    
-    JFLayout* layout = [JFLayout new];
-    
-    // 头像
-    JFImageStorage* avatarImg = [JFImageStorage jf_imageStroageWithContents:[NSURL URLWithString:node.avatar] frame:frame];
-    [layout addStorage:avatarImg];
-    
-    frame.origin.x = startX;
-    frame.size.width = frame.size.height = 1000;
-    
-    // 名字
-    JFTextStorage* nameTxt = [JFTextStorage jf_textStorageWithText:node.name frame:frame insets:UIEdgeInsetsZero];
-    nameTxt.textFont = [UIFont boldSystemFontOfSize:14];
-    nameTxt.textColor = JFHexColor(0x6b7ca5, 1);
-    [nameTxt addLinkWithData:@"href://nameUrl" textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0x999999, 1) atRange:NSMakeRange(0, node.name.length)];
-    [layout addStorage:nameTxt];
-    
-    frame.origin.y += nameTxt.height + 5;
-    frame.size.width = avalibleWidth;
-
-    // 正文
-    if (node.content && node.content.length > 0) {
-        JFTextStorage* contentTxt = [JFTextStorage jf_textStorageWithText:node.content frame:frame insets:UIEdgeInsetsZero];
-        contentTxt.numberOfLines = 5;
-        contentTxt.lineSpace = 1.4;
-        contentTxt.debugMode = YES;
-        contentTxt.textColor = JFHexColor(0x27384b, 1);
-        contentTxt.textFont = [UIFont systemFontOfSize:13.4];
-        [layout addStorage:contentTxt];
-        
-        frame.size.height = contentTxt.height;
-        frame.origin.y += frame.size.height + hInset;
-    }
-    
-    // 图片 or 图片+描述
-    NSInteger imgCount = node.imgs.count;
-    if (imgCount > 0) {
-        CGFloat imgY = frame.origin.y;
-        CGFloat offsetY = imgY;
-        
-        CGFloat imgWidth = 0;
-        NSInteger cellCountPerLine = 3;
-        
-        if (imgCount == 1) {
-            imgWidth = avalibleWidth * 0.618;
-        }
-        else if (imgCount < 5) {
-            imgWidth = (avalibleWidth - 5)/2;
-            cellCountPerLine = 2;
-        }
-        else {
-            imgWidth = (avalibleWidth - 10)/3;
-        }
-        
-        for (int i = 0; i < imgCount; i++) { // 最多9张图片
-            if (i >= 9) break;
-            frame.origin.x = startX + (i % cellCountPerLine) * (imgWidth + 5);
-            frame.origin.y = imgY + (i / cellCountPerLine) * (imgWidth + 5);
-            frame.size.width = frame.size.height = imgWidth;
-            JFImageStorage* thumbImg = [JFImageStorage jf_imageStroageWithContents:[NSURL URLWithString:[node.imgs objectAtIndex:i]] frame:frame];
-            [layout addStorage:thumbImg];
-            
-            offsetY = frame.origin.y + frame.size.height + hInset;
-        }
-        
-        frame.origin.x = startX;
-        frame.origin.y = offsetY;
-    }
-    
-    // 日期时间
-    if (node.date && node.date.length > 0) {
-        NSDate* date = [NSDate dateWithTimeIntervalSince1970:[node.date doubleValue]];
-        NSString* dateString = JFTimeStringWithFormat(date, @"yyyy-MM-dd");
-        JFTextStorage* dateTxt = [JFTextStorage jf_textStorageWithText:dateString frame:frame insets:UIEdgeInsetsZero];
-        dateTxt.textColor = JFHexColor(0x999999, 1);
-        dateTxt.textFont = [UIFont systemFontOfSize:13];
-        [layout addStorage:dateTxt];
-        
-    }
-    
-    // 发表评论
-    frame.size.width = 20;
-    frame.size.height = 20;
-    frame.origin.x = JFSCREEN_WIDTH - vInset - frame.size.width;
-    JFImageStorage* menuImg = [JFImageStorage jf_imageStroageWithContents:[UIImage imageNamed:@"评论"] frame:frame];
-    menuImg.backgroundColor = [UIColor whiteColor];
-    [layout addStorage:menuImg];
-    
-    frame.origin.x = startX;
-    frame.origin.y += frame.size.height + hInset;
-    
-    // 回复信息
-    
-    
-    return layout;
 }
 
 
@@ -221,7 +109,7 @@
                                               @"to":@"waynezxcv",
                                               @"content":@"使用Gallop适合包含文字、图片高性能的展示型界面的构建。"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"权志龙"]},
                          
                          
                          @{@"type":@"image",
@@ -238,7 +126,7 @@
                                               @"to":@"waynezxcv",
                                               @"content":@"支持GIF"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"权志龙"]},
                          
                          
                          @{@"type":@"image",
@@ -271,14 +159,14 @@
                                               @"to":@"waynezxcv",
                                               @"content":@"使用Gallop能保持滚动时的FPS在60hz"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv",@"伊布拉希莫维奇",@"权志龙",@"郜林",@"扎克伯格"]},
+                           @"likeList":@[@"权志龙",@"伊布拉希莫维奇",@"郜林",@"扎克伯格"]},
                          
                          @{@"type":@"website",
                            @"name":@"Ronaldo",
                            @"avatar":@"https://avatars0.githubusercontent.com/u/8408918?v=3&s=460",
                            @"content":@"Easy to use yet capable of so much, iOS 9 was engineered to work hand in hand with the advanced technologies built into iPhone.",
                            @"date":@"1459668442",
-                           @"imgs":@[@"http://ww2.sinaimg.cn/bmiddle/6d0bb361gw1f2jim2hgxij20lo0egwgc.jpg"],
+                           @"imgs":@[@"http://ww2.sinaimg.cn/bmiddle/6d0bb361gw1f2jim2hgxij20lo0egwgc.jpg"], 
                            
                            @"thumbnail":@[@"http://ww2.sinaimg.cn/thumbnail/6d0bb361gw1f2jim2hgxij20lo0egwgc.jpg"],
                            
@@ -288,7 +176,7 @@
                                               @"to":@"",
                                               @"content":@"手动再见..."}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv",@"Gallop"]},
+                           @"likeList":@[]}, //@"waynezxcv",@"Gallop"
                          
                          
                          @{@"type":@"image",
@@ -324,7 +212,7 @@
                                               @"to":@"waynezxcv",
                                               @"content":@"打得不错。"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"权志龙"]},
                          
                          @{@"type":@"image",
                            @"name":@"Instagram热门",

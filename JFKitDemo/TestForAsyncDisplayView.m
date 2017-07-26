@@ -42,7 +42,7 @@
 # pragma maks 2 delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self.feedCtrl layoutAtIndex:indexPath.row].bottom + 15;
+    return [self.feedCtrl layoutAtIndex:indexPath.row].cellHeight;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "TMFeedNode.h"
+#import "MFeedLayout.h"
 
-@class JFLayout;
 @interface TVMFeedCtrl : NSObject
 
 // 提供数据获取接口
@@ -21,7 +21,7 @@
 - (NSInteger) numberOfFeedNodes;
 
 // 获取指定序号的布局属性
-- (JFLayout*) layoutAtIndex:(NSInteger)index;
+- (MFeedLayout*) layoutAtIndex:(NSInteger)index;
 
 
 @end

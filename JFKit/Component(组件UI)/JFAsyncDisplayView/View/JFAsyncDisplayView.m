@@ -11,6 +11,7 @@
 #import "JFMacro.h"
 #import "UIImageView+WebCache.h"
 #import <libkern/OSAtomic.h>
+#import "UIImage+Extension.h"
 
 @interface JFAsyncDisplayView() <JFAsyncDisplayDelegate> {
     int32_t cancelFlag;
@@ -46,7 +47,23 @@
                 NSURL* url = imageStorage.contents;
                 UIImageView* imageView = [self jf_dequeueImageView];
                 imageView.frame = imageStorage.frame;
-                [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder];
+                
+                [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    CGSize imageSize = image.size;
+                    if (imageSize.width != imageSize.height) {
+                        CGFloat newWidth = MIN(imageSize.width, imageSize.height);
+                        dispatch_queue_t distQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+                        dispatch_async(distQ, ^{
+                            UIImage* cutedImage = [image imageCutedWithNewSize:CGSizeMake(newWidth, newWidth) contentMode:UIViewContentModeCenter];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                imageView.image = cutedImage;
+                            });
+                        });
+                        
+                    }
+                    
+                }];
+//                [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder];
             }
         }
     }
@@ -167,8 +184,17 @@
     // 执行绘制任务
     callBack.display = ^(CGContextRef context, CGSize size, isCanceledBlock isCanceled) {
         __strong typeof(wself) sself = wself;
+        // 即将开始绘制
+        if (sself.delegate && [sself.delegate respondsToSelector:@selector(asyncDisplayView:willBeginDrawingInContext:)]) {
+            [sself.delegate asyncDisplayView:sself willBeginDrawingInContext:context];
+        }
+        // 开始绘制文本+图片
         for (JFStorage* storage in sself.layout.storages) {
             [storage drawInContext:context isCanceled:isCanceled];
+        }
+        // 即将结束绘制
+        if (sself.delegate && [sself.delegate respondsToSelector:@selector(asyncDisplayView:willEndDrawingInContext:)]) {
+            [sself.delegate asyncDisplayView:sself willEndDrawingInContext:context];
         }
     };
     // 绘制完毕

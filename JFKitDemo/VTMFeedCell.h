@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class JFLayout;
+@class MFeedLayout;
 @interface VTMFeedCell : UITableViewCell
-@property (nonatomic, strong) JFLayout* layout;
+@property (nonatomic, strong) MFeedLayout* layout;
 @end

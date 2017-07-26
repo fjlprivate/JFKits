@@ -31,7 +31,6 @@
     CGFloat ascent;
     CGFloat desent;
     CGFloat runWidth = CTRunGetTypographicBounds(_runRef, CFRangeMake(0, 0), &ascent, &desent, NULL);
-
     // 获取所有字形的起点坐标
     CFIndex glyphCount = CTRunGetGlyphCount(_runRef);
     CGPoint glyphPositions[glyphCount];

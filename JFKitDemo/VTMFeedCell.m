@@ -7,18 +7,71 @@
 //
 
 #import "VTMFeedCell.h"
-#import "JFKit.h"
+#import "MFeedLayout.h"
 
-@interface VTMFeedCell()
+@interface VTMFeedCell() <JFAsyncDisplayViewDelegate>
 @property (nonatomic, strong) JFAsyncDisplayView* asyncView;
 @end
 
 @implementation VTMFeedCell
 
+# pragma mask 2 JFAsyncDisplayViewDelegate
+
+- (void)asyncDisplayView:(JFAsyncDisplayView *)asyncView willBeginDrawingInContext:(CGContextRef)context {
+    CGContextSaveGState(context);
+    // 绘制web背景色
+    if (self.layout.webFrame.size.width > 0 && self.layout.webFrame.size.height > 0) {
+        CGContextSetFillColorWithColor(context, self.layout.webBackColor.CGColor);
+        CGMutablePathRef path = CGPathCreateMutable();
+        CGPathAddRect(path, NULL, self.layout.webFrame);
+        CGContextAddPath(context, path);
+        CGContextFillPath(context);
+        CGPathRelease(path);
+    }
+    // 绘制回复模块背景色
+    if (self.layout.commentFrame.size.width > 0 && self.layout.commentFrame.size.height > 0) {
+        CGContextSetFillColorWithColor(context, self.layout.commentBackColor.CGColor);
+        CGFloat startX = self.layout.commentFrame.origin.x;
+        CGFloat startY = self.layout.commentFrame.origin.y;
+        CGFloat width = self.layout.commentFrame.size.width;
+        CGFloat height = self.layout.commentFrame.size.height;
+        CGContextMoveToPoint(context, startX, startY + ChatBubbleTriHeight);
+        CGContextAddLineToPoint(context, startX + ChatBubbleTriWidth, startY + ChatBubbleTriHeight);
+        CGContextAddLineToPoint(context, startX + ChatBubbleTriWidth * 1.5, startY);
+        CGContextAddLineToPoint(context, startX + ChatBubbleTriWidth * 2, startY + ChatBubbleTriHeight);
+        CGContextAddLineToPoint(context, startX + width, startY + ChatBubbleTriHeight);
+        CGContextAddLineToPoint(context, startX + width, startY + height);
+        CGContextAddLineToPoint(context, startX, startY + height);
+        CGContextAddLineToPoint(context, startX, startY + ChatBubbleTriHeight);
+        CGContextClosePath(context);
+        CGContextFillPath(context);
+    }
+    // 绘制点赞分割线
+    if (self.layout.seperateLineWidth > 0) {
+        CGContextMoveToPoint(context, self.layout.seperateLineStartP.x, self.layout.seperateLineStartP.y);
+        CGContextAddLineToPoint(context, self.layout.seperateLineEndP.x, self.layout.seperateLineEndP.y);
+        CGContextSetLineWidth(context, self.layout.seperateLineWidth);
+        CGContextClosePath(context);
+        CGContextSetStrokeColorWithColor(context, self.layout.seperateLineColor.CGColor);
+        CGContextStrokePath(context);
+        
+    }
+
+    CGContextRestoreGState(context);
+}
+
+- (void)asyncDisplayView:(JFAsyncDisplayView *)asyncView willEndDrawingInContext:(CGContextRef)context {
+    
+}
+
+
+# pragma mask 3 life cycle
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         _asyncView = [JFAsyncDisplayView new];
+        _asyncView.delegate = self;
         [self.contentView addSubview:_asyncView];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -30,9 +83,10 @@
     self.asyncView.frame = self.contentView.frame;
 }
 
-- (void)setLayout:(JFLayout *)layout {
+- (void)setLayout:(MFeedLayout *)layout {
     _layout = layout;
     self.asyncView.layout = layout;
 }
+
 
 @end

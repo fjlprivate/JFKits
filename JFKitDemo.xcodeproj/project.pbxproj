@@ -21,6 +21,7 @@
 		8050D3BE1F2719FB002A982D /* NSString+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3B31F2719FB002A982D /* NSString+MJExtension.m */; };
 		8050D3C41F273AC5002A982D /* VTMFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C31F273AC5002A982D /* VTMFeedCell.m */; };
 		8050D3C71F273BAC002A982D /* TestForAsyncDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C61F273BAC002A982D /* TestForAsyncDisplayView.m */; };
+		8050D3CA1F28325C002A982D /* MFeedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C91F28325C002A982D /* MFeedLayout.m */; };
 		807AAE631F14CCB20083A384 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE621F14CCB20083A384 /* YYWeakProxy.m */; };
 		807AAE661F15CBEE0083A384 /* JFAsyncDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE651F15CBEE0083A384 /* JFAsyncDisplayView.m */; };
 		807AAE691F15CC090083A384 /* JFTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE681F15CC090083A384 /* JFTextStorage.m */; };
@@ -146,6 +147,8 @@
 		8050D3C31F273AC5002A982D /* VTMFeedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VTMFeedCell.m; sourceTree = "<group>"; };
 		8050D3C51F273BAC002A982D /* TestForAsyncDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestForAsyncDisplayView.h; sourceTree = "<group>"; };
 		8050D3C61F273BAC002A982D /* TestForAsyncDisplayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestForAsyncDisplayView.m; sourceTree = "<group>"; };
+		8050D3C81F28325B002A982D /* MFeedLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFeedLayout.h; sourceTree = "<group>"; };
+		8050D3C91F28325C002A982D /* MFeedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFeedLayout.m; sourceTree = "<group>"; };
 		807AAE611F14CCB20083A384 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
 		807AAE621F14CCB20083A384 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		807AAE641F15CBEE0083A384 /* JFAsyncDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFAsyncDisplayView.h; sourceTree = "<group>"; };
@@ -382,6 +385,8 @@
 			children = (
 				8050D3971F26FB43002A982D /* TVMFeedCtrl.h */,
 				8050D3981F26FB43002A982D /* TVMFeedCtrl.m */,
+				8050D3C81F28325B002A982D /* MFeedLayout.h */,
+				8050D3C91F28325C002A982D /* MFeedLayout.m */,
 				8050D39A1F26FBB2002A982D /* TMFeedNode.h */,
 				8050D39B1F26FBB2002A982D /* TMFeedNode.m */,
 			);
@@ -900,6 +905,7 @@
 				807FF7841F14BAC5002C57FC /* UIImageView+HighlightedWebCache.m in Sources */,
 				B236064D1F165564001121B2 /* JFTextAttachment.m in Sources */,
 				807FF7FD1F14BBDB002C57FC /* LWTextParser.m in Sources */,
+				8050D3CA1F28325C002A982D /* MFeedLayout.m in Sources */,
 				807FF7F61F14BBDB002C57FC /* LWStorage.m in Sources */,
 				807FF7F41F14BBDB002C57FC /* LWImageStorage.m in Sources */,
 				80D536E71F146BFA009F5687 /* AppDelegate.m in Sources */,

@@ -259,7 +259,6 @@
 }
 
 - (void)dealloc {
-    NSLog(@"*********text layout被释放了***********");
     if (self.frameRef) {
         CFRelease(self.frameRef);
     }

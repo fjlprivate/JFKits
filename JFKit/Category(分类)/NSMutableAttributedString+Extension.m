@@ -12,10 +12,11 @@
 
 static CGFloat attachmentAscentCallBack(void* config) {
     JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
-    return attachment.contentSize.height;
+    return attachment.contentSize.height * 0.77;
 }
 static CGFloat attachmentDesentCallBack(void* config) {
-    return 0;
+    JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
+    return attachment.contentSize.height * 0.23;
 }
 static CGFloat attachmentWidthCallBack(void* config) {
     JFTextAttachment* attachment = (__bridge JFTextAttachment*)config;
