@@ -10,6 +10,7 @@
 #import "TVMFeedCtrl.h"
 #import "VTMFeedCell.h"
 #import "JFKit.h"
+#import "UIView+Toast.h"
 
 @interface TestForAsyncDisplayView () <UITableViewDelegate, UITableViewDataSource, VTMFeedCellDelegate>
 @property (nonatomic, strong) UITableView* tableView;
@@ -68,6 +69,9 @@
         if ([str hasPrefix:@"action"] && ([str hasSuffix:ContentTruncateYES] || [str hasSuffix:ContentTruncateNO])) {
             [self.feedCtrl replaceLayoutAtIndex:cell.tag withTruncated:([str hasSuffix:ContentTruncateYES] ? NO : YES)];
             [self.tableView reloadData];
+        }
+        else {
+            [self.view makeToast:[NSString stringWithFormat:@"需要处理绑定的数据:%@", textData] duration:0.7 position:CSToastPositionCenter];
         }
     }
 }
