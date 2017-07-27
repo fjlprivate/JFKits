@@ -19,13 +19,16 @@ typedef BOOL (^ isCanceledBlock) ();
 @end
 
 
-
+// 接口类: 提供绘制任务接口;
 @interface JFAsyncDisplayCallBacks : NSObject
 
+// 即将开始绘制
 @property (nonatomic, copy) void (^ willDisplay) (JFAsyncDisplayLayer* layer);
 
+// 正在绘制
 @property (nonatomic, copy) void (^ display) (CGContextRef context, CGSize size, isCanceledBlock isCanceled);
 
+// 绘制结束
 @property (nonatomic, copy) void (^ didDisplayed) (JFAsyncDisplayLayer* layer, BOOL finished);
 
 
@@ -33,7 +36,10 @@ typedef BOOL (^ isCanceledBlock) ();
 
 
 
-
+/**
+ 异步绘制的回调;
+ 用于在上层UIView中提供绘制任务;
+ */
 @protocol JFAsyncDisplayDelegate <NSObject>
 
 @required

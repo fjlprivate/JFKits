@@ -14,10 +14,31 @@
 
 @protocol JFAsyncDisplayViewDelegate <NSObject>
 
-// 即将开始绘制
+/**
+ 回调: 即将开始绘制;
+
+ @param asyncView 异步绘制视图;
+ @param context 绘制所在的上下文;
+ */
 - (void) asyncDisplayView:(JFAsyncDisplayView*)asyncView willBeginDrawingInContext:(CGContextRef)context;
-// 即将结束绘制
+
+/**
+ 回调: 即将结束绘制;
+
+ @param asyncView 异步绘制视图;
+ @param context 绘制所在的上下文;
+ */
 - (void) asyncDisplayView:(JFAsyncDisplayView*)asyncView willEndDrawingInContext:(CGContextRef)context;
+
+/**
+ 回调: 点击了文本的高亮区;
+
+ @param asyncView 异步绘制视图;
+ @param textStorage 点击事件所在的textStorage;
+ @param linkData 点击事件对应绑定的数据;
+ */
+- (void) asyncDisplayView:(JFAsyncDisplayView*)asyncView didClickedTextStorage:(JFTextStorage*)textStorage withLinkData:(id)linkData;
+
 
 @end
 

@@ -27,27 +27,27 @@
     CGPoint location = [touch locationInView:self];
     JFAsyncDisplayLayer* layer = (JFAsyncDisplayLayer*)self.layer;
     //
-    if ([_textStorage didClickedHighLightPosition:location]) {
-        self.clickedPosition = location;
-        [_textStorage turnningHightLightSwitch:YES atPosition:location];
-        layer.displayedAsyncchronous = NO;
-        [layer setNeedsDisplay];
-        return;
-    }
-    if ([_tStorage2 didClickedHighLightPosition:location]) {
-        self.clickedPosition = location;
-        [_tStorage2 turnningHightLightSwitch:YES atPosition:location];
-        layer.displayedAsyncchronous = NO;
-        [layer setNeedsDisplay];
-        return;
-    }
-    if ([_tStorage3 didClickedHighLightPosition:location]) {
-        self.clickedPosition = location;
-        [_tStorage3 turnningHightLightSwitch:YES atPosition:location];
-        layer.displayedAsyncchronous = NO;
-        [layer setNeedsDisplay];
-        return;
-    }
+//    if ([_textStorage didClickedHighLightPosition:location]) {
+//        self.clickedPosition = location;
+//        [_textStorage turnningHightLightSwitch:YES atPosition:location];
+//        layer.displayedAsyncchronous = NO;
+//        [layer setNeedsDisplay];
+//        return;
+//    }
+//    if ([_tStorage2 didClickedHighLightPosition:location]) {
+//        self.clickedPosition = location;
+//        [_tStorage2 turnningHightLightSwitch:YES atPosition:location];
+//        layer.displayedAsyncchronous = NO;
+//        [layer setNeedsDisplay];
+//        return;
+//    }
+//    if ([_tStorage3 didClickedHighLightPosition:location]) {
+//        self.clickedPosition = location;
+//        [_tStorage3 turnningHightLightSwitch:YES atPosition:location];
+//        layer.displayedAsyncchronous = NO;
+//        [layer setNeedsDisplay];
+//        return;
+//    }
 
     
 }

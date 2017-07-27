@@ -48,7 +48,7 @@ static NSString* const JFTextLastTextColorName      = @"JFTextLastTextColorName"
 @property (nonatomic, assign) NSRange range;
 @property (nonatomic, strong) UIColor* textSelectedColor; // 文本高亮色
 @property (nonatomic, strong) UIColor* backSelectedColor; // 文本背景色
-@property (nonatomic, strong) id content; // 链接数据
+@property (nonatomic, strong) id content; // 绑定数据
 @property (nonatomic, strong) NSArray<NSValue*>* positions; // CGRect in NSValue,可以有多个背景色块,每个对应一个CTRunRef
 
 @end

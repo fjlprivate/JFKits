@@ -47,7 +47,7 @@
                 NSURL* url = imageStorage.contents;
                 UIImageView* imageView = [self jf_dequeueImageView];
                 imageView.frame = imageStorage.frame;
-                
+                // 下载图片完成后需要进行裁剪
                 [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                     CGSize imageSize = image.size;
                     if (imageSize.width != imageSize.height) {
@@ -63,7 +63,6 @@
                     }
                     
                 }];
-//                [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder];
             }
         }
     }
@@ -118,7 +117,8 @@
     for (JFStorage* storage in self.layout.storages) {
         if ([storage isKindOfClass:[JFTextStorage class]]) {
             JFTextStorage* textStorage = (JFTextStorage*)storage;
-            if ([textStorage didClickedHighLightPosition:curP]) {
+            CGRect highLightRect = [textStorage didClickedHighLightPosition:curP];
+            if (!CGRectEqualToRect(highLightRect, CGRectZero)) {
                 [textStorage turnningHightLightSwitch:YES atPosition:curP];
                 self.clickedPosition = curP;
                 [self setLayerDisplayAsynchronously:NO];
@@ -133,13 +133,26 @@
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    UITouch* touch = [touches anyObject];
+    CGPoint curP = [touch locationInView:self];
+
     if (!CGPointEqualToPoint(self.clickedPosition, CGPointZero)) {
         for (JFStorage* storage in self.layout.storages) {
             if ([storage isKindOfClass:[JFTextStorage class]]) {
                 JFTextStorage* textStorage = (JFTextStorage*)storage;
-                if ([textStorage didClickedHighLightPosition:self.clickedPosition]) {
+                // 判断当前textStorage是否是被点击的高亮storage，如果是：则取消高亮
+                CGRect highLightRect = [textStorage didClickedHighLightPosition:self.clickedPosition];
+                if (!CGRectEqualToRect(highLightRect, CGRectZero)) {
+                    // 取消高亮
                     [textStorage turnningHightLightSwitch:NO atPosition:self.clickedPosition];
+                    // 如果是在高亮区内退出点击的，则回调
+                    if (CGRectContainsPoint(highLightRect, curP)) {
+                        if (self.delegate && [self.delegate respondsToSelector:@selector(asyncDisplayView:didClickedTextStorage:withLinkData:)]) {
+                            [self.delegate asyncDisplayView:self didClickedTextStorage:textStorage withLinkData:[textStorage bindingDataWithHighLightAtPosition:curP]];
+                        }
+                    }
                     self.clickedPosition = CGPointZero;
+                    // 同步绘制
                     [self setLayerDisplayAsynchronously:NO];
                     return;
                 }
@@ -155,7 +168,8 @@
         for (JFStorage* storage in self.layout.storages) {
             if ([storage isKindOfClass:[JFTextStorage class]]) {
                 JFTextStorage* textStorage = (JFTextStorage*)storage;
-                if ([textStorage didClickedHighLightPosition:self.clickedPosition]) {
+                CGRect highLightRect = [textStorage didClickedHighLightPosition:self.clickedPosition];
+                if (!CGRectEqualToRect(highLightRect, CGRectZero)) {
                     [textStorage turnningHightLightSwitch:NO atPosition:self.clickedPosition];
                     self.clickedPosition = CGPointZero;
                     [self setLayerDisplayAsynchronously:NO];
@@ -227,7 +241,7 @@
 # pragma mask 4 setter
 
 - (void)setLayout:(JFLayout *)layout {
-    if (_layout != layout) {
+    if (layout != _layout) {
         [self incrementCancelFlag];
         _layout = layout;
         // 清空显示图并保存到重用池

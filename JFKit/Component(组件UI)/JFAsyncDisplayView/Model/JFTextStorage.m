@@ -127,9 +127,9 @@
  逐个比较当前缓存中的所有高亮区;
  
  @param position 点击坐标
- @return 存在任意一个高亮区，则返回YES;否则返回NO;
+ @return 存在任意一个高亮区，则返回它的frame;否则返回CGRectZero;
  */
-- (BOOL) didClickedHighLightPosition:(CGPoint)position {
+- (CGRect) didClickedHighLightPosition:(CGPoint)position {
     return [self.textLayout didClickedHighLightPosition:position];
 }
 
@@ -163,6 +163,16 @@
     [self.textLayout turnningHightLightSwitch:switchOn atPosition:position];
 }
 
+/**
+ 获取指定坐标对应的高亮对象的绑定数据;
+ 
+ @param position 指定坐标;
+ @return 高亮对象绑定的数据;
+ */
+- (id) bindingDataWithHighLightAtPosition:(CGPoint)position {
+    return [self.textLayout bindingDataWithHighLightAtPosition:position];
+}
+
 
 
 /**
@@ -192,7 +202,8 @@
     self.textLayout.debugMode = self.debugMode;
     self.textLayout.backgroundColor = self.backgroundColor;
     self.suggustFrame = self.textLayout.suggestFrame;
-    _isTrancated = self.textLayout.isTrancated;
+    _isTruncated = self.textLayout.isTrancated;
+    _originNumberOfLines = self.textLayout.originNumberOfLines;
     if (layout) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             [layout class];
@@ -207,7 +218,7 @@
     if (self) {
         _attributedString = [[NSMutableAttributedString alloc] initWithString:text];
         _numberOfLines = 0;
-        _isTrancated = NO;
+        _isTruncated = NO;
     }
     return self;
 }

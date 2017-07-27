@@ -12,7 +12,7 @@
 
 @interface TVMFeedCtrl()
 
-@property (nonatomic, strong) NSArray* layouts;
+@property (nonatomic, strong) NSMutableArray* layouts;
 @property (nonatomic, strong) NSArray* originDatas;
 
 @end
@@ -56,23 +56,35 @@
 }
 
 
+- (void) replaceLayoutAtIndex:(NSInteger)index withTruncated:(BOOL)truncated {
+    NSDictionary* nodeData = [self.originDatas objectAtIndex:index];
+    TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:nodeData];
+    MFeedLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:truncated];
+    [self.layouts replaceObjectAtIndex:index withObject:layout];
+}
+
+
 # pragma mask 2 tools
 
 - (void) transDatasToLayouts {
-    NSMutableArray* datas = [NSMutableArray array];
+    [self.layouts removeAllObjects];
     for (NSDictionary* data in self.originDatas) {
         TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
-        JFLayout* layout = [[MFeedLayout alloc] initWithFeedNode:node];
-        [datas addObject:layout];
-    }
-    if (datas.count > 0) {
-        self.layouts = datas;
+        JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
+        [self.layouts addObject:layout];
     }
 }
 
 
 
 # pragma mask 4 getter
+
+- (NSMutableArray *)layouts {
+    if (!_layouts) {
+        _layouts = [NSMutableArray array];
+    }
+    return _layouts;
+}
 
 - (NSArray *)originDatas {
     if (!_originDatas) {

@@ -133,7 +133,6 @@
         _asyncView.left = 15;
         _asyncView.right = JFSCREEN_WIDTH - 15;
         _asyncView.bottom = self.asyncBtn.top - 15;
-//        _asyncView.backgroundColor = JFHexColor(0xeeeeee, 1);
     }
     return _asyncView;
 }

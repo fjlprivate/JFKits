@@ -22,6 +22,7 @@
 		8050D3C41F273AC5002A982D /* VTMFeedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C31F273AC5002A982D /* VTMFeedCell.m */; };
 		8050D3C71F273BAC002A982D /* TestForAsyncDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C61F273BAC002A982D /* TestForAsyncDisplayView.m */; };
 		8050D3CA1F28325C002A982D /* MFeedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3C91F28325C002A982D /* MFeedLayout.m */; };
+		8050D3CD1F2993F6002A982D /* JFLinkDataPaser.m in Sources */ = {isa = PBXBuildFile; fileRef = 8050D3CC1F2993F6002A982D /* JFLinkDataPaser.m */; };
 		807AAE631F14CCB20083A384 /* YYWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE621F14CCB20083A384 /* YYWeakProxy.m */; };
 		807AAE661F15CBEE0083A384 /* JFAsyncDisplayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE651F15CBEE0083A384 /* JFAsyncDisplayView.m */; };
 		807AAE691F15CC090083A384 /* JFTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 807AAE681F15CC090083A384 /* JFTextStorage.m */; };
@@ -149,6 +150,8 @@
 		8050D3C61F273BAC002A982D /* TestForAsyncDisplayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestForAsyncDisplayView.m; sourceTree = "<group>"; };
 		8050D3C81F28325B002A982D /* MFeedLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MFeedLayout.h; sourceTree = "<group>"; };
 		8050D3C91F28325C002A982D /* MFeedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MFeedLayout.m; sourceTree = "<group>"; };
+		8050D3CB1F2993F6002A982D /* JFLinkDataPaser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFLinkDataPaser.h; sourceTree = "<group>"; };
+		8050D3CC1F2993F6002A982D /* JFLinkDataPaser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFLinkDataPaser.m; sourceTree = "<group>"; };
 		807AAE611F14CCB20083A384 /* YYWeakProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYWeakProxy.h; sourceTree = "<group>"; };
 		807AAE621F14CCB20083A384 /* YYWeakProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYWeakProxy.m; sourceTree = "<group>"; };
 		807AAE641F15CBEE0083A384 /* JFAsyncDisplayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFAsyncDisplayView.h; sourceTree = "<group>"; };
@@ -745,6 +748,8 @@
 				807AAE7E1F1C6E990083A384 /* JFTextRun.m */,
 				807AAE801F1C9DE50083A384 /* JFTextGlyph.h */,
 				807AAE811F1C9DE50083A384 /* JFTextGlyph.m */,
+				8050D3CB1F2993F6002A982D /* JFLinkDataPaser.h */,
+				8050D3CC1F2993F6002A982D /* JFLinkDataPaser.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -974,6 +979,7 @@
 				807FF7821F14BAC5002C57FC /* UIImage+MultiFormat.m in Sources */,
 				8050D3BD1F2719FB002A982D /* NSObject+MJProperty.m in Sources */,
 				807FF7861F14BAC5002C57FC /* UIView+WebCache.m in Sources */,
+				8050D3CD1F2993F6002A982D /* JFLinkDataPaser.m in Sources */,
 				807FF7EC1F14BBDB002C57FC /* LWGIFImage.m in Sources */,
 				807FF7F51F14BBDB002C57FC /* LWLayout.m in Sources */,
 				807AAE931F21FB7E0083A384 /* TestForImageStorage.m in Sources */,

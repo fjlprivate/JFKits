@@ -16,6 +16,12 @@
     }
 }
 
+/**
+ 清空缓存
+ */
+- (void) removeAllStorages {
+    [self.storages removeAllObjects];
+}
 
 
 # pragma mask 4 getter

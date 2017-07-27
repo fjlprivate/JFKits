@@ -64,6 +64,16 @@
     
 }
 
+// 点击事件回调
+- (void)asyncDisplayView:(JFAsyncDisplayView *)asyncView didClickedTextStorage:(JFTextStorage *)textStorage withLinkData:(id)linkData {
+    if ([linkData isKindOfClass:[NSString class]]) {
+        // 先回调去刷新table高度
+        if (self.delegate && [self.delegate respondsToSelector:@selector(feedCell:didClickedTextData:)]) {
+            [self.delegate feedCell:self didClickedTextData:linkData];
+        }
+    }
+}
+
 
 # pragma mask 3 life cycle
 

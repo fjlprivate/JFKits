@@ -92,16 +92,16 @@
  @param position 点击坐标
  @return 存在任意一个高亮区，则返回YES;否则返回NO;
  */
-- (BOOL) didClickedHighLightPosition:(CGPoint)position {
+- (CGRect) didClickedHighLightPosition:(CGPoint)position {
     for (JFTextHighLight* highLight in self.highLights) {
         for (NSValue* frameValue in highLight.positions) {
             CGRect frame = [frameValue CGRectValue];
             if (CGRectContainsPoint(frame, position)) {
-                return YES;
+                return frame;
             }
         }
     }
-    return NO;
+    return CGRectZero;
 }
 
 
@@ -144,6 +144,23 @@
     }
 }
 
+/**
+ 获取指定坐标对应的高亮对象的绑定数据;
+ 
+ @param position 指定坐标;
+ @return 高亮对象绑定的数据;
+ */
+- (id) bindingDataWithHighLightAtPosition:(CGPoint)position {
+    for (JFTextHighLight* highLight in self.highLights) {
+        for (NSValue* frameValue in highLight.positions) {
+            CGRect frame = [frameValue CGRectValue];
+            if (CGRectContainsPoint(frame, position)) {
+                return highLight.content;
+            }
+        }
+    }
+    return nil;
+}
 
 
 # pragma mask 2 life cycle
@@ -179,6 +196,7 @@
         // 获取所有行属性
         CFArrayRef lines = CTFrameGetLines(_frameRef);
         CFIndex originLinesCount = CFArrayGetCount(lines);
+        _originNumberOfLines = originLinesCount; // 保存文本原始行数
         CGPoint linesOrigins[originLinesCount];
         CTFrameGetLineOrigins(_frameRef, CFRangeMake(0, 0), linesOrigins);
         

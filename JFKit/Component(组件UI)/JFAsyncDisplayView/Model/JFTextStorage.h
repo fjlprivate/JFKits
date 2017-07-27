@@ -37,8 +37,10 @@
 @property (nonatomic, strong) UIColor* backgroundColor; // 背景色
 
 @property (nonatomic, assign) NSInteger numberOfLines; // 文本行数
+@property (nonatomic, assign, readonly) NSInteger originNumberOfLines; // 原始文本行数
 
-@property (nonatomic, assign, readonly) BOOL isTrancated; // 被截取行数
+
+@property (nonatomic, assign, readonly) BOOL isTruncated; // 被截取行数
 
 // 字间距、行间距、对齐
 @property (nonatomic, assign) CGFloat lineSpace; // 行间距
@@ -114,9 +116,9 @@
  逐个比较当前缓存中的所有高亮区;
 
  @param position 点击坐标
- @return 存在任意一个高亮区，则返回YES;否则返回NO;
+ @return 存在任意一个高亮区，则返回它的frame;否则返回CGRectZero;
  */
-- (BOOL) didClickedHighLightPosition:(CGPoint)position;
+- (CGRect) didClickedHighLightPosition:(CGPoint)position;
 
 
 
@@ -130,5 +132,13 @@
 - (void) turnningHightLightSwitch:(BOOL)switchOn atPosition:(CGPoint)position;
 
 
+
+/**
+ 获取指定坐标对应的高亮对象的绑定数据;
+
+ @param position 指定坐标;
+ @return 高亮对象绑定的数据;
+ */
+- (id) bindingDataWithHighLightAtPosition:(CGPoint)position;
 
 @end

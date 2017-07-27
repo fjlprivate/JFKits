@@ -11,13 +11,15 @@
 #define ChatBubbleTriWidth 10  // 回复背景框三角的宽
 #define ChatBubbleTriHeight 5 // 回复背景框三角的高
 
+#define ContentTruncateYES  @"全文" 
+#define ContentTruncateNO  @"收起"
 
 
 @class TMFeedNode;
 @interface MFeedLayout : JFLayout
 
 // 使用数据元来初始化layout
-- (instancetype) initWithFeedNode:(TMFeedNode*)feedNode;
++ (instancetype) layoutWithFeedNode:(TMFeedNode*)feedNode contentTruncated:(BOOL)contentTruncated;
 
 // 网页内容的背景边框
 @property (nonatomic, assign, readonly) CGRect webFrame;
@@ -34,5 +36,8 @@
 @property (nonatomic, strong, readonly) UIColor* seperateLineColor;
 
 @property (nonatomic, assign, readonly) CGFloat cellHeight;
+
+
+@property (nonatomic, assign, readonly) BOOL isContentTruncated; // 正文是否被折叠
 
 @end

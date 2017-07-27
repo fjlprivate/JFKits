@@ -11,7 +11,7 @@
 #import "VTMFeedCell.h"
 #import "JFKit.h"
 
-@interface TestForAsyncDisplayView () <UITableViewDelegate, UITableViewDataSource>
+@interface TestForAsyncDisplayView () <UITableViewDelegate, UITableViewDataSource, VTMFeedCellDelegate>
 @property (nonatomic, strong) UITableView* tableView;
 @property (nonatomic, strong) TVMFeedCtrl* feedCtrl;
 @end
@@ -39,7 +39,7 @@
     }];
 }
 
-# pragma maks 2 delegate
+# pragma maks 2 uitableView delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [self.feedCtrl layoutAtIndex:indexPath.row].cellHeight;
@@ -55,9 +55,21 @@
         cell = [[VTMFeedCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"VTMFeedCell"];
     }
     cell.layout = [self.feedCtrl layoutAtIndex:indexPath.row];
+    cell.tag = indexPath.row;
+    cell.delegate = self;
     return cell;
 }
 
+# pragma mask 2 VTMFeedCellDelegate
 
+- (void)feedCell:(VTMFeedCell *)cell didClickedTextData:(id)textData {
+    if ([textData isKindOfClass:[NSString class]]) {
+        NSString* str = textData;
+        if ([str hasPrefix:@"action"] && ([str hasSuffix:ContentTruncateYES] || [str hasSuffix:ContentTruncateNO])) {
+            [self.feedCtrl replaceLayoutAtIndex:cell.tag withTruncated:([str hasSuffix:ContentTruncateYES] ? NO : YES)];
+            [self.tableView reloadData];
+        }
+    }
+}
 
 @end

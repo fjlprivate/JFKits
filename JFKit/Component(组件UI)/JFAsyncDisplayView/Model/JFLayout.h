@@ -24,4 +24,9 @@
 - (void) addStorage:(JFStorage*)storage;
 
 
+/**
+ 清空缓存
+ */
+- (void) removeAllStorages;
+
 @end

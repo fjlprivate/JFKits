@@ -15,15 +15,27 @@
 #define MFeedLayoutFontSizeContent 14
 #define MFeedLayoutFontSizeComment 13
 
+#define MFeedLayoutContentLineCount 5 // 正文截断行数
 
 
 @interface MFeedLayout()
 @property (nonatomic, strong) NSArray* imageNameList;
+@property (nonatomic, strong) TMFeedNode* feedNode;
 @end
 
 @implementation MFeedLayout
 
-- (instancetype)initWithFeedNode:(TMFeedNode *)node {
+
+
+# pragma mask 3 life cycle
+
++ (instancetype) layoutWithFeedNode:(TMFeedNode*)feedNode contentTruncated:(BOOL)contentTruncated {
+    MFeedLayout* layout = [[MFeedLayout alloc] initWithFeedNode:feedNode contentTruncated:contentTruncated];
+    return layout;
+}
+
+
+- (instancetype)initWithFeedNode:(TMFeedNode *)node contentTruncated:(BOOL)contentTruncated {
     self = [super init];
     if (self) {
         _commentFrame = CGRectZero;
@@ -31,10 +43,14 @@
         _commentBackColor = JFHexColor(0xefefef, 1);
         _seperateLineColor = JFHexColor(0xcdcdcd, 1);
         _seperateLineWidth = 0.3;
-        [self processWithFeedNode:node];
+        _feedNode = node;
+        [self processWithFeedNode:node truncated:contentTruncated];
     }
     return self;
 }
+
+
+
 
 
 /**
@@ -51,7 +67,11 @@
 
  @param node 数据节点
  */
-- (void) processWithFeedNode:(TMFeedNode*)node {
+- (void) processWithFeedNode:(TMFeedNode*)node truncated:(BOOL)truncated {
+    // 是否需要做立即退出操作?
+    // 清空原有的所有缓存
+    [self removeAllStorages];
+    
     CGFloat hInset = 10;
     CGFloat vInset = 15;
     CGRect frame = CGRectMake(hInset, vInset, 44, 44);
@@ -69,7 +89,7 @@
     JFTextStorage* nameTxt = [JFTextStorage jf_textStorageWithText:node.name frame:frame insets:UIEdgeInsetsZero];
     nameTxt.textFont = [UIFont boldSystemFontOfSize:MFeedLayoutFontSizeName];
     nameTxt.textColor = JFHexColor(0x6b7ca5, 1);
-    [nameTxt addLinkWithData:@"href://nameUrl" textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0x999999, 1) atRange:NSMakeRange(0, node.name.length)];
+    [nameTxt addLinkWithData:@"url://nameUrl" textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0x999999, 1) atRange:NSMakeRange(0, node.name.length)];
     [self addStorage:nameTxt];
     
     frame.origin.y += nameTxt.height + 5;
@@ -81,15 +101,34 @@
         // 替换表情符号
         [self replaceEmojPicWithTextStorage:contentTxt];
         
-        contentTxt.numberOfLines = 5;
+        contentTxt.numberOfLines = truncated ? MFeedLayoutContentLineCount : 0;
         contentTxt.lineSpace = 1.4;
         contentTxt.debugMode = NO;
         contentTxt.textColor = JFHexColor(0x27384b, 1);
         contentTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeContent];
         [self addStorage:contentTxt];
         
+        // 正文是否被截断
+        _isContentTruncated = contentTxt.isTruncated;
+        
         frame.size.height = contentTxt.height;
-        frame.origin.y += frame.size.height + hInset;
+        frame.origin.y += frame.size.height;
+        
+        // 全文/收起
+        if (contentTxt.originNumberOfLines > MFeedLayoutContentLineCount) {
+            frame.origin.y += 5;
+            NSString* spreadText = truncated ? ContentTruncateYES : ContentTruncateNO;
+            JFTextStorage* truncateTxt = [JFTextStorage jf_textStorageWithText:spreadText frame:frame insets:UIEdgeInsetsZero];
+            truncateTxt.textFont = [UIFont boldSystemFontOfSize:MFeedLayoutFontSizeContent];
+            truncateTxt.textColor = JFHexColor(0x6b7ca5, 1);
+            NSString* data = [NSString stringWithFormat:@"action://%@", spreadText];
+            [truncateTxt addLinkWithData:data textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:NSMakeRange(0, 2)];
+            [self addStorage:truncateTxt];
+            
+            frame.origin.y += truncateTxt.height;
+        }
+        
+        frame.origin.y += hInset;
     }
     
     // 图片组模块
@@ -150,7 +189,7 @@
             webContentTxt.textFont = [UIFont systemFontOfSize:MFeedLayoutFontSizeComment];
             webContentTxt.textColor = JFHexColor(0x27384b, 1);
             webContentTxt.lineSpace = 1;
-            [webContentTxt addLinkWithData:@"href://webContent" textSelectedColor:JFHexColor(0x27384b, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:NSMakeRange(0, node.detail.length)];
+            [webContentTxt addLinkWithData:@"url://webContent" textSelectedColor:JFHexColor(0x27384b, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:NSMakeRange(0, node.detail.length)];
             [self addStorage:webContentTxt];
             
             webBackFrame.size.height = MAX(imgWidth + 10, webContentTxt.height + 10);
@@ -212,7 +251,7 @@
             NSRange nameRange = [nameList rangeOfString:name];
             nameRange.location += 1;
             [likeListTxt setTextColor:JFHexColor(0x6b7ca5, 1) atRange:nameRange];
-            NSString* nameData = [NSString stringWithFormat:@"href://%@", name];
+            NSString* nameData = [NSString stringWithFormat:@"url://%@", name];
             [likeListTxt addLinkWithData:nameData textSelectedColor:JFHexColor(0x6c7ba5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:nameRange];
         }
         [self addStorage:likeListTxt];
@@ -245,13 +284,13 @@
                 NSRange toRange = [commentText rangeOfString:commentNode.to];
                 [commentTxt setTextFont:[UIFont boldSystemFontOfSize:MFeedLayoutFontSizeComment] atRange:toRange];
                 [commentTxt setTextColor:JFHexColor(0x6b7ca5, 1) atRange:toRange];
-                NSString* toData = [NSString stringWithFormat:@"href://%@", commentNode.to];
+                NSString* toData = [NSString stringWithFormat:@"url://%@", commentNode.to];
                 [commentTxt addLinkWithData:toData textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:toRange];
             }
             NSRange fromRange = [commentText rangeOfString:commentNode.from];
             [commentTxt setTextFont:[UIFont boldSystemFontOfSize:MFeedLayoutFontSizeComment] atRange:fromRange];
             [commentTxt setTextColor:JFHexColor(0x6b7ca5, 1) atRange:fromRange];
-            NSString* fromData = [NSString stringWithFormat:@"href://%@", commentNode.from];
+            NSString* fromData = [NSString stringWithFormat:@"url://%@", commentNode.from];
             [commentTxt addLinkWithData:fromData textSelectedColor:JFHexColor(0x6b7ca5, 1) backSelectedColor:JFHexColor(0, 0.1) atRange:fromRange];
             commentTxt.lineSpace = 1;
             [self addStorage:commentTxt];
