@@ -33,7 +33,6 @@ typedef BOOL (^ isCanceledBlock) ();
  缓存数据可以是text或image;
  如果是image,contents必须是UIImage才可以绘制;
  
- 
  @param context 图形上下文;
  @param canceled 是否取消绘制的校验方法;
  */

@@ -51,11 +51,11 @@
 
 - (NSArray *)titles {
     if (!_titles) {
-        _titles = @[@"TestAsyncDisplayLayer",
-                    @"TextAsyncDisplayLayer2",
-                    @"TestForTextStorage",
-                    @"TestForImageDraw",
-                    @"TestForImageStorage",
+        _titles = @[
+//                    @"TextAsyncDisplayLayer2",
+//                    @"TestForTextStorage",
+//                    @"TestForImageDraw",
+//                    @"TestForImageStorage",
                     @"TestForAsyncDisplayView"];
     }
     return _titles;
