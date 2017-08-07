@@ -12,6 +12,13 @@
 #import "UIImageView+WebCache.h"
 #import <libkern/OSAtomic.h>
 #import "UIImage+Extension.h"
+#import "FLAnimatedImageView+WebCache.h"
+
+// 图片类型
+typedef NS_ENUM(NSInteger, JFAsyncImageType) {
+    JFAsyncImageTypeStatic, // 静态图片
+    JFAsyncImageTypeGif // gif动图
+};
 
 @interface JFAsyncDisplayView() <JFAsyncDisplayDelegate> {
     int32_t cancelFlag;
@@ -45,24 +52,31 @@
             JFImageStorage* imageStorage = (JFImageStorage*)storage;
             if (imageStorage.contents && [imageStorage.contents isKindOfClass:[NSURL class]]) {
                 NSURL* url = imageStorage.contents;
-                UIImageView* imageView = [self jf_dequeueImageView];
-                imageView.frame = imageStorage.frame;
-                // 下载图片完成后需要进行裁剪
-                [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                    CGSize imageSize = image.size;
-                    if (imageSize.width != imageSize.height) {
-                        CGFloat newWidth = MIN(imageSize.width, imageSize.height);
-                        dispatch_queue_t distQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-                        dispatch_async(distQ, ^{
-                            UIImage* cutedImage = [image imageCutedWithNewSize:CGSizeMake(newWidth, newWidth) contentMode:UIViewContentModeCenter];
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                imageView.image = cutedImage;
+                
+                if ([[url.absoluteString lowercaseString] hasSuffix:@".gif"]) {
+                    FLAnimatedImageView* animatedImageV = (FLAnimatedImageView*)[self jf_dequeueImageViewWithType:JFAsyncImageTypeGif];
+                    animatedImageV.frame = imageStorage.frame;
+                    [animatedImageV sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder];
+                } else {
+                    UIImageView* imageView = [self jf_dequeueImageView];
+                    imageView.frame = imageStorage.frame;
+                    // 下载图片完成后需要进行裁剪
+                    [imageView sd_setImageWithURL:url placeholderImage:imageStorage.placeHolder completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                        CGSize imageSize = image.size;
+                        if (imageSize.width != imageSize.height) {
+                            CGFloat newWidth = MIN(imageSize.width, imageSize.height);
+                            dispatch_queue_t distQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+                            dispatch_async(distQ, ^{
+                                UIImage* cutedImage = [image imageCutedWithNewSize:CGSizeMake(newWidth, newWidth) contentMode:UIViewContentModeCenter];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    imageView.image = cutedImage;
+                                });
                             });
-                        });
+                            
+                        }
                         
-                    }
-                    
-                }];
+                    }];
+                }
             }
         }
     }
@@ -81,6 +95,42 @@
     [self.displayImageViews addObject:imageView];
     return imageView;
 }
+
+- (UIImageView*) jf_dequeueImageViewWithType:(JFAsyncImageType)imageType {
+    if (imageType == JFAsyncImageTypeStatic) { // 取静态图片imageView
+        UIImageView* imageView = [self.reuseImageViews lastObject];
+        if (!imageView) {
+            imageView = [UIImageView new];
+            [self addSubview:imageView];
+        } else {
+            imageView.hidden = NO;
+            [self.reuseImageViews removeObject:imageView];
+        }
+        [self.displayImageViews addObject:imageView];
+        return imageView;
+    } else { // 取动态图FLAnimatedImageView
+        UIImageView* availableImgV = nil;
+        for (UIImageView* imageV in self.reuseImageViews) {
+            if ([imageV isKindOfClass:[FLAnimatedImageView class]]) {
+                imageV.hidden = NO;
+                availableImgV = imageV;
+                break;
+            }
+        }
+        // 取到: 从重用池删除
+        if (availableImgV) {
+            [self.reuseImageViews removeObject:availableImgV];
+        }
+        // 没取到: 创建一个新的，并加载到当前视图
+        else {
+            availableImgV = [[FLAnimatedImageView alloc] init];
+            [self addSubview:availableImgV];
+        }
+        [self.displayImageViews addObject:availableImgV];
+        return availableImgV;
+    }
+}
+
 
 // 清空当前正在使用的imageView组;并保存到重用池中
 - (void) jf_inquequeAllDisplayImageViews {
