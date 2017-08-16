@@ -51,33 +51,47 @@ static char TAG_ACTIVITY_SHOW;
         }
         
         __weak __typeof(self)wself = self;
-        id <SDWebImageOperation> operation = [SDWebImageManager.sharedManager loadImageWithURL:url options:options progress:progressBlock completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        // 通过 SDWebImageManager 来加载图片，并返回一个operation，这个operation必须包含协议: SDWebImageOperation
+        // 在complete回调block中处理图片或图片数据
+        id <SDWebImageOperation> operation = [SDWebImageManager.sharedManager loadImageWithURL:url
+                                                                                       options:options
+                                                                                      progress:progressBlock
+                                                                                     completed:^(UIImage *image, NSData *data, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
             __strong __typeof (wself) sself = wself;
+            // 移除动态加载器
             [sself sd_removeActivityIndicator];
             if (!sself) {
                 return;
             }
+            // 下面的宏的作用：保证block是在主线程执行的
             dispatch_main_async_safe(^{
                 if (!sself) {
                     return;
                 }
+                // image存在 且 避免自动设置图片 且 存在'完成回调' 时,直接回调出去
                 if (image && (options & SDWebImageAvoidAutoSetImage) && completedBlock) {
                     completedBlock(image, error, cacheType, url);
                     return;
-                } else if (image) {
+                }
+                // 否则，图片存在时，处理图片，并刷新layout
+                else if (image) {
                     [sself sd_setImage:image imageData:data basedOnClassOrViaCustomSetImageBlock:setImageBlock];
                     [sself sd_setNeedsLayout];
-                } else {
+                }
+                // 否则，当存在占位图时，处理占位图，并刷新layout
+                else {
                     if ((options & SDWebImageDelayPlaceholder)) {
                         [sself sd_setImage:placeholder imageData:nil basedOnClassOrViaCustomSetImageBlock:setImageBlock];
                         [sself sd_setNeedsLayout];
                     }
                 }
+                // 如果加载是完成状态，则通过完毕回调，回调出去
                 if (completedBlock && finished) {
                     completedBlock(image, error, cacheType, url);
                 }
             });
         }];
+        // 将得到的operation保存到view的缓存字典里面
         [self sd_setImageLoadOperation:operation forKey:validOperationKey];
     } else {
         dispatch_main_async_safe(^{
@@ -94,13 +108,16 @@ static char TAG_ACTIVITY_SHOW;
     [self sd_cancelImageLoadOperationWithKey:NSStringFromClass([self class])];
 }
 
+// 处理图片；要么回调出去，要么设置image到当前imageVIew中
 - (void)sd_setImage:(UIImage *)image imageData:(NSData *)imageData basedOnClassOrViaCustomSetImageBlock:(SDSetImageBlock)setImageBlock {
+    // 有setblock，则直接回调出去
     if (setImageBlock) {
         setImageBlock(image, imageData);
         return;
     }
     
 #if SD_UIKIT || SD_MAC
+    // 如果是ios系统才处理如下：当前view是imageView时，直接将image设置到imageView中
     if ([self isKindOfClass:[UIImageView class]]) {
         UIImageView *imageView = (UIImageView *)self;
         imageView.image = image;

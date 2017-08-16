@@ -25,6 +25,7 @@
 
     CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
 
+    // 读取图片源中包含图片的张数
     size_t count = CGImageSourceGetCount(source);
 
     UIImage *staticImage;
@@ -41,7 +42,7 @@
         CGFloat scale = 1;
         scale = [UIScreen mainScreen].scale;
 #endif
-        
+      // 取图片数据源的第一张
         CGImageRef CGImage = CGImageSourceCreateImageAtIndex(source, 0, NULL);
 #if SD_UIKIT || SD_WATCH
         UIImage *frameImage = [UIImage imageWithCGImage:CGImage scale:scale orientation:UIImageOrientationUp];

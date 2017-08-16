@@ -165,6 +165,8 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (nullable NSString *)cachedFileNameForKey:(nullable NSString *)key {
+    // 根据key生成在缓存中的文件名
+    // MD5加密后的16进制字符串(+.后缀;如果有后缀)
     const char *str = key.UTF8String;
     if (str == NULL) {
         str = "";
@@ -179,6 +181,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (nullable NSString *)makeDiskCachePath:(nonnull NSString*)fullNamespace {
+    // 缓存目录是在cache目录下面的
     NSArray<NSString *> *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     return [paths[0] stringByAppendingPathComponent:fullNamespace];
 }
@@ -310,6 +313,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (nullable NSData *)diskImageDataBySearchingAllPathsForKey:(nullable NSString *)key {
+    // 目录在 NSCachesDirectory/default/xxxxxxxx(.suffix)
     NSString *defaultPath = [self defaultCachePathForKey:key];
     NSData *data = [NSData dataWithContentsOfFile:defaultPath];
     if (data) {
@@ -361,6 +365,7 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (nullable NSOperation *)queryCacheOperationForKey:(nullable NSString *)key done:(nullable SDCacheQueryCompletedBlock)doneBlock {
+    // 如果key为空则直接回调出去nil的图片
     if (!key) {
         if (doneBlock) {
             doneBlock(nil, nil, SDImageCacheTypeNone);
@@ -369,10 +374,14 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
     }
 
     // First check the in-memory cache...
+    // 从 NSCache中根据key取图片
     UIImage *image = [self imageFromMemoryCacheForKey:key];
+    // 如果内存缓存中有
     if (image) {
         NSData *diskData = nil;
+        // 如果图片是gif类型的
         if ([image isGIF]) {
+            // 从bundle中取key对应的imageData
             diskData = [self diskImageDataBySearchingAllPathsForKey:key];
         }
         if (doneBlock) {

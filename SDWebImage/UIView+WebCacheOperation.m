@@ -40,18 +40,23 @@ typedef NSMutableDictionary<NSString *, id> SDOperationsDictionary;
 
 - (void)sd_cancelImageLoadOperationWithKey:(nullable NSString *)key {
     // Cancel in progress downloader from queue
+    // 实际上是 NSMutableDictionary类型
     SDOperationsDictionary *operationDictionary = [self operationDictionary];
     id operations = operationDictionary[key];
     if (operations) {
+        // 有可能是数组类型,则轮询数组中的
         if ([operations isKindOfClass:[NSArray class]]) {
             for (id <SDWebImageOperation> operation in operations) {
                 if (operation) {
                     [operation cancel];
                 }
             }
-        } else if ([operations conformsToProtocol:@protocol(SDWebImageOperation)]){
+        }
+        // 否则就是含有协议 SDWebImageOperation的对象
+        else if ([operations conformsToProtocol:@protocol(SDWebImageOperation)]){
             [(id<SDWebImageOperation>) operations cancel];
         }
+        // 取消完毕就将这个operation从字典中移除
         [operationDictionary removeObjectForKey:key];
     }
 }

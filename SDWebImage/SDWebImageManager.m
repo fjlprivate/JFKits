@@ -120,26 +120,32 @@
         url = nil;
     }
 
+    // 创建operation封装类
     __block SDWebImageCombinedOperation *operation = [SDWebImageCombinedOperation new];
     __weak SDWebImageCombinedOperation *weakOperation = operation;
 
     BOOL isFailedUrl = NO;
     if (url) {
+        
         @synchronized (self.failedURLs) {
             isFailedUrl = [self.failedURLs containsObject:url];
         }
     }
 
+    // url为空 或者 (失败不重试 && url是失败的url)时，回调一个错误出去:URL不存在
     if (url.absoluteString.length == 0 || (!(options & SDWebImageRetryFailed) && isFailedUrl)) {
         [self callCompletionBlockForOperation:operation completion:completedBlock error:[NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorFileDoesNotExist userInfo:nil] url:url];
         return operation;
     }
 
+    // 将operation添加到当前正在运行的operation组
     @synchronized (self.runningOperations) {
         [self.runningOperations addObject:operation];
     }
+    // 读取url的缓存key字符串
     NSString *key = [self cacheKeyForURL:url];
 
+    // 加载器的operation是调用
     operation.cacheOperation = [self.imageCache queryCacheOperationForKey:key done:^(UIImage *cachedImage, NSData *cachedData, SDImageCacheType cacheType) {
         if (operation.isCancelled) {
             [self safelyRemoveOperationFromRunning:operation];
