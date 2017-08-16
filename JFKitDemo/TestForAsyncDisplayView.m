@@ -76,4 +76,17 @@
     }
 }
 
+- (void)feedCell:(VTMFeedCell *)cell didClickedImageData:(id)imageData {
+    if ([imageData isKindOfClass:[UIImage class]]) {
+        NSString* log = [NSString stringWithFormat:@"点击了图片: %@", imageData];
+        [self.view makeToast:log duration:1 position:CSToastPositionCenter];
+    }
+    else if ([imageData isKindOfClass:[NSURL class]]) {
+        NSURL* url = imageData;
+        NSString* log = [NSString stringWithFormat:@"点击了图片: %@", url.absoluteString];
+        [self.view makeToast:log duration:1 position:CSToastPositionCenter];
+    }
+    
+}
+
 @end

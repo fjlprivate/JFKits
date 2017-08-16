@@ -21,6 +21,15 @@
  */
 - (void) feedCell:(VTMFeedCell*)cell didClickedTextData:(id)textData;
 
+
+/**
+ 回调: 点击了图片
+
+ @param cell 点击事件所在的cell;
+ @param imageData 图片类型: <UIImage> or <NSURL>;
+ */
+- (void) feedCell:(VTMFeedCell*)cell didClickedImageData:(id)imageData;
+
 @end
 
 

@@ -64,13 +64,20 @@
     
 }
 
-// 点击事件回调
+// 点击了textStorage
 - (void)asyncDisplayView:(JFAsyncDisplayView *)asyncView didClickedTextStorage:(JFTextStorage *)textStorage withLinkData:(id)linkData {
     if ([linkData isKindOfClass:[NSString class]]) {
         // 先回调去刷新table高度
         if (self.delegate && [self.delegate respondsToSelector:@selector(feedCell:didClickedTextData:)]) {
             [self.delegate feedCell:self didClickedTextData:linkData];
         }
+    }
+}
+
+// 点击了imageStorage
+- (void)asyncDIsplayView:(JFAsyncDisplayView *)asyncView didClickedImageStorage:(JFImageStorage *)imageStorage {
+    if (self.delegate && [self.delegate respondsToSelector:@selector(feedCell:didClickedImageData:)]) {
+        [self.delegate feedCell:self didClickedImageData:imageStorage.contents];
     }
 }
 

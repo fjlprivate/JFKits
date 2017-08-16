@@ -40,6 +40,15 @@
 - (void) asyncDisplayView:(JFAsyncDisplayView*)asyncView didClickedTextStorage:(JFTextStorage*)textStorage withLinkData:(id)linkData;
 
 
+/**
+ 回调: 点击了图片;
+
+ @param asyncView 异步绘制视图;
+ @param imageStorage 点击事件所在的imageStorage;
+ */
+- (void) asyncDIsplayView:(JFAsyncDisplayView*)asyncView didClickedImageStorage:(JFImageStorage*)imageStorage;
+
+
 @end
 
 
