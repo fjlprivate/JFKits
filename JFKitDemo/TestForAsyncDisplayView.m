@@ -11,16 +11,20 @@
 #import "VTMFeedCell.h"
 #import "JFKit.h"
 #import "UIView+Toast.h"
+#import "JFImageBrowser.h"
 
-@interface TestForAsyncDisplayView () <UITableViewDelegate, UITableViewDataSource, VTMFeedCellDelegate>
+@interface TestForAsyncDisplayView () <UITableViewDelegate, UITableViewDataSource, VTMFeedCellDelegate, JFImageBrowserDelegate>
 @property (nonatomic, strong) UITableView* tableView;
 @property (nonatomic, strong) TVMFeedCtrl* feedCtrl;
+@property (nonatomic, strong) JFImageBrowser* imageBrowser;
+@property (nonatomic, assign) NSInteger selectedIndex;
 @end
 
 @implementation TestForAsyncDisplayView
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.selectedIndex = -1;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     
@@ -87,6 +91,26 @@
         [self.view makeToast:log duration:1 position:CSToastPositionCenter];
     }
     
+}
+
+# pragma mask 2 JFImageBrowserDelegate
+
+//- (NSInteger)numberOfImageSections {
+//    
+//}
+//
+//- (id)imageDataAtSection:(NSInteger)section {
+//    
+//}
+
+# pragma mask 4 getter
+
+- (JFImageBrowser *)imageBrowser {
+    if (!_imageBrowser) {
+        _imageBrowser = [[JFImageBrowser alloc] initWithFromVC:self];
+        _imageBrowser.delegate = self;
+    }
+    return _imageBrowser;
 }
 
 @end

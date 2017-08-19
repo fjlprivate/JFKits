@@ -73,6 +73,7 @@
 		B20F9F951F3843D50094F020 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = B20F9F811F3843D50094F020 /* UIView+WebCacheOperation.m */; };
 		B20F9F9A1F3843FE0094F020 /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B20F9F971F3843FE0094F020 /* FLAnimatedImage.m */; };
 		B20F9F9B1F3843FE0094F020 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B20F9F991F3843FE0094F020 /* FLAnimatedImageView.m */; };
+		B20FA0431F447EA20094F020 /* JFImageBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = B20FA0421F447EA20094F020 /* JFImageBrowser.m */; };
 		B236064A1F164DF0001121B2 /* NSMutableAttributedString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = B23606491F164DF0001121B2 /* NSMutableAttributedString+Extension.m */; };
 		B236064D1F165564001121B2 /* JFTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = B236064C1F165564001121B2 /* JFTextAttachment.m */; };
 /* End PBXBuildFile section */
@@ -212,6 +213,8 @@
 		B20F9F971F3843FE0094F020 /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
 		B20F9F981F3843FE0094F020 /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
 		B20F9F991F3843FE0094F020 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
+		B20FA0411F447EA20094F020 /* JFImageBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFImageBrowser.h; sourceTree = "<group>"; };
+		B20FA0421F447EA20094F020 /* JFImageBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFImageBrowser.m; sourceTree = "<group>"; };
 		B23606481F164DF0001121B2 /* NSMutableAttributedString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+Extension.h"; sourceTree = "<group>"; };
 		B23606491F164DF0001121B2 /* NSMutableAttributedString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+Extension.m"; sourceTree = "<group>"; };
 		B236064B1F165564001121B2 /* JFTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextAttachment.h; sourceTree = "<group>"; };
@@ -421,6 +424,7 @@
 		80D536FF1F146C2B009F5687 /* Component(组件UI) */ = {
 			isa = PBXGroup;
 			children = (
+				B20FA0401F447E300094F020 /* JFImageBrowser */,
 				80D537061F146C2B009F5687 /* JFButton */,
 				80D537001F146C2B009F5687 /* JFAsyncDisplayView */,
 			);
@@ -567,6 +571,15 @@
 			path = FLAnimatedImage;
 			sourceTree = "<group>";
 		};
+		B20FA0401F447E300094F020 /* JFImageBrowser */ = {
+			isa = PBXGroup;
+			children = (
+				B20FA0411F447EA20094F020 /* JFImageBrowser.h */,
+				B20FA0421F447EA20094F020 /* JFImageBrowser.m */,
+			);
+			path = JFImageBrowser;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -676,6 +689,7 @@
 				807AAE7C1F1866410083A384 /* TestForTextStorage.m in Sources */,
 				B20F9F9B1F3843FE0094F020 /* FLAnimatedImageView.m in Sources */,
 				B20F9F8C1F3843D50094F020 /* SDWebImageManager.m in Sources */,
+				B20FA0431F447EA20094F020 /* JFImageBrowser.m in Sources */,
 				8050D3B71F2719FB002A982D /* MJProperty.m in Sources */,
 				807AAE8C1F1F59950083A384 /* JFStorage.m in Sources */,
 				807AAE751F1761BD0083A384 /* JFTextLine.m in Sources */,

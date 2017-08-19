@@ -92,7 +92,7 @@
                          @{@"type":@"image",
                            @"name":@"型格志style",
                            @"avatar":@"http://tp4.sinaimg.cn/5747171147/50/5741401933/0",
-                           @"content":@"春天卫衣的正确打开方式https://github.com/waynezxcv/Gallop",
+                           @"content":@"春天卫衣的正确打开方式",
                            @"date":@"1459668442",
                            
                            @"imgs":@[@"http://ww2.sinaimg.cn/bmiddle/006gWxKPgw1f2jeloxwhnj30fu0g0ta5.jpg",
@@ -118,8 +118,8 @@
                            
                            @"statusID":@"8",
                            @"commentList":@[@{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
-                                              @"content":@"使用Gallop适合包含文字、图片高性能的展示型界面的构建。"}],
+                                              @"to":@"大大",
+                                              @"content":@"使用JFAsyncDisplayView适合包含文字、图片高性能的展示型界面的构建。"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"权志龙"]},
                          
@@ -135,7 +135,7 @@
                            
                            @"statusID":@"22",
                            @"commentList":@[@{@"from":@"someone",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"大大",
                                               @"content":@"支持GIF"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"权志龙"]},
@@ -144,7 +144,7 @@
                          @{@"type":@"image",
                            @"name":@"SIZE潮流生活",
                            @"avatar":@"http://tp2.sinaimg.cn/1829483361/50/5753078359/1",
-                           @"content":@"近日[心][心][心][心][心][心][face]，adidas Originals😂为经典鞋款Stan Smith打造Primeknit版本，并带来全新的“OG”系列。简约的鞋身采用白色透气Primeknit针织材质制作，再将Stan Smith代表性的绿、红、深蓝三个元年色调融入到鞋舌和后跟点缀，最后搭载上米白色大底来保留其复古风味。据悉该鞋款将在今月登陆全球各大adidas Originals指定店舖。https://github.com/waynezxcv/Gallop <-",
+                           @"content":@"近日[心][心][心][心][心][心][face]，adidas Originals😂为经典鞋款Stan Smith打造Primeknit版本，并带来全新的“OG”系列。简约的鞋身采用白色透气Primeknit针织材质制作，再将Stan Smith代表性的绿、红、深蓝三个元年色调融入到鞋舌和后跟点缀，最后搭载上米白色大底来保留其复古风味。据悉该鞋款将在今月登陆全球各大adidas Originals指定店舖。 <-",
                            @"date":@"1459668442",
                            
                            @"imgs":@[@"http://ww2.sinaimg.cn/bmiddle/6d0bb361gw1f2jim2hgxij20lo0egwgc.jpg",
@@ -164,12 +164,12 @@
                            @"commentList":@[@{@"from":@"SIZE潮流生活",
                                               @"to":@"",
                                               @"content":@"哈哈哈..."},
-                                            @{@"from":@"waynezxcv",
+                                            @{@"from":@"dada",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
-                                              @"content":@"使用Gallop能保持滚动时的FPS在60hz"}],
+                                              @"to":@"大大",
+                                              @"content":@"使用JFAsyncDisplayView能保持滚动时的FPS在60hz"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"权志龙",@"伊布拉希莫维奇",@"郜林",@"扎克伯格"]},
                          
@@ -182,10 +182,10 @@
                            
                            @"thumbnail":@[@"http://ww2.sinaimg.cn/thumbnail/6d0bb361gw1f2jim2hgxij20lo0egwgc.jpg"],
                            
-                           @"detail":@"LWAlchemy,A fast and lightweight ORM framework for Cocoa and Cocoa Touch.",
+                           @"detail":@"Austin Butler & Vanessa Hudgens.",
                            @"statusID":@"1",
                            @"commentList":@[@{@"from":@"伊布拉西莫维奇",
-                                              @"to":@"",
+                                              @"to":@"大大",
                                               @"content":@"手动再见..."}],
                            @"isLike":@(NO),
                            @"likeList":@[]}, //@"waynezxcv",@"Gallop"
@@ -215,13 +215,13 @@
                            
                            @"statusID":@"2",
                            @"commentList":@[@{@"from":@"炉石传说",
-                                              @"to":@"",
+                                              @"to":@"大大",
                                               @"content":@"#炉石传说#"},
-                                            @{@"from":@"waynezxcv",
+                                            @{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"Austin Butler & Vanessa Hudgens",
                                               @"content":@"打得不错。"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"权志龙"]},
@@ -250,11 +250,11 @@
                            
                            
                            @"statusID":@"3",
-                           @"commentList":@[@{@"from":@"waynezxcv",
+                           @"commentList":@[@{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"大大",
                                               @"content":@"+++"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"Tim Cook"]},
@@ -272,11 +272,11 @@
                            
                            
                            @"statusID":@"4",
-                           @"commentList":@[@{@"from":@"waynezxcv",
+                           @"commentList":@[@{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"大大",
                                               @"content":@"打得不错。"}],
                            @"isLike":@(NO),
                            @"likeList":@[@"Tim Cook"]},
@@ -300,7 +300,7 @@
                                               @"to":@"",
                                               @"content":@"统一回复,使用Gallop来快速构建图文混排界面。享受如丝般顺滑的滚动体验。"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"大大"]},
                          
                          
                          
@@ -317,14 +317,14 @@
                            @"commentList":@[@{@"from":@"SIZE潮流生活",
                                               @"to":@"",
                                               @"content":@"使用Gallop来快速构建图文混排界面。享受如丝般顺滑的滚动体验。"},
-                                            @{@"from":@"waynezxcv",
+                                            @{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"大大",
                                               @"content":@"打得不错。"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"大大"]},
                          
                          
                          @{@"type":@"image",
@@ -339,15 +339,15 @@
                            @"statusID":@"9",
                            @"commentList":@[@{@"from":@"SIZE潮流生活",
                                               @"to":@"",
-                                              @"content":@"使用Gallop来快速构建图文混排界面。享受如丝般顺滑的滚动体验。"},
-                                            @{@"from":@"waynezxcv",
+                                              @"content":@"this is a.."},
+                                            @{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"},
                                             @{@"from":@"SIZE潮流生活",
-                                              @"to":@"waynezxcv",
+                                              @"to":@"大大",
                                               @"content":@"打得不错。"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"大大"]},
                          
                          
                          @{@"type":@"image",
@@ -368,11 +368,11 @@
                            
                            
                            @"statusID":@"10",
-                           @"commentList":@[@{@"from":@"waynezxcv",
+                           @"commentList":@[@{@"from":@"大大",
                                               @"to":@"SIZE潮流生活",
                                               @"content":@"哈哈哈哈"}],
                            @"isLike":@(NO),
-                           @"likeList":@[@"waynezxcv"]},
+                           @"likeList":@[@"大大"]},
                          ];
     }
     return _originDatas;
