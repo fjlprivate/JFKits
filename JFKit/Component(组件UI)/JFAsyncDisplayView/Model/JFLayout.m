@@ -14,6 +14,9 @@
     if (![self.storages containsObject:storage]) {
         [self.storages addObject:storage];
     }
+    if ([storage isKindOfClass:[JFTextStorage class]]) {
+        [((JFTextStorage*)storage) renewTextLayout];
+    }
 }
 
 /**

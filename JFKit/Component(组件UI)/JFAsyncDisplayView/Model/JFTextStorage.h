@@ -50,6 +50,11 @@
 // 调试模式
 @property (nonatomic, assign) BOOL debugMode; // 是否开启调试模式
 
+/** private
+ 重新生成文本布局属性;
+ 在所有属性设置完毕后调用;JFLayout添加storage时自动调用，无须手动调用;
+ */
+- (void) renewTextLayout;
 
 
 # pragma mask : 设置属性方法

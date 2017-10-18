@@ -400,7 +400,6 @@
 				80D5370F1F146C2B009F5687 /* Macro(宏定义) */,
 				80D5370A1F146C2B009F5687 /* Helper(函数) */,
 				80D536FA1F146C2B009F5687 /* Category(分类) */,
-				80D537111F146C2B009F5687 /* Utility(工具NS) */,
 				80D536FF1F146C2B009F5687 /* Component(组件UI) */,
 			);
 			path = JFKit;
@@ -502,13 +501,6 @@
 				80D537101F146C2B009F5687 /* JFMacro.h */,
 			);
 			path = "Macro(宏定义)";
-			sourceTree = "<group>";
-		};
-		80D537111F146C2B009F5687 /* Utility(工具NS) */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "Utility(工具NS)";
 			sourceTree = "<group>";
 		};
 		B20F9F571F3843D50094F020 /* SDWebImage */ = {

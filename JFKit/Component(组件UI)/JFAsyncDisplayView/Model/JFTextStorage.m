@@ -42,12 +42,12 @@
 
 - (void) setTextFont:(UIFont *)textFont atRange:(NSRange)range {
     [self.attributedString setAttribute:NSFontAttributeName withValue:textFont atRange:range];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void) setTextColor:(UIColor *)textColor atRange:(NSRange)range {
     [self.attributedString setAttribute:NSForegroundColorAttributeName withValue:textColor atRange:range];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 
@@ -64,7 +64,7 @@
     backColor.backgroundColor = backgroundColor;
     backColor.range = range;
     [self.attributedString addTextBackgroundColor:backColor];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 
@@ -81,7 +81,7 @@
     textAttachment.range = NSMakeRange(position, 1);
     textAttachment.contentSize = imageSize;
     [self.attributedString addTextAttachment:textAttachment];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void) replaceTextAtRange:(NSRange)range withImage:(UIImage*)image imageSize:(CGSize)imageSize {
@@ -90,7 +90,7 @@
     textAttachment.range = NSMakeRange(range.location, 1);
     textAttachment.contentSize = imageSize;
     if ([self.attributedString replayceTextAtRange:range withAttachment:textAttachment]) {
-        [self renewTextLayout];
+//        [self renewTextLayout];
     }
 }
 
@@ -118,7 +118,7 @@
     highLight.range = range;
     highLight.content = data;
     [self.attributedString addTextHighLight:highLight];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 
@@ -158,7 +158,7 @@
         } else {
             [self.attributedString setTextColor:lastTextColor atRange:range];
         }
-        [self renewTextLayout];
+//        [self renewTextLayout];
     }
     [self.textLayout turnningHightLightSwitch:switchOn atPosition:position];
 }
@@ -231,7 +231,7 @@
     }
     _textFont = textFont;
     [self.attributedString setFont:textFont];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void)setTextColor:(UIColor *)textColor {
@@ -240,7 +240,7 @@
     }
     _textColor = textColor;
     [self.attributedString setTextColor:textColor];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
@@ -256,7 +256,7 @@
         return;
     }
     _numberOfLines = numberOfLines;
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void)setLineSpace:(CGFloat)lineSpace {
@@ -269,7 +269,7 @@
     }
     self.paragraphStyle.lineSpacing = lineSpace;
     [self.attributedString setAttribute:NSParagraphStyleAttributeName withValue:self.paragraphStyle atRange:NSMakeRange(0, self.attributedString.length)];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void)setKernSpace:(CGFloat)kernSpace {
@@ -278,7 +278,7 @@
     }
     _kernSpace = kernSpace;
     [self.attributedString setAttribute:NSKernAttributeName withValue:@(kernSpace) atRange:NSMakeRange(0, self.attributedString.length)];
-    [self renewTextLayout];
+//    [self renewTextLayout];
 }
 
 - (void)setDebugMode:(BOOL)debugMode {
