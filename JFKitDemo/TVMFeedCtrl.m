@@ -68,11 +68,24 @@
 
 - (void) transDatasToLayouts {
     [self.layouts removeAllObjects];
+    
+    NSOperationQueue* operationQueue = [NSOperationQueue new];
+    __weak typeof(self) wself = self;
     for (NSDictionary* data in self.originDatas) {
         TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
-        JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
-        [self.layouts addObject:layout];
+        NSBlockOperation* operation = [NSBlockOperation blockOperationWithBlock:^{
+            JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
+            [wself.layouts addObject:layout];
+        }];
+        [operationQueue addOperation:operation];
     }
+    [operationQueue waitUntilAllOperationsAreFinished];
+    
+//    for (NSDictionary* data in self.originDatas) {
+//        TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
+//        JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
+//        [self.layouts addObject:layout];
+//    }
 }
 
 
