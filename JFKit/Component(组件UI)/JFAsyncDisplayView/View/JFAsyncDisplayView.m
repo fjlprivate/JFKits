@@ -65,7 +65,7 @@ typedef NS_ENUM(NSInteger, JFAsyncImageType) {
                         CGSize imageSize = image.size;
                         if (imageSize.width != imageSize.height) {
                             CGFloat newWidth = MIN(imageSize.width, imageSize.height);
-                            dispatch_queue_t distQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+                            dispatch_queue_t distQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
                             dispatch_async(distQ, ^{
                                 UIImage* cutedImage = [image imageCutedWithNewSize:CGSizeMake(newWidth, newWidth) contentMode:UIViewContentModeCenter];
                                 dispatch_async(dispatch_get_main_queue(), ^{

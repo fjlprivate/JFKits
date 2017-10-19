@@ -74,13 +74,17 @@
     
     // 创建一个异步操作队列,每个layout的生成都放在一个operation中进行异步生成，最后队列阻塞到所有operation完毕后才退出
     NSOperationQueue* operationQueue = [NSOperationQueue new];
-    operationQueue.maxConcurrentOperationCount = 4; // 并发少开点，不然模拟器会挂掉
+//    operationQueue.maxConcurrentOperationCount = 2; // 并发少开点，不然模拟器会挂掉
     __weak typeof(self) wself = self;
     for (int i = 0; i < self.originDatas.count; i++) {
         int curI = i;
         NSBlockOperation* operation = [NSBlockOperation blockOperationWithBlock:^{
             NSDictionary* data = wself.originDatas[curI];
-            TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
+            TMFeedNode* node = nil;
+            @synchronized(wself) {
+                // MJExtension转化模型要小心线程安全，所以加锁处理;
+                node = [TMFeedNode mj_objectWithKeyValues:data];
+            }
             JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
             layout.name = [NSString stringWithFormat:@"%d", curI];
             [wself.layouts addObject:layout];
@@ -92,7 +96,6 @@
     [self.layouts sortUsingComparator:^NSComparisonResult(JFLayout*  _Nonnull obj1, JFLayout*  _Nonnull obj2) {
         return (obj1.name.integerValue < obj2.name.integerValue) ? NSOrderedAscending : NSOrderedDescending;
     }];
-    
 }
 
 

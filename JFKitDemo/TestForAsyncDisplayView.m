@@ -49,6 +49,7 @@
 # pragma maks 2 uitableView delegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"-------height for row at [%ld] : [%.02lf]",indexPath.section, [self.feedCtrl layoutAtIndex:indexPath.section].cellHeight);
     return [self.feedCtrl layoutAtIndex:indexPath.section].cellHeight;
 }
 
@@ -69,6 +70,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"-------cell for row[%ld]", indexPath.section);
     VTMFeedCell* cell = [tableView dequeueReusableCellWithIdentifier:@"VTMFeedCell"];
     cell.layout = [self.feedCtrl layoutAtIndex:indexPath.section];
     cell.tag = indexPath.section;
@@ -90,15 +92,18 @@
                 // 先截取cell的图片并覆盖到tableView中,等cell刷新完毕后删除
 //                CGFloat cellHeight = [wself.feedCtrl layoutAtIndex:cell.tag].cellHeight;
 //                UIImageView* imageView = [wself coverScreenshotAndDelayRemoveWithCell:cell cellHeight:cellHeight];
-//                [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
-
-                [UIView animateWithDuration:0 animations:^{
-                    [wself.tableView beginUpdates];
-                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
-                    [wself.tableView endUpdates];
-                } completion:^(BOOL finished) {
-//                    [imageView removeFromSuperview];
+                [UIView animateWithDuration:0.1 animations:^{
+                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationFade];
+                    
                 }];
+
+//                [UIView animateWithDuration:0 animations:^{
+//                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
+//                    [wself.tableView beginUpdates];
+//                    [wself.tableView endUpdates];
+//                } completion:^(BOOL finished) {
+////                    [imageView removeFromSuperview];
+//                }];
             }];
         }
         else {
