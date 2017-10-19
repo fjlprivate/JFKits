@@ -87,10 +87,17 @@
         if ([str hasPrefix:@"action"] && ([str hasSuffix:ContentTruncateYES] || [str hasSuffix:ContentTruncateNO])) {
             // 更改数据源中对应的序号的layout的全文展开或收起
             [self.feedCtrl replaceLayoutAtIndex:cell.tag withTruncated:([str hasSuffix:ContentTruncateYES] ? NO : YES) onFinished:^{
+                // 先截取cell的图片并覆盖到tableView中,等cell刷新完毕后删除
+//                CGFloat cellHeight = [wself.feedCtrl layoutAtIndex:cell.tag].cellHeight;
+//                UIImageView* imageView = [wself coverScreenshotAndDelayRemoveWithCell:cell cellHeight:cellHeight];
+//                [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
+
                 [UIView animateWithDuration:0 animations:^{
                     [wself.tableView beginUpdates];
                     [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
                     [wself.tableView endUpdates];
+                } completion:^(BOOL finished) {
+//                    [imageView removeFromSuperview];
                 }];
             }];
         }
@@ -112,6 +119,38 @@
     }
     
 }
+
+# pragma mark : tools
+- (UIImage *)screenshotFromView:(UIView *)aView {
+    UIGraphicsBeginImageContextWithOptions(aView.bounds.size,NO,[UIScreen mainScreen].scale);
+    [aView.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage* screenshotImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return screenshotImage;
+}
+
+
+- (UIImageView* )coverScreenshotAndDelayRemoveWithCell:(UITableViewCell *)cell cellHeight:(CGFloat)cellHeight {
+    
+    UIImage* screenshot = [self screenshotFromView:cell];
+    
+    UIImageView* imgView = [[UIImageView alloc] initWithFrame:[self.tableView convertRect:cell.frame toView:self.tableView]];
+    
+    imgView.frame = CGRectMake(imgView.frame.origin.x,
+                               imgView.frame.origin.y,
+                               imgView.frame.size.width,
+                               cellHeight);
+    
+    imgView.contentMode = UIViewContentModeTop;
+    imgView.backgroundColor = [UIColor whiteColor];
+    imgView.image = screenshot;
+    [self.tableView addSubview:imgView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [imgView removeFromSuperview];
+    });
+    return imgView;
+}
+
 
 # pragma mask 2 JFImageBrowserDelegate
 
