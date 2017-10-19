@@ -101,6 +101,9 @@
 }
 
 - (void)setLayout:(MFeedLayout *)layout {
+    if (_layout == layout) {
+        return;
+    }
     _layout = layout;
     self.asyncView.layout = layout;
 }

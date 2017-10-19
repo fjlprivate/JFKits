@@ -24,6 +24,6 @@
 - (MFeedLayout*) layoutAtIndex:(NSInteger)index;
 
 // 更新序号index的layout，指定正文展开模式
-- (void) replaceLayoutAtIndex:(NSInteger)index withTruncated:(BOOL)truncated;
+- (void) replaceLayoutAtIndex:(NSInteger)index withTruncated:(BOOL)truncated onFinished:(void (^) (void))finished ;
 
 @end

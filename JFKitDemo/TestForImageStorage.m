@@ -100,7 +100,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
-//    [self.view addSubview:self.asyncView];
     [self.view addSubview:self.asyncBtn];
     self.tableView.top = 64;
     self.tableView.left = 0;

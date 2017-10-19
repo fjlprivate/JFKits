@@ -25,18 +25,10 @@
 - (void) requestFeedDataOnFinished:(void (^) (void))finishedBlock
                            orError:(void (^) (NSError* error))errorBlock
 {
-    __weak typeof(self) wself = self;
-    dispatch_queue_t dispathQ = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    dispatch_async(dispathQ, ^{
-        __strong typeof(wself) sself = wself;
-        [NSThread sleepForTimeInterval:0.5];
-        [sself transDatasToLayouts];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (finishedBlock) {
-                finishedBlock();
-            }
-        });
-    });
+    [self transDatasToLayouts];
+    if (finishedBlock) {
+        finishedBlock();
+    }
 }
 
 
@@ -56,36 +48,51 @@
 }
 
 
-- (void) replaceLayoutAtIndex:(NSInteger)index withTruncated:(BOOL)truncated {
+// 替换指定序号的layout
+- (void) replaceLayoutAtIndex:(NSInteger)index withTruncated:(BOOL)truncated onFinished:(void (^) (void))finished {
     NSDictionary* nodeData = [self.originDatas objectAtIndex:index];
     TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:nodeData];
-    MFeedLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:truncated];
-    [self.layouts replaceObjectAtIndex:index withObject:layout];
+    // 重新生成layout
+    __weak typeof(self) wself = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        MFeedLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:truncated];
+        layout.name = [NSString stringWithFormat:@"%ld", index];
+        [wself.layouts replaceObjectAtIndex:index withObject:layout];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (finished) {
+                finished();
+            }
+        });
+    });
 }
-
 
 # pragma mask 2 tools
 
+// 将数据源data列表转换为cell的layouts布局;
 - (void) transDatasToLayouts {
     [self.layouts removeAllObjects];
     
+    // 创建一个异步操作队列,每个layout的生成都放在一个operation中进行异步生成，最后队列阻塞到所有operation完毕后才退出
     NSOperationQueue* operationQueue = [NSOperationQueue new];
+    operationQueue.maxConcurrentOperationCount = 4; // 并发少开点，不然模拟器会挂掉
     __weak typeof(self) wself = self;
-    for (NSDictionary* data in self.originDatas) {
-        TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
+    for (int i = 0; i < self.originDatas.count; i++) {
+        int curI = i;
         NSBlockOperation* operation = [NSBlockOperation blockOperationWithBlock:^{
+            NSDictionary* data = wself.originDatas[curI];
+            TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
             JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
+            layout.name = [NSString stringWithFormat:@"%d", curI];
             [wself.layouts addObject:layout];
         }];
         [operationQueue addOperation:operation];
     }
     [operationQueue waitUntilAllOperationsAreFinished];
+    // 排序
+    [self.layouts sortUsingComparator:^NSComparisonResult(JFLayout*  _Nonnull obj1, JFLayout*  _Nonnull obj2) {
+        return (obj1.name.integerValue < obj2.name.integerValue) ? NSOrderedAscending : NSOrderedDescending;
+    }];
     
-//    for (NSDictionary* data in self.originDatas) {
-//        TMFeedNode* node = [TMFeedNode mj_objectWithKeyValues:data];
-//        JFLayout* layout = [MFeedLayout layoutWithFeedNode:node contentTruncated:YES];
-//        [self.layouts addObject:layout];
-//    }
 }
 
 
