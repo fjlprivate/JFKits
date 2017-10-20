@@ -37,6 +37,9 @@
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView registerClass:[VTMFeedCell class] forCellReuseIdentifier:@"VTMFeedCell"];
     [self.view addSubview:_tableView];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0) {
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
     
     __weak typeof(self) wself = self;
     [_feedCtrl requestFeedDataOnFinished:^{
@@ -92,18 +95,30 @@
                 // 先截取cell的图片并覆盖到tableView中,等cell刷新完毕后删除
 //                CGFloat cellHeight = [wself.feedCtrl layoutAtIndex:cell.tag].cellHeight;
 //                UIImageView* imageView = [wself coverScreenshotAndDelayRemoveWithCell:cell cellHeight:cellHeight];
-                [UIView animateWithDuration:0.1 animations:^{
-                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationFade];
-                    
-                }];
-
-//                [UIView animateWithDuration:0 animations:^{
-//                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationNone];
+//                [UIView animateWithDuration:0.1 animations:^{
+//                    [wself.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:cell.tag]] withRowAnimation:UITableViewRowAnimationFade];
+//
+//                }];
+//                [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
 //                    [wself.tableView beginUpdates];
+//                    cell.layout = [wself.feedCtrl layoutAtIndex:cell.tag];
 //                    [wself.tableView endUpdates];
 //                } completion:^(BOOL finished) {
-////                    [imageView removeFromSuperview];
+//
 //                }];
+//                [CATransaction begin];
+//                [CATransaction setCompletionBlock:^{
+//                    cell.layout = [wself.feedCtrl layoutAtIndex:cell.tag];
+//                }];
+//                [wself.tableView beginUpdates];
+//                [wself.tableView endUpdates];
+//                [CATransaction commit];
+                
+                [UIView animateWithDuration:0 animations:^{
+                    [wself.tableView beginUpdates];
+                    cell.layout = [wself.feedCtrl layoutAtIndex:cell.tag];
+                    [wself.tableView endUpdates];
+                }];
             }];
         }
         else {

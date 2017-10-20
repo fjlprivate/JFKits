@@ -61,12 +61,12 @@
     
     
     if (asynchronous) {
-        // 清除原来的contents
-        CGImageRef image = (__bridge_retained CGImageRef)self.contents;
-        self.contents = nil;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            CGImageRelease(image);
-        });
+//        // 清除原来的contents
+//        CGImageRef image = (__bridge_retained CGImageRef)self.contents;
+//        self.contents = nil;
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+//            CGImageRelease(image);
+//        });
 
         
         BOOL opaque = self.opaque;
@@ -129,10 +129,20 @@
             // 回主线程更新contents，并回调
             dispatch_async(dispatch_get_main_queue(), ^{
                 __strong typeof(wself) sself = wself;
+                CGImageRef oldImage = (__bridge_retained CGImageRef)sself.contents;
+
                 sself.contents = (__bridge id)image.CGImage;
                 if (asyncDisplayBlock.didDisplayed) {
                     asyncDisplayBlock.didDisplayed(sself, NO);
                 }
+                
+                // 清除原来的contents
+//                CGImageRef image = (__bridge_retained CGImageRef)self.contents;
+//                self.contents = nil;
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                    CGImageRelease(oldImage);
+                });
+
             });
         });
     }
