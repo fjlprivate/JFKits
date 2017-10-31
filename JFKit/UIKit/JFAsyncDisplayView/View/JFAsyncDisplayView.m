@@ -178,7 +178,7 @@ typedef NS_ENUM(NSInteger, JFAsyncImageType) {
                 [textStorage turnningHightLightSwitch:YES atPosition:curP];
                 self.clickedPosition = curP;
                 // 同步刷新绘制(如果没有selectedColor,就不用刷新绘制)
-//                [self setLayerDisplayAsynchronously:YES];
+                [self setLayerDisplayAsynchronously:YES];
                 return;
             }
         }
@@ -215,7 +215,7 @@ typedef NS_ENUM(NSInteger, JFAsyncImageType) {
                     [textStorage turnningHightLightSwitch:NO atPosition:self.clickedPosition];
                     self.clickedPosition = CGPointZero;
                     // 同步绘制
-//                    [self setLayerDisplayAsynchronously:YES];
+                    [self setLayerDisplayAsynchronously:YES];
                     // 如果是在高亮区内退出点击的，则回调
                     if (CGRectContainsPoint(highLightRect, curP)) {
                         if (self.delegate && [self.delegate respondsToSelector:@selector(asyncDisplayView:didClickedTextStorage:withLinkData:)]) {
