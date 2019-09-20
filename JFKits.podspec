@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
   spec.author       = { "fjlprivate" => "869325397@qq.com" }
   spec.platform     = :ios, "8.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
-  spec.source_files = "JFKit/**"
+  spec.source_files = "JFKit/**/*"
   spec.requires_arc = true
 
   spec.dependency "Masonry"
