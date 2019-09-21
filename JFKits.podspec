@@ -16,6 +16,7 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "8.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
   spec.source_files = "JFKit/**/*"
+  spec.resource = ['JFKit/UIKit/JFVideoKit/JFVideoImages.xcassets']
   spec.requires_arc = true
 
   spec.dependency "Masonry"
