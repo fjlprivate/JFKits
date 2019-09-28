@@ -8,8 +8,8 @@
 
 #import "JFImageView.h"
 #import "JFMacro.h"
-#import <UIImageView+WebCache.h>
-#import <YYWebImage.h>
+#import "UIImageView+WebCache.h"
+#import "YYWebImage.h"
 
 @implementation JFImageView
 

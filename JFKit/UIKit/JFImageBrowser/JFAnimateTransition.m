@@ -8,7 +8,7 @@
 
 #import "JFAnimateTransition.h"
 #import <CoreGraphics/CoreGraphics.h>
-#import <UIImageView+WebCache.h>
+#import "UIImageView+WebCache.h"
 #import "JFHelper.h"
 
 

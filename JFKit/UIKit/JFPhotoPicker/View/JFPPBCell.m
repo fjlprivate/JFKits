@@ -7,7 +7,7 @@
 //
 
 #import "JFPPBCell.h"
-#import <Masonry.h>
+#import "Masonry.h"
 #import "UIView+Extension.h"
 #import "JFHelper.h"
 #import "JFPhotoPickerViewModel.h"

@@ -12,6 +12,7 @@
 #import <Photos/Photos.h>
 #import "JFVideoPathHelper.h"
 #import "JFVideoCaptureBtn.h"
+#import "UIImage+JFExtension.h"
 
 
 
@@ -622,7 +623,7 @@
 - (UIButton *)revokeBtn {
     if (!_revokeBtn) {
         _revokeBtn = [UIButton new];
-        [_revokeBtn setImage:[UIImage imageNamed:JFVideoImageNameRevoke] forState:UIControlStateNormal];
+        [_revokeBtn setImage:[UIImage jf_kitImageWithName:JFVideoImageNameRevoke] forState:UIControlStateNormal];
         [_revokeBtn addTarget:self action:@selector(clickedRevokeBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _revokeBtn;
@@ -630,7 +631,7 @@
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
-        [_doneBtn setImage:[UIImage imageNamed:JFVideoImageNameDoneBlue] forState:UIControlStateNormal];
+        [_doneBtn setImage:[UIImage jf_kitImageWithName:JFVideoImageNameDoneBlue] forState:UIControlStateNormal];
         [_doneBtn addTarget:self action:@selector(clickedDoneBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _doneBtn;
@@ -687,7 +688,7 @@
 }
 - (UIImageView *)focusCursor {
     if (!_focusCursor) {
-        _focusCursor = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon_capture_focus"]];
+        _focusCursor = [[UIImageView alloc] initWithImage:[UIImage jf_kitImageWithName:@"icon_capture_focus"]];
         _focusCursor.contentMode = UIViewContentModeScaleAspectFit;
         _focusCursor.alpha = 0;
         _focusCursor.bounds = CGRectMake(0, 0, 64, 64);

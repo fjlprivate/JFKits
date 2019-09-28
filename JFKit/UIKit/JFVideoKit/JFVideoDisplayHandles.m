@@ -9,7 +9,8 @@
 #import "JFVideoDisplayHandles.h"
 #import "JFMacro.h"
 #import "JFHelper.h"
-#import <Masonry.h>
+#import "Masonry.h"
+#import "UIImage+JFExtension.h"
 
 // 底部区域的高度比(跟屏幕高度的比)
 static CGFloat const JFVDH_bottomBarHeightScale = 1/5.f;
@@ -132,9 +133,9 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
 - (void)setState:(JFVideoPlayState)state {
     _state = state;
     if (state == JFVideoPlayStatePlaying) {
-        self.playImageView.image = JFImageNamed(JFVDH_imageNamePause);
+        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePause];
     } else {
-        self.playImageView.image = JFImageNamed(JFVDH_imageNamePlay);
+        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
     }
 }
 - (void)setDidUpdateSlider:(void (^)(JFVideoSlider * _Nonnull))didUpdateSlider {
@@ -170,7 +171,7 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
         _playImageView.userInteractionEnabled = YES;
         _playImageView.clipsToBounds = YES;
         _playImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _playImageView.image = JFImageNamed(JFVDH_imageNamePlay);
+        _playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
         [_playImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickedPlayImage:)]];
     }
     return _playImageView;
@@ -204,7 +205,7 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [UIButton new];
-        [_cancelBtn setImage:JFImageNamed(@"delete_fill") forState:UIControlStateNormal];
+        [_cancelBtn setImage:[UIImage jf_kitImageWithName:@"delete_fill"] forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(clickedCancelBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelBtn;

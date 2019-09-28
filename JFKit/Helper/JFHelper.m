@@ -8,7 +8,7 @@
 
 #import "JFHelper.h"
 #import <Photos/Photos.h>
-#import <SDWebImage.h>
+#import "SDWebImage.h"
 #import "NSError+Extension.h"
 
 @implementation JFHelper

@@ -19,7 +19,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    // Do any additional setup after loading the view.
     
     // 轮播图
     JFCycleImageView* cycleImageVIew = [JFCycleImageView new];
@@ -85,7 +84,12 @@
                          },
                        @{@"title":@"TextKit",
                          @"detail":@"TestTextKit"
-                         }];
+                         },
+                       // TestVideoVC
+                       @{@"title":@"TestVideo",
+                         @"detail":@"TestVideoVC"
+                         },
+                       ];
     }
     return _functions;
 }

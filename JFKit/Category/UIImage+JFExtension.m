@@ -10,6 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <Accelerate/Accelerate.h>
 #import <CoreImage/CoreImage.h>
+#import "NSBundle+JFExtension.h"
 
 @implementation UIImage (JFExtension)
 
@@ -225,6 +226,24 @@
     UIImage *newImage=UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return newImage;
+}
+
+/**
+ 从JFKit.bundle取图片;如果取不到，再到工程去取
+ @param name 图片名称
+ @return UIImage
+ */
++ (UIImage*) jf_kitImageWithName:(NSString*)name {
+    if (name.length == 0) {
+        return nil;
+    }
+    NSBundle* bundle = [NSBundle jf_kitBundle];
+    NSString* path = [[bundle resourcePath] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", name]];
+    UIImage* image = [UIImage imageWithContentsOfFile:path];
+    if (!image) {
+        image = [UIImage imageNamed:name];
+    }
+    return image;
 }
 
 @end

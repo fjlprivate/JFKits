@@ -40,4 +40,12 @@ static NSString* const JFTextBackgroundColorAttributeKey = @"JFTextBackgroundCol
  */
 - (UIImage*) jf_drawText:(NSAttributedString*)text inRect:(CGRect)rect newImageSize:(CGSize)newImageSize;
 
+
+/**
+ 从JFKit.bundle取图片;如果取不到，再到工程去取
+ @param name 图片名称
+ @return UIImage
+ */
++ (UIImage*) jf_kitImageWithName:(NSString*)name;
+
 @end

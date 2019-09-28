@@ -10,7 +10,7 @@
 #import "JFMacro.h"
 #import "JFHelper.h"
 #import "JFConstant.h"
-#import <Masonry.h>
+#import "Masonry.h"
 #import "UIView+Extension.h"
 
 static CGFloat const JFVideoSliderThumbWidth = 20;

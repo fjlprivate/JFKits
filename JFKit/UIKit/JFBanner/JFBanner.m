@@ -7,8 +7,8 @@
 //
 
 #import "JFBanner.h"
-#import <Masonry.h>
-#import <SDWebImage.h>
+#import "Masonry.h"
+#import "SDWebImage.h"
 
 
 @interface JFBanner() <UIScrollViewDelegate>

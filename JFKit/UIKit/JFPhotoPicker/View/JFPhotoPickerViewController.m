@@ -16,6 +16,7 @@
 #import "UINavigationBar+Awesome.h"
 #import "JFImageBrowserViewController.h"
 #import "JFPhotoPickerBrowserViewController.h"
+#import "UIImage+JFExtension.h"
 
 //#import "QQVideoPlayVC.h"
 
@@ -197,7 +198,7 @@
                                                                     NSForegroundColorAttributeName:self.navigationBarTintColor
                                                                     };
     if (self.navigationController.viewControllers.firstObject == self) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:self.navigationCancelImageName] style:UIBarButtonItemStylePlain target:self action:@selector(clickedCancel:)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage jf_kitImageWithName:self.navigationCancelImageName] style:UIBarButtonItemStylePlain target:self action:@selector(clickedCancel:)];
     }
 }
 

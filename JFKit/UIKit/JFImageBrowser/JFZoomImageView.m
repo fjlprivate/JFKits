@@ -7,9 +7,9 @@
 //
 
 #import "JFZoomImageView.h"
-#import <UIImageView+WebCache.h>
-#import <SDWebImageDownloader.h>
-#import <YYWebImage.h>
+#import "UIImageView+WebCache.h"
+#import "SDWebImageDownloader.h"
+#import "YYWebImage.h"
 
 @implementation JFZoomImageView
 

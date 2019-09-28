@@ -8,9 +8,9 @@
 
 #import "JFCycleImageView.h"
 #import "JFImageDownloadManager.h"
-#import <Masonry.h>
+#import "Masonry.h"
 #import "JFHelper.h"
-#import <UIImageView+WebCache.h>
+#import "UIImageView+WebCache.h"
 #import "UIView+Extension.h"
 
 # define  JFCycleImageViewCycleDuration     4   // 轮播间隔时间

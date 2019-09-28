@@ -8,7 +8,7 @@
 
 #import "JFImageBrowserViewController.h"
 #import "JFAnimateTransition.h"
-#import <UIImageView+WebCache.h>
+#import "UIImageView+WebCache.h"
 #import "JFZoomImageView.h"
 #import "JFImageBrowserActionView.h"
 #import "JFIBButton.h"
