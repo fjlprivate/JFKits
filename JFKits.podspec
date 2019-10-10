@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |spec|
   spec.name         = "JFKits"
-  spec.version      = "0.0.1"
+  spec.version      = "0.0.2"
   spec.summary      = "我的工具集"
   spec.homepage     = "https://github.com/fjlprivate/JFKits.git"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "8.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
   spec.source_files = "JFKit/**/*"
-#  spec.resource     = "JFKit/*.bundle"
+#  spec.resources     = "JFKit/*.bundle"
   spec.resource_bundles = {
     "JFKit" => ["JFKit/JFKit.bundle"]
   }
