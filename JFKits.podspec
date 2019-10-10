@@ -18,7 +18,7 @@ Pod::Spec.new do |spec|
   spec.source_files = "JFKit/**/*"
 #  spec.resource     = "JFKit/*.bundle"
   spec.resource_bundles = {
-    'JFKit' => ['JFKit/JFKit.bundle']
+    "JFKit" => ["JFKit/JFKit.bundle"]
   }
 
   spec.requires_arc = true
