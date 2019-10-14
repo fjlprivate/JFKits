@@ -78,6 +78,9 @@
 		7A0D8AD4233EFB5B0070FDBC /* JFKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */; };
 		7A0D8AD7233EFE520070FDBC /* NSBundle+JFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */; };
 		7ABB1421233F38D40057CB77 /* TestVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABB1420233F38D40057CB77 /* TestVideoVC.m */; };
+		7AFF3129235428A6008ADF94 /* TextAsyncViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */; };
+		7AFF312C235428CE008ADF94 /* APTransHashHeaderLayouts.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */; };
+		7AFF312F235428D6008ADF94 /* APTransHashCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF312D235428D6008ADF94 /* APTransHashCellHeader.m */; };
 		FA21528D200367B400C49427 /* TextView1.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21528C200367B400C49427 /* TextView1.m */; };
 		FA2152902004532000C49427 /* SystemLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FA21528F2004532000C49427 /* SystemLabel.m */; };
 		FA2152962004749400C49427 /* TestTextKit.m in Sources */ = {isa = PBXBuildFile; fileRef = FA2152952004749400C49427 /* TestTextKit.m */; };
@@ -236,6 +239,12 @@
 		7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+JFExtension.m"; sourceTree = "<group>"; };
 		7ABB141F233F38D40057CB77 /* TestVideoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestVideoVC.h; sourceTree = "<group>"; };
 		7ABB1420233F38D40057CB77 /* TestVideoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestVideoVC.m; sourceTree = "<group>"; };
+		7AFF3127235428A6008ADF94 /* TextAsyncViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextAsyncViewViewController.h; sourceTree = "<group>"; };
+		7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextAsyncViewViewController.m; sourceTree = "<group>"; };
+		7AFF312A235428CE008ADF94 /* APTransHashHeaderLayouts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APTransHashHeaderLayouts.h; sourceTree = "<group>"; };
+		7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APTransHashHeaderLayouts.m; sourceTree = "<group>"; };
+		7AFF312D235428D6008ADF94 /* APTransHashCellHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APTransHashCellHeader.m; sourceTree = "<group>"; };
+		7AFF312E235428D6008ADF94 /* APTransHashCellHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APTransHashCellHeader.h; sourceTree = "<group>"; };
 		80ED7CA1F23BBF69FBBBE25F /* Pods-JFKitDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JFKitDemo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JFKitDemo/Pods-JFKitDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		AF2524A17C4993B6C3CE7CFE /* Pods-JFKitDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JFKitDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-JFKitDemo/Pods-JFKitDemo.release.xcconfig"; sourceTree = "<group>"; };
 		E653BA76FE9CAB8568AC4DC7 /* libPods-JFKitDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JFKitDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -618,6 +627,35 @@
 			path = TestVideoKit;
 			sourceTree = "<group>";
 		};
+		7AFF31242354287A008ADF94 /* TestAsyncView */ = {
+			isa = PBXGroup;
+			children = (
+				7AFF312623542890008ADF94 /* Model */,
+				7AFF31252354288D008ADF94 /* View */,
+			);
+			path = TestAsyncView;
+			sourceTree = "<group>";
+		};
+		7AFF31252354288D008ADF94 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7AFF3127235428A6008ADF94 /* TextAsyncViewViewController.h */,
+				7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */,
+				7AFF312E235428D6008ADF94 /* APTransHashCellHeader.h */,
+				7AFF312D235428D6008ADF94 /* APTransHashCellHeader.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7AFF312623542890008ADF94 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7AFF312A235428CE008ADF94 /* APTransHashHeaderLayouts.h */,
+				7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		FA2152912004745E00C49427 /* TestTextKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -692,6 +730,7 @@
 		FAF924B520030BDA00B7C9A5 /* JFKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				7AFF31242354287A008ADF94 /* TestAsyncView */,
 				7ABB141E233F38B10057CB77 /* TestVideoKit */,
 				FAEF59632008AD82003F9A3C /* TestAsyncDisplayKit */,
 				FAF9254E200343C700B7C9A5 /* TestCoreText */,
@@ -870,6 +909,8 @@
 				FAF924C620030BDA00B7C9A5 /* main.m in Sources */,
 				7A0D89CC23347E900070FDBC /* JFCycleImageView.m in Sources */,
 				7A0D89D223347E900070FDBC /* JFTextLayout.m in Sources */,
+				7AFF312C235428CE008ADF94 /* APTransHashHeaderLayouts.m in Sources */,
+				7AFF3129235428A6008ADF94 /* TextAsyncViewViewController.m in Sources */,
 				7A0D89E423347E900070FDBC /* JFImageDownloadManager.m in Sources */,
 				FAF92553200343EF00B7C9A5 /* TestCoreTextVC.m in Sources */,
 				7A0D89B323347E900070FDBC /* CALayer+JFExtension.m in Sources */,
@@ -899,6 +940,7 @@
 				7A0D89DD23347E900070FDBC /* JFPPBCell.m in Sources */,
 				7A0D89C123347E900070FDBC /* JFVideoSlider.m in Sources */,
 				7A0D89C723347E900070FDBC /* JFImageBrowserActionView.m in Sources */,
+				7AFF312F235428D6008ADF94 /* APTransHashCellHeader.m in Sources */,
 				7A0D89B923347E900070FDBC /* NSError+Extension.m in Sources */,
 				7A0D89C823347E900070FDBC /* JFImageBrowserItem.m in Sources */,
 				7A0D89AF23347E900070FDBC /* NSMutableAttributedString+Extension.m in Sources */,

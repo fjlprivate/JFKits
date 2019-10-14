@@ -174,4 +174,18 @@
 }
 
 
+/**
+ 根据给定的格式生成日期字符串
+ @param format 日期格式;如果为nil,默认: yyyy-MM-dd HH:mm:ss
+ @return 格式化后的日期字符串
+ */
+- (NSString*) stringWithFormat:(NSString*)format {
+    if (!format || format.length <= 0) {
+        format = @"yyyy-MM-dd HH:mm:ss";
+    }
+    NSDateFormatter* dateFormatter = [NSDateFormatter new];
+    dateFormatter.dateFormat = format;
+    return [dateFormatter stringFromDate:self];
+}
+
 @end

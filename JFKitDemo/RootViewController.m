@@ -89,6 +89,10 @@
                        @{@"title":@"TestVideo",
                          @"detail":@"TestVideoVC"
                          },
+                       //TextAsyncViewViewController.h
+                       @{@"title":@"TestAsyncView",
+                         @"detail":@"TextAsyncViewViewController"
+                         },
                        ];
     }
     return _functions;

@@ -37,12 +37,15 @@
     UIColor* bgColor = self.backgroundColor;
     UIColor* textBgColor = self.textStorage.backgroundColor;
     UIColor* borderColor = self.borderColor;
+    // 背景色默认:白色
     if (!bgColor) {
         bgColor = [UIColor whiteColor];
     }
+    // 文本背景色默认:
     if (!textBgColor) {
         textBgColor = bgColor;
     }
+    // 边框色
     if (!borderColor) {
         borderColor = bgColor;
     }
@@ -51,7 +54,12 @@
         return;
     }
     CGRect frame = CGRectMake(0, 0, self.suggustSize.width, self.suggustSize.height);
-    if (self.cornerRadius.width > 0) {
+    // 绘制layout背景色
+    
+    // 绘制storage背景色、边框色
+    
+    // 圆角值width或height > 0时，才
+    if (self.cornerRadius.width > 0 ) {
         // 填充背景色
         CGContextSetFillColorWithColor(context, bgColor.CGColor);
         // 绘制背景色:超出边界
