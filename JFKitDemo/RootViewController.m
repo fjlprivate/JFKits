@@ -20,19 +20,6 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // 轮播图
-    JFCycleImageView* cycleImageVIew = [JFCycleImageView new];
-    cycleImageVIew.imageList = @[[NSURL URLWithString:@"http://10.0.0.21:800/xiangyu/20171211/e5a00da7b28b4ad28d0ed5dfffe39c68.jpg"],
-                                 [NSURL URLWithString:@"http://10.0.0.21:800/xiangyu/20171211/df4dc6a1c4cd4c789e7e425d50b2c17f.jpg"],
-                                 [NSURL URLWithString:@"http://10.0.0.21:800/xiangyu/20171211/5d50232f2cb643fd873d5b5c69be1b9c.jpg"],
-                                 [NSURL URLWithString:@"http://10.0.0.21:800/xiangyu/20171211/df4dc6a1c4cd4c789e7e425d50b2c17f.jpg"]];
-    [self.view addSubview:cycleImageVIew];
-    [cycleImageVIew mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(100);
-        make.left.right.mas_equalTo(0);
-        make.height.equalTo(cycleImageVIew.mas_width).multipliedBy(1/2.f);
-    }];
-
     // 功能列表
     UITableView* tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor whiteColor];
@@ -42,7 +29,7 @@
     
     [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
-        make.top.equalTo(cycleImageVIew.mas_bottom).offset(10);
+        make.top.mas_equalTo(100);
     }];
     
 }
@@ -78,9 +65,6 @@
     if (!_functions) {
         _functions = @[@{@"title":@"富文本1",
                          @"detail":@"TestCoreTextVC"
-                         },
-                       @{@"title":@"TextAsyncDisplay",
-                         @"detail":@"TestAsyncDisplayKit"
                          },
                        @{@"title":@"TextKit",
                          @"detail":@"TestTextKit"

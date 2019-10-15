@@ -20,7 +20,7 @@
 }
 - (void)setTop:(CGFloat)top {
     CGPoint origin = self.viewOrigin;
-    origin.y = top;
+    origin.y = floor(top);
     self.viewOrigin = origin;
 }
 
@@ -29,7 +29,7 @@
 }
 - (void)setLeft:(CGFloat)left {
     CGPoint origin = self.viewOrigin;
-    origin.x = left;
+    origin.x = floor(left);
     self.viewOrigin = origin;
 }
 
@@ -38,7 +38,7 @@
 }
 - (void)setBottom:(CGFloat)bottom {
     CGSize size = self.viewSize;
-    size.height = bottom - self.viewOrigin.y;
+    size.height = floor(bottom - self.viewOrigin.y);
     self.viewSize = size;
 }
 
@@ -47,7 +47,7 @@
 }
 - (void)setRight:(CGFloat)right {
     CGSize size = self.viewSize;
-    size.width = right - self.viewOrigin.x;
+    size.width = floor(right - self.viewOrigin.x);
     self.viewSize = size;
 }
 
@@ -56,7 +56,7 @@
 }
 - (void)setWidth:(CGFloat)width {
     CGSize size = self.viewSize;
-    size.width = width;
+    size.width = floor(width);
     self.viewSize = size;
 }
 
@@ -65,7 +65,7 @@
 }
 - (void)setHeight:(CGFloat)height {
     CGSize size = self.viewSize;
-    size.height = height;
+    size.height = floor(height);
     self.viewSize = size;
 }
 
@@ -74,7 +74,7 @@
 }
 - (void)setCenterX:(CGFloat)centerX {
     CGPoint origin = self.viewOrigin;
-    origin.x = centerX - self.width * 0.5;
+    origin.x = floor(centerX - self.width * 0.5);
     self.viewOrigin = origin;
 }
 
@@ -83,17 +83,24 @@
 }
 - (void)setCenterY:(CGFloat)centerY {
     CGPoint origin = self.viewOrigin;
-    origin.y = centerY - self.height * 0.5;
+    origin.y = floor(centerY - self.height * 0.5);
     self.viewOrigin = origin;
 }
 
 # pragma mark - setter
 - (void)setViewSize:(CGSize)viewSize {
-    _viewSize = viewSize;
-    _suggustSize = viewSize;
+    _viewSize = CGSizeMake(floor(viewSize.width), floor(viewSize.height));
+    _suggustSize = _viewSize;
 }
-
-
+- (void)setViewOrigin:(CGPoint)viewOrigin {
+    _viewOrigin = CGPointMake(floor(viewOrigin.x), floor(viewOrigin.y));
+}
+- (void)setInsets:(UIEdgeInsets)insets {
+    _insets = UIEdgeInsetsMake(floor(insets.top),
+                               floor(insets.left),
+                               floor(insets.bottom),
+                               floor(insets.right));
+}
 
 # pragma mark - life cycle
 

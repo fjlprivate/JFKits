@@ -126,19 +126,20 @@
             bottom = t_stateT.bottom;
         }
         
-        JFTextStorage* s_state1 = [JFTextStorage storageWithText:NSLocalizedString(@"不可逆", nil)];
+        JFTextStorage* s_state1 = [JFTextStorage storageWithText:NSLocalizedString(@"ffffffffff", nil)];
         s_state1.font = JFSystemFont(JFScaleWidth6(12));
         s_state1.textColor = JFColorWhite;
         s_state1.backgroundColor = JFRGBAColor(0x0AA3D1, 1);
         JFTextLayout* t_state1 = [JFTextLayout textLayoutWithText:s_state1];
-        t_state1.borderColor = s_state1.backgroundColor;
-        t_state1.backgroundColor = JFColorWhite;
+//        t_state1.debug = YES;
+//        t_state1.borderColor = s_state1.backgroundColor;
+//        t_state1.backgroundColor = JFColorWhite;
         t_state1.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(10), JFScaleWidth6(2), JFScaleWidth6(10));
         t_state1.width = 200;
         t_state1.height = 50;
         t_state1.centerY = t_stateT.centerY;
         t_state1.left = JFSCREEN_WIDTH - JFScaleWidth6(15) - t_state1.width;
-        t_state1.cornerRadius = CGSizeMake(0, t_state1.height * 0.5);
+//        t_state1.cornerRadius = CGSizeMake(0, t_state1.height * 0.5);
         [self addLayout:t_state1];
 
         JFTextStorage* s_state2 = [JFTextStorage storageWithText:NSLocalizedString(@"已执行", nil)];
@@ -146,13 +147,14 @@
         s_state2.textColor = JFColorWhite;
         s_state2.backgroundColor = JFRGBAColor(0x13BD68, 1);
         JFTextLayout* t_state2 = [JFTextLayout textLayoutWithText:s_state2];
-        t_state2.borderColor = s_state2.backgroundColor;
-        t_state2.backgroundColor = JFColorWhite;
+        t_state2.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
+        t_state2.borderWidth = 1;
+        t_state2.borderColor = JFRGBAColor(0xcccccc, 1);
         t_state2.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(10), JFScaleWidth6(2), JFScaleWidth6(10));
         t_state2.width = 200;
         t_state2.height = 50;
         t_state2.centerY = t_stateT.centerY;
-        t_state2.left = t_state1.left - JFScaleWidth6(13) - t_state2.width;
+        t_state2.left = t_state1.left - JFScaleWidth6(3) - t_state2.width;
         t_state2.cornerRadius = CGSizeMake(0, t_state2.height * 0.5);
         [self addLayout:t_state2];
 
@@ -160,7 +162,7 @@
         JFTextStorage* s_block_numT = [JFTextStorage storageWithText:NSLocalizedString(@"所在区块", nil)];
         s_block_numT.font = JFSystemFont(JFScaleWidth6(14));
         s_block_numT.textColor = JFRGBAColor(0xB3B3B3, 1);
-        s_block_numT.backgroundColor = JFColorWhite;
+        s_block_numT.backgroundColor = JFColorOrange;
         JFTextLayout* t_block_numT = [JFTextLayout textLayoutWithText:s_block_numT];
         t_block_numT.top = bottom + JFScaleWidth6(15);
         t_block_numT.left = JFScaleWidth6(15);
@@ -176,7 +178,7 @@
             JFTextStorage* s_block_num = [JFTextStorage storageWithText:block_num];
             s_block_num.font = JFSystemFont(JFScaleWidth6(14));
             s_block_num.textColor = JFRGBAColor(0x333333, 1);
-            s_block_num.backgroundColor = JFColorWhite;
+            s_block_num.backgroundColor = JFColorOrange;
             JFTextLayout* t_block_num = [JFTextLayout textLayoutWithText:s_block_num];
             t_block_num.width = JFSCREEN_WIDTH;
             t_block_num.height = 200;
@@ -194,6 +196,7 @@
         s_block_idT.textColor = JFRGBAColor(0xB3B3B3, 1);
         s_block_idT.backgroundColor = JFColorWhite;
         JFTextLayout* t_block_idT = [JFTextLayout textLayoutWithText:s_block_idT];
+        t_block_idT.debug = YES;
         t_block_idT.top = bottom + JFScaleWidth6(15);
         t_block_idT.left = JFScaleWidth6(15);
         t_block_idT.width = 200;
@@ -228,11 +231,20 @@
         /**********分割线**********/
         
         // actions
-        JFTextStorage* s_actionsT = [JFTextStorage storageWithText:NSLocalizedString(@"Actions", nil)];
+        JFTextStorage* s_actionsT = [JFTextStorage storageWithText:NSLocalizedString(@"Actiyons", nil)];
         s_actionsT.font = JFSystemFont(JFScaleWidth6(16));
         s_actionsT.textColor = JFRGBAColor(0x333333, 1);
-        s_actionsT.backgroundColor = JFColorWhite;
+        // 添加高亮属性
+//        JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
+//        highlight.range = NSMakeRange(0, s_actionsT.text.length);
+//        highlight.normalTextColor = s_actionsT.textColor;
+//        highlight.highlightTextColor = JFRGBAColor(0x0AA3D1, 1);
+//        highlight.normalBackgroundColor = s_actionsT.backgroundColor;
+//        highlight.highlightBackgroundColor = JFRGBAColor(0xf5f5f5, 1);
+//        [s_actionsT addHighlight:highlight];
         JFTextLayout* t_actionsT = [JFTextLayout textLayoutWithText:s_actionsT];
+        t_actionsT.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
+        t_actionsT.debug = YES;
         t_actionsT.top = bottom + JFScaleWidth6(15);
         t_actionsT.left = JFScaleWidth6(15);
         t_actionsT.width = 200;
@@ -240,7 +252,7 @@
         [self addLayout:t_actionsT];
         if (bottom < t_actionsT.bottom) {
             bottom = t_actionsT.bottom;
-        }
+        }        
 
         self.lineFrame = CGRectMake(0, bottom + JFScaleWidth6(15), JFSCREEN_WIDTH, 0.5);
         bottom += JFScaleWidth6(15);
@@ -257,6 +269,7 @@
             sFrom.textColor = JFRGBAColor(0x0AA3D1, 1);
             sFrom.backgroundColor = JFColorWhite;
             JFTextLayout* tFrom = [JFTextLayout textLayoutWithText:sFrom];
+            tFrom.debug = YES;
             tFrom.top = bottom + JFScaleWidth6(23);
             tFrom.left = JFScaleWidth6(15);
             tFrom.width = 200;
@@ -266,12 +279,13 @@
                 bottom = tFrom.bottom;
             }
             
-            JFImageLayout* imgTo = [JFImageLayout new];
-            imgTo.image = JFImageNamed(@"light_jiantou");
-            imgTo.width = imgTo.height = JFScaleWidth6(10);
-            imgTo.left = tFrom.right + JFScaleWidth6(10);
-            imgTo.centerY = tFrom.centerY;
-            [self addLayout:imgTo];
+//            JFImageLayout* imgTo = [JFImageLayout new];
+////            imgTo.
+//            imgTo.image = JFImageNamed(@"icon_robot_orange");
+//            imgTo.width = imgTo.height = JFScaleWidth6(10);
+//            imgTo.left = tFrom.right + JFScaleWidth6(10);
+//            imgTo.centerY = tFrom.centerY;
+//            [self addLayout:imgTo];
 
             NSString* to = node[@"to"];
             if (IsNon(to)) {
@@ -282,10 +296,11 @@
             sTo.textColor = JFRGBAColor(0x0AA3D1, 1);
             sTo.backgroundColor = JFColorWhite;
             JFTextLayout* tTo = [JFTextLayout textLayoutWithText:sTo];
+            tTo.debug = YES;
             tTo.width = 200;
             tTo.height = 50;
-            tTo.left = imgTo.right + JFScaleWidth6(10);
-            tTo.centerY = imgTo.centerY;
+            tTo.left = tFrom.right + JFScaleWidth6(10);
+            tTo.centerY = tFrom.centerY;
             [self addLayout:tTo];
             if (bottom < tTo.bottom) {
                 bottom = tTo.bottom;
@@ -302,7 +317,7 @@
                 tQuantity.width = 200;
                 tQuantity.height = 50;
                 tQuantity.left = JFScaleWidth6(15);
-                tQuantity.top = bottom + JFScaleWidth6(8);
+                tQuantity.top = bottom + JFScaleWidth6(20);
                 [self addLayout:tQuantity];
                 if (bottom < tQuantity.bottom) {
                     bottom = tQuantity.bottom;
@@ -317,6 +332,7 @@
                     sAccount.textColor = JFRGBAColor(0xB3B3B3, 1);
                     sAccount.backgroundColor = JFColorWhite;
                     JFTextLayout* tAccount = [JFTextLayout textLayoutWithText:sAccount];
+                    tAccount.debug = YES;
                     tAccount.width = 200;
                     tAccount.height = 50;
                     tAccount.left = tQuantity.right + JFScaleWidth6(2);
@@ -345,7 +361,7 @@
             if (bottom < tMemoT.bottom) {
                 bottom = tMemoT.bottom;
             }
-            // MEMO : data[actions][0][data]  .memo
+//            // MEMO : data[actions][0][data]  .memo
             NSString* memo = [NSString stringWithFormat:@"%@", node[@"memo"]];
             if (!IsNon(memo)) {
                 JFTextStorage* sMemo = [JFTextStorage storageWithText:memo];
@@ -355,12 +371,12 @@
                 JFTextLayout* tMemo = [JFTextLayout textLayoutWithText:sMemo];
                 tMemo.borderColor = JFRGBAColor(0x0AA3D1, 0.5);
                 tMemo.borderWidth = 1;
-                tMemo.cornerRadius = CGSizeMake(JFScaleWidth6(2), JFScaleWidth6(2));
-                tMemo.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(4), JFScaleWidth6(2), JFScaleWidth6(4));
+                tMemo.cornerRadius = CGSizeMake(4, 4);
+                tMemo.insets = UIEdgeInsetsMake(JFScaleWidth6(5), JFScaleWidth6(10), JFScaleWidth6(5), JFScaleWidth6(10));
                 tMemo.width = 200;
                 tMemo.height = 200;
-                tMemo.centerY = tMemoT.centerY;
                 tMemo.left = tMemoT.right + JFScaleWidth6(5);
+                tMemo.centerY = tMemoT.centerY;
                 [self addLayout:tMemo];
                 if (bottom < tMemo.bottom) {
                     bottom = tMemo.bottom;
@@ -410,19 +426,19 @@
                 [sDatas.text appendAttributedString:attriDou];
             }
 
-            if (!IsNon(memo)) {
-                NSMutableAttributedString* attriMemoT = [[NSMutableAttributedString alloc] initWithString:@"  \"memo\":" attributes:@{NSFontAttributeName:JFSystemFont(JFScaleWidth6(14)), NSForegroundColorAttributeName:JFRGBAColor(0xF04D4D, 1)}];
-                NSMutableAttributedString* attriMemoV = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\"%@\"", memo] attributes:@{NSFontAttributeName:JFSystemFont(JFScaleWidth6(14)), NSForegroundColorAttributeName:JFRGBAColor(0x13BD68, 1)}];
-                [sDatas.text appendAttributedString:attriMemoT];
-                [sDatas.text appendAttributedString:attriMemoV];
-                [sDatas.text appendAttributedString:attriDou];
-            }
+//            if (!IsNon(memo)) {
+//                NSMutableAttributedString* attriMemoT = [[NSMutableAttributedString alloc] initWithString:@"  \"memo\":" attributes:@{NSFontAttributeName:JFSystemFont(JFScaleWidth6(14)), NSForegroundColorAttributeName:JFRGBAColor(0xF04D4D, 1)}];
+//                NSMutableAttributedString* attriMemoV = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"\"%@\"", memo] attributes:@{NSFontAttributeName:JFSystemFont(JFScaleWidth6(14)), NSForegroundColorAttributeName:JFRGBAColor(0x13BD68, 1)}];
+//                [sDatas.text appendAttributedString:attriMemoT];
+//                [sDatas.text appendAttributedString:attriMemoV];
+//                [sDatas.text appendAttributedString:attriDou];
+//            }
 
             NSMutableAttributedString* attriWei = [[NSMutableAttributedString alloc] initWithString:@"}" attributes:@{NSFontAttributeName:JFSystemFont(JFScaleWidth6(14)), NSForegroundColorAttributeName:JFRGBAColor(0xb3b3b3, 1)}];
             [sDatas.text appendAttributedString:attriWei];
             JFTextLayout* tDatas = [JFTextLayout textLayoutWithText:sDatas];
             tDatas.numberOfLines = 0;
-            tDatas.left = tMemoT.left;
+            tDatas.left = JFScaleWidth6(15);
             tDatas.top = bottom + JFScaleWidth6(8);
             tDatas.width = JFSCREEN_WIDTH;
             tDatas.height = JFSCREEN_WIDTH;

@@ -45,70 +45,108 @@
     if (!textBgColor) {
         textBgColor = bgColor;
     }
-    // 边框色
-    if (!borderColor) {
-        borderColor = bgColor;
-    }
     if (cancelled()) {
         CGContextRestoreGState(context);
         return;
     }
-    CGRect frame = CGRectMake(0, 0, self.suggustSize.width, self.suggustSize.height);
+    CGRect frame = CGRectMake(self.left,
+                              self.top,
+                              self.suggustSize.width,
+                              self.suggustSize.height);
     // 绘制layout背景色
+    CGContextSetFillColorWithColor(context, bgColor.CGColor);
+    CGContextFillRect(context, frame);
+    if (cancelled()) {
+        CGContextRestoreGState(context);
+        return;
+    }
     
-    // 绘制storage背景色、边框色
-    
-    // 圆角值width或height > 0时，才
-    if (self.cornerRadius.width > 0 ) {
-        // 填充背景色
-        CGContextSetFillColorWithColor(context, bgColor.CGColor);
-        // 绘制背景色:超出边界
-        CGContextFillRect(context, CGRectInset(frame, -2, -2));
+    // 设置了边框颜色才绘制
+    if (borderColor) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
+            CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
+            CGFloat halfBorderWidth = self.borderWidth * 0.5;
+            CGPathMoveToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+            CGPathAddArc(path, NULL, self.left + radius, self.top + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - radius, self.top + halfBorderWidth);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, self.top + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
+            CGPathAddLineToPoint(path, NULL, self.left + radius, CGRectGetMaxY(frame) - halfBorderWidth);
+            CGPathAddArc(path, NULL, self.left + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
+            CGPathAddLineToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+        } else {
+            CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
+        }
+        CGContextAddPath(context, path);
+        CGPathRelease(path);
         if (cancelled()) {
             CGContextRestoreGState(context);
             return;
         }
-
-        // 显示文字背景色
-        CGContextSetFillColorWithColor(context, textBgColor.CGColor);
-        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
         CGContextSetLineWidth(context, self.borderWidth);
-        CGMutablePathRef path = CGPathCreateMutable();
-        CGPathAddRoundedRect(path, nil, CGRectInset(frame, self.borderWidth, self.borderWidth), self.cornerRadius.width - self.borderWidth * 0.5, self.cornerRadius.height - self.borderWidth * 0.5);
-        CGContextAddPath(context, path);
-        CGContextFillPath(context);
-        CGMutablePathRef path1 = CGPathCreateMutable();
-        CGPathAddRoundedRect(path1, nil, CGRectInset(frame, self.borderWidth, self.borderWidth), self.cornerRadius.width - self.borderWidth * 0.5, self.cornerRadius.height - self.borderWidth * 0.5);
-        CGContextAddPath(context, path1);
-        CGContextStrokePath(context);
-        CGPathRelease(path);
-        CGPathRelease(path1);
-    } else {
-        CGContextSetFillColorWithColor(context, textBgColor.CGColor);
         CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
-        CGContextFillRect(context, CGRectInset(frame, -2, -2));
-        CGContextStrokeRect(context, CGRectInset(frame, self.borderWidth, self.borderWidth));
+        CGContextStrokePath(context);
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            return;
+        }
     }
-    if (cancelled()) {
-        CGContextRestoreGState(context);
-        return;
+
+    // 文本背景色跟layout背景色不一致才需要填充文本背景色
+    if (textBgColor != bgColor) {
+        CGMutablePathRef path = CGPathCreateMutable();
+        if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
+            CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
+            CGFloat halfBorderWidth = self.borderWidth * 0.5;
+            CGPathMoveToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+            CGPathAddArc(path, NULL, self.left + radius, self.top + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, self.top + halfBorderWidth);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, self.top + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
+            CGPathAddLineToPoint(path, NULL, self.left + radius, CGRectGetMaxY(frame) - halfBorderWidth);
+            CGPathAddArc(path, NULL, self.left + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
+            CGPathAddLineToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+        } else {
+            CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
+        }
+        
+        CGContextAddPath(context, path);
+        CGPathRelease(path);
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            return;
+        }
+        CGContextSetFillColorWithColor(context, textBgColor.CGColor);
+        CGContextFillPath(context);
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            return;
+        }
     }
+
     
-    // 高亮附件
+    // 绘制高亮附件
     for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
         if (cancelled()) {
             CGContextRestoreGState(context);
             return;
         }
+        // 获取选中|非选中背景色
         UIColor* bgColor = highlight.isHighlight ? highlight.highlightBackgroundColor : highlight.normalBackgroundColor;
         if (bgColor) {
             CGContextSetFillColorWithColor(context, bgColor.CGColor);
+            // 每个高亮附件可能有多个frame
             for (NSValue* framevalue in highlight.uiFrames) {
                 if (cancelled()) {
                     CGContextRestoreGState(context);
                     return;
                 }
                 CGRect highlightframe = [framevalue CGRectValue];
+                highlightframe.origin.x += CGRectGetMinX(frame);
+                highlightframe.origin.y += CGRectGetMinY(frame);
                 CGContextFillRect(context, highlightframe);
             }
         }
@@ -117,7 +155,7 @@
     
     // 转换矩阵:<UIKit> -> <CoreText>
     // 翻转矩阵时，要用originSize:CTLine等都是在原始size生成的
-    CGContextTranslateCTM(context, self.insets.left, self.viewSize.height - self.insets.bottom);
+    CGContextTranslateCTM(context, self.left + self.insets.left, self.top + self.viewSize.height - self.insets.bottom);
     CGContextScaleCTM(context, 1, -1);
     if (cancelled()) {
         CGContextRestoreGState(context);
@@ -163,6 +201,12 @@
     
     // 测试时:绘制行边框
     if (self.debug) {
+        CGContextTranslateCTM(context, - self.left - self.insets.left, self.top + self.viewSize.height - self.insets.bottom);
+        CGContextScaleCTM(context, 1, -1);
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            return;
+        }
         for (JFTextLine* line in self.ctLines) {
             CGContextSetLineWidth(context, 0.5);
             CGContextSetStrokeColorWithColor(context, [UIColor orangeColor].CGColor);
@@ -170,6 +214,10 @@
                                                     line.uiOrigin.y,
                                                     line.width,
                                                     line.descent + line.ascent));
+            if (cancelled()) {
+                CGContextRestoreGState(context);
+                return;
+            }
         }
     }
     CGContextRestoreGState(context);
@@ -198,8 +246,8 @@
     [self freeFramer];
     
     /* --- 计算布局 --- */
-    CGRect frame = CGRectMake(self.insets.left,
-                              self.insets.top,
+    CGRect frame = CGRectMake(self.left +  self.insets.left,
+                              self.top + self.insets.top,
                               self.viewSize.width - self.insets.left - self.insets.right,
                               self.viewSize.height - self.insets.top - self.insets.bottom);
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
@@ -241,6 +289,7 @@
             NSDictionary* tokenAttri = [self.textStorage.text attributesAtIndex:truncationPosition effectiveRange:NULL];
             // 创建省略号富文本
             NSMutableAttributedString* tokenString = [[NSMutableAttributedString alloc] initWithString:JFEllipsesCharacter attributes:tokenAttri];
+            if (layoutCancelled()) return;
             if (self.shouldShowMoreAct && self.showMoreActColor) {
                 [tokenString addAttribute:NSForegroundColorAttributeName value:self.showMoreActColor range:[JFEllipsesCharacter rangeOfString:@"全文"]];
                 // 添加高亮属性
@@ -252,6 +301,7 @@
                 [self.textStorage addHighlight:highLight];
                 [tokenString addAttribute:JFTextAttachmentHighlightName value:highLight range:[JFEllipsesCharacter rangeOfString:@"全文"]];
             }
+            if (layoutCancelled()) return;
             // 生成line
             CTLineRef truncationToken = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)tokenString);
             // 将当前行富文本复制一份
@@ -266,7 +316,8 @@
             }
             // 拼接省略号
             [truncationString appendAttributedString:tokenString];
-            
+            if (layoutCancelled()) return;
+
             // 将拼接后的string转成CTLine
             CTLineRef truncationLine = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)truncationString);
             // 截断
@@ -298,7 +349,7 @@
         if (!ctLine) {
             return;
         }
-        // 取最宽的行款
+        // 取最宽的行宽
         suggustWidth = suggustWidth < ctLine.width ? ctLine.width : suggustWidth;
         // 如果追加当前行时，实际高度已经超过了frame.height，则退出循环
         if (suggustHeight > frame.size.height) {
@@ -310,10 +361,10 @@
     }
     // 根据布局重置实际的文本size,可以用于重置label的frame
     if (self.shouldSuggustingSize) {
-        _suggustSize = CGSizeMake(suggustWidth + self.insets.left + self.insets.right,
-                                  suggustHeight + self.insets.top + self.insets.bottom);
+        self.suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
+                                      floor(suggustHeight + self.insets.top + self.insets.bottom));
     } else {
-        _suggustSize = self.viewSize;
+        self.suggustSize = self.viewSize;
     }
     // 保存行对象
     self.ctLines = ctLines.copy;
@@ -348,6 +399,11 @@
     _shouldShowMoreAct = shouldShowMoreAct;
     [self relayouting];
 }
+- (void)setViewOrigin:(CGPoint)viewOrigin {
+    [super setViewOrigin:viewOrigin];
+    [self relayouting];
+}
+
 
 # pragma mark - getter
 
