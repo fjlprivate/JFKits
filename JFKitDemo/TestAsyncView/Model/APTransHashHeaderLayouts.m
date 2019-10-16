@@ -52,6 +52,7 @@
         s_createdAtT.textColor = JFRGBAColor(0xB3B3B3, 1);
         s_createdAtT.backgroundColor = JFColorWhite;
         JFTextLayout* t_createdAtT = [JFTextLayout textLayoutWithText:s_createdAtT];
+        t_createdAtT.debug = YES;
         t_createdAtT.top = bottom + JFScaleWidth6(15);
         t_createdAtT.left = JFScaleWidth6(15);
         t_createdAtT.width = 200;
@@ -85,6 +86,9 @@
         s_expirationT.textColor = JFRGBAColor(0xB3B3B3, 1);
         s_expirationT.backgroundColor = JFColorWhite;
         JFTextLayout* t_expirationT = [JFTextLayout textLayoutWithText:s_expirationT];
+        t_expirationT.borderColor = JFColorOrange;
+        t_expirationT.borderWidth = 1;
+        t_expirationT.cornerRadius = CGSizeMake(2, 2);
         t_expirationT.top = bottom + JFScaleWidth6(15);
         t_expirationT.left = JFScaleWidth6(15);
         t_expirationT.width = 200;
@@ -101,6 +105,9 @@
             s_expiration.textColor = JFRGBAColor(0x333333, 1);
             s_expiration.backgroundColor = JFColorWhite;
             JFTextLayout* t_expiration = [JFTextLayout textLayoutWithText:s_expiration];
+            t_expiration.borderColor = JFColorOrange;
+            t_expiration.borderWidth = 1;
+            t_expiration.cornerRadius = CGSizeMake(2, 2);
             t_expiration.width = JFSCREEN_WIDTH;
             t_expiration.height = 200;
             t_expiration.centerY = t_expirationT.centerY;
@@ -376,6 +383,7 @@
                 tMemo.width = 200;
                 tMemo.height = 200;
                 tMemo.left = tMemoT.right + JFScaleWidth6(5);
+                // 这时 tMemoT 的suggestSize还是viewSize，还没有更新
                 tMemo.centerY = tMemoT.centerY;
                 [self addLayout:tMemo];
                 if (bottom < tMemo.bottom) {

@@ -22,33 +22,6 @@
 - (instancetype) initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets;
 - (instancetype) iniWithFrame:(CGRect)frame;
 
-// 用于标记
-@property (nonatomic, assign) NSInteger tag;
-
-// 背景色
-@property (nonatomic, copy) UIColor* backgroundColor;
-
-// 视图在界面中的位置
-@property (nonatomic, assign) CGPoint viewOrigin;
-// 视图的初始尺寸
-@property (nonatomic, assign) CGSize viewSize;
-/**
- 是否截取建议尺寸(suggustSize);默认:YES;
- YES:按文本实际width、行数，截断(包含insets);
- NO:不截取;直接=viewSize;
- */
-@property (nonatomic, assign) BOOL shouldSuggustingSize;
-// 建议尺寸;
-@property (nonatomic, assign) CGSize suggustSize;
-// 内嵌边距
-@property (nonatomic, assign) UIEdgeInsets insets;
-// 圆角
-@property (nonatomic, assign) CGSize cornerRadius;
-
-// 边框宽度
-@property (nonatomic, assign) CGFloat borderWidth;
-// 边框颜色
-@property (nonatomic, strong) UIColor* borderColor;
 
 // 布局支持;setter会更改origin和size
 @property (nonatomic, assign) CGFloat top;
@@ -60,8 +33,38 @@
 @property (nonatomic, assign) CGFloat centerX;
 @property (nonatomic, assign) CGFloat centerY;
 
+/**
+ 是否截取建议尺寸(suggustSize);默认:YES;
+ YES:按文本实际width、行数，截断(包含insets);
+ NO:不截取;直接=viewSize;
+ */
+@property (nonatomic, assign) BOOL shouldSuggustingSize;
+// 内嵌边距
+@property (nonatomic, assign) UIEdgeInsets insets;
+// 圆角
+@property (nonatomic, assign) CGSize cornerRadius;
+
+// 边框宽度
+@property (nonatomic, assign) CGFloat borderWidth;
+// 边框颜色
+@property (nonatomic, strong) UIColor* borderColor;
+
+// 用于标记
+@property (nonatomic, assign) NSInteger tag;
+
+// 背景色
+@property (nonatomic, copy) UIColor* backgroundColor;
+
 // 测试line边框绘制:默认:NO;
 @property (nonatomic, assign) BOOL debug;
+
+# pragma mark - 只读属性
+// 视图在界面中的位置
+@property (nonatomic, assign) CGPoint viewOrigin;
+// 视图的初始尺寸
+@property (nonatomic, assign) CGSize viewSize;
+// 建议尺寸;
+@property (nonatomic, assign) CGSize suggustSize;
 
 
 @end

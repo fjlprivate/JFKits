@@ -24,6 +24,7 @@
 
 @implementation JFTextLayout
 @synthesize suggustSize = _suggustSize;
+//@synthesize viewOrigin = _viewOrigin;
 
 # pragma mark - 绘制
 /**
@@ -49,8 +50,25 @@
         CGContextRestoreGState(context);
         return;
     }
-    CGRect frame = CGRectMake(self.left,
-                              self.top,
+    
+    CGFloat startX = CGFLOAT_MAX;
+    CGFloat startY = CGFLOAT_MAX;
+    for (JFTextLine* ctLine in self.ctLines) {
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            return;
+        }
+        if (startX > ctLine.uiOrigin.x) {
+            startX = ctLine.uiOrigin.x;
+        }
+        if (startY > ctLine.uiOrigin.y) {
+            startY = ctLine.uiOrigin.y;
+        }
+    }
+
+    
+    CGRect frame = CGRectMake(startX,
+                              startY,
                               self.suggustSize.width,
                               self.suggustSize.height);
     // 绘制layout背景色
@@ -67,15 +85,15 @@
         if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
             CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
             CGFloat halfBorderWidth = self.borderWidth * 0.5;
-            CGPathMoveToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
-            CGPathAddArc(path, NULL, self.left + radius, self.top + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - radius, self.top + halfBorderWidth);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, self.top + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
+            CGPathMoveToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
+            CGPathAddArc(path, NULL, startX + radius, startY + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - radius, startY + halfBorderWidth);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, startY + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
             CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
             CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
-            CGPathAddLineToPoint(path, NULL, self.left + radius, CGRectGetMaxY(frame) - halfBorderWidth);
-            CGPathAddArc(path, NULL, self.left + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
-            CGPathAddLineToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+            CGPathAddLineToPoint(path, NULL, startX + radius, CGRectGetMaxY(frame) - halfBorderWidth);
+            CGPathAddArc(path, NULL, startX + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
+            CGPathAddLineToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
         } else {
             CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
         }
@@ -100,15 +118,15 @@
         if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
             CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
             CGFloat halfBorderWidth = self.borderWidth * 0.5;
-            CGPathMoveToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
-            CGPathAddArc(path, NULL, self.left + radius, self.top + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, self.top + halfBorderWidth);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, self.top + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
+            CGPathMoveToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
+            CGPathAddArc(path, NULL, startX + radius, startY + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
+            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, startY + halfBorderWidth);
+            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, startY + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
             CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
             CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
-            CGPathAddLineToPoint(path, NULL, self.left + radius, CGRectGetMaxY(frame) - halfBorderWidth);
-            CGPathAddArc(path, NULL, self.left + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
-            CGPathAddLineToPoint(path, NULL, self.left + halfBorderWidth, self.top + radius);
+            CGPathAddLineToPoint(path, NULL, startX + radius, CGRectGetMaxY(frame) - halfBorderWidth);
+            CGPathAddArc(path, NULL, startX + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
+            CGPathAddLineToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
         } else {
             CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
         }
@@ -155,7 +173,7 @@
     
     // 转换矩阵:<UIKit> -> <CoreText>
     // 翻转矩阵时，要用originSize:CTLine等都是在原始size生成的
-    CGContextTranslateCTM(context, self.left + self.insets.left, self.top + self.viewSize.height - self.insets.bottom);
+    CGContextTranslateCTM(context, startX + self.insets.left, startY + self.viewSize.height - self.insets.bottom);
     CGContextScaleCTM(context, 1, -1);
     if (cancelled()) {
         CGContextRestoreGState(context);
@@ -201,7 +219,7 @@
     
     // 测试时:绘制行边框
     if (self.debug) {
-        CGContextTranslateCTM(context, - self.left - self.insets.left, self.top + self.viewSize.height - self.insets.bottom);
+        CGContextTranslateCTM(context, - startX - self.insets.left, startY + self.viewSize.height - self.insets.bottom);
         CGContextScaleCTM(context, 1, -1);
         if (cancelled()) {
             CGContextRestoreGState(context);
@@ -343,6 +361,7 @@
                                           cancelled:layoutCancelled];
         }
         
+
         
         if (layoutCancelled()) return;
         // 创建JFTextLine直接退出
@@ -359,6 +378,7 @@
         suggustHeight += ctLine.ascent + ctLine.descent + ((i == numberOfLines - 1) ? 0 : ctLine.leading);
         [ctLines addObject:ctLine];
     }
+    
     // 根据布局重置实际的文本size,可以用于重置label的frame
     if (self.shouldSuggustingSize) {
         self.suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
