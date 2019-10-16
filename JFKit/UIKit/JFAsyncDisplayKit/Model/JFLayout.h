@@ -39,32 +39,35 @@
  NO:不截取;直接=viewSize;
  */
 @property (nonatomic, assign) BOOL shouldSuggustingSize;
+
 // 内嵌边距
 @property (nonatomic, assign) UIEdgeInsets insets;
-// 圆角
-@property (nonatomic, assign) CGSize cornerRadius;
 
-// 边框宽度
+// 边框
 @property (nonatomic, assign) CGFloat borderWidth;
-// 边框颜色
 @property (nonatomic, strong) UIColor* borderColor;
 
-// 用于标记
-@property (nonatomic, assign) NSInteger tag;
+// 圆角
+@property (nonatomic, assign) CGSize cornerRadius;
 
 // 背景色
 @property (nonatomic, copy) UIColor* backgroundColor;
 
+// 用于标记
+@property (nonatomic, assign) NSInteger tag;
+
 // 测试line边框绘制:默认:NO;
 @property (nonatomic, assign) BOOL debug;
 
-# pragma mark - 只读属性
+# pragma mark - readonly
 // 视图在界面中的位置
-@property (nonatomic, assign) CGPoint viewOrigin;
+@property (nonatomic, assign, readonly) CGPoint viewOrigin;
 // 视图的初始尺寸
-@property (nonatomic, assign) CGSize viewSize;
+@property (nonatomic, assign, readonly) CGSize viewSize;
 // 建议尺寸;
-@property (nonatomic, assign) CGSize suggustSize;
+@property (nonatomic, assign, readonly) CGSize suggustSize;
 
+// 由子类实现
+- (void) relayouting;
 
 @end

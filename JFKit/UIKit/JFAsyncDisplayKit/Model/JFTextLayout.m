@@ -381,10 +381,10 @@
     
     // 根据布局重置实际的文本size,可以用于重置label的frame
     if (self.shouldSuggustingSize) {
-        self.suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
+        _suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
                                       floor(suggustHeight + self.insets.top + self.insets.bottom));
     } else {
-        self.suggustSize = self.viewSize;
+        _suggustSize = self.viewSize;
     }
     // 保存行对象
     self.ctLines = ctLines.copy;
@@ -399,16 +399,8 @@
     _numberOfLines = numberOfLines;
     [self relayouting];
 }
-- (void)setViewSize:(CGSize)viewSize {
-    [super setViewSize:viewSize];
-    [self relayouting];
-}
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
     [super setBackgroundColor:backgroundColor];
-    [self relayouting];
-}
-- (void)setInsets:(UIEdgeInsets)insets {
-    [super setInsets:insets];
     [self relayouting];
 }
 - (void)setShowMoreActColor:(UIColor *)showMoreActColor {
@@ -419,11 +411,6 @@
     _shouldShowMoreAct = shouldShowMoreAct;
     [self relayouting];
 }
-- (void)setViewOrigin:(CGPoint)viewOrigin {
-    [super setViewOrigin:viewOrigin];
-    [self relayouting];
-}
-
 
 # pragma mark - getter
 

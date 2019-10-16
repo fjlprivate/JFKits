@@ -376,8 +376,6 @@
                 sMemo.textColor = JFRGBAColor(0x0AA3D1, 1);
                 sMemo.backgroundColor = JFColorWhite;
                 JFTextLayout* tMemo = [JFTextLayout textLayoutWithText:sMemo];
-                tMemo.borderColor = JFRGBAColor(0x0AA3D1, 0.5);
-                tMemo.borderWidth = 1;
                 tMemo.cornerRadius = CGSizeMake(4, 4);
                 tMemo.insets = UIEdgeInsetsMake(JFScaleWidth6(5), JFScaleWidth6(10), JFScaleWidth6(5), JFScaleWidth6(10));
                 tMemo.width = 200;
@@ -385,6 +383,9 @@
                 tMemo.left = tMemoT.right + JFScaleWidth6(5);
                 // 这时 tMemoT 的suggestSize还是viewSize，还没有更新
                 tMemo.centerY = tMemoT.centerY;
+                tMemo.borderColor = JFRGBAColor(0x0AA3D1, 0.5);
+                tMemo.borderWidth = 1;
+
                 [self addLayout:tMemo];
                 if (bottom < tMemo.bottom) {
                     bottom = tMemo.bottom;

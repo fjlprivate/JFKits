@@ -10,6 +10,13 @@
 
 
 @interface JFLayout()
+// 视图在界面中的位置
+@property (nonatomic, assign) CGPoint viewOrigin;
+// 视图的初始尺寸
+@property (nonatomic, assign) CGSize viewSize;
+// 建议尺寸;
+@property (nonatomic, assign) CGSize suggustSize;
+
 @end
 
 @implementation JFLayout
@@ -87,19 +94,36 @@
     self.viewOrigin = origin;
 }
 
+
+// 由子类实现
+- (void) relayouting {
+    
+}
+
 # pragma mark - setter
 - (void)setViewSize:(CGSize)viewSize {
     _viewSize = CGSizeMake(floor(viewSize.width), floor(viewSize.height));
     _suggustSize = _viewSize;
+    [self relayouting];
 }
 - (void)setViewOrigin:(CGPoint)viewOrigin {
     _viewOrigin = CGPointMake(floor(viewOrigin.x), floor(viewOrigin.y));
+    [self relayouting];
 }
 - (void)setInsets:(UIEdgeInsets)insets {
     _insets = UIEdgeInsetsMake(floor(insets.top),
                                floor(insets.left),
                                floor(insets.bottom),
                                floor(insets.right));
+    [self relayouting];
+}
+- (void)setBorderColor:(UIColor *)borderColor {
+    _borderColor = borderColor;
+    [self relayouting];
+}
+- (void)setBorderWidth:(CGFloat)borderWidth {
+    _borderWidth = borderWidth;
+    [self relayouting];
 }
 
 # pragma mark - life cycle
