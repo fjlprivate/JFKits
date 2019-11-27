@@ -26,7 +26,7 @@
 
 @property (nonatomic, assign, readonly) CTLineRef ctLine;
 
-@property (nonatomic, assign, readonly) CGPoint ctOrigin;
+@property (nonatomic, assign) CGPoint ctOrigin;
 @property (nonatomic, assign, readonly) CGPoint uiOrigin;
 
 @property (nonatomic, assign, readonly) CGFloat ascent;

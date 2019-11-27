@@ -18,7 +18,7 @@
 
 - (void)setTextLayout:(JFTextLayout *)textLayout {
     _textLayout = textLayout;
-    self.frame = CGRectMake(textLayout.viewOrigin.x, textLayout.viewOrigin.y, textLayout.suggustSize.width, textLayout.suggustSize.height);
+    self.frame = textLayout.frame;
     [self setNeedsDisplay];
 }
 

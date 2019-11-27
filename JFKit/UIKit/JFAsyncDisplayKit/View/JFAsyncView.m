@@ -9,12 +9,11 @@
 #import "JFAsyncView.h"
 #import "JFHelper.h"
 #import "JFAsyncFlag.h"
-#import "JFLabel.h"
 #import "JFImageView.h"
 #import "JFAsyncDisplayLayer.h"
 
 
-@interface JFAsyncView() <JFLabelDelegate, JFImageViewDelegate>
+@interface JFAsyncView() < JFImageViewDelegate>
 @property (nonatomic, strong) NSMutableArray* labelsStorage;
 @property (nonatomic, strong) NSMutableArray* imageViewsStorage;
 @property (nonatomic, strong) NSMutableArray* labelsDisplay;
@@ -154,17 +153,6 @@
 //    }
 //}
 
-# pragma mark - JFLabelDelegate
-- (void)label:(JFLabel *)label didClickedTextAtHighlight:(JFTextAttachmentHighlight *)highlight {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(asyncView:didClickedAtTextLayout:withHighlight:)]) {
-        [self.delegate asyncView:self didClickedAtTextLayout:label.textLayout withHighlight:highlight];
-    }
-}
-- (void)label:(JFLabel *)label didLongPressAtHighlight:(JFTextAttachmentHighlight *)highlight {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(asyncView:didLongpressAtTextLayout:withHighlight:)]) {
-        [self.delegate asyncView:self didLongpressAtTextLayout:label.textLayout withHighlight:highlight];
-    }
-}
 # pragma mark - JFImageViewDelegate
 - (void)didClickedImageView:(JFImageView *)imageView {
     if (self.delegate && [self.delegate respondsToSelector:@selector(asyncView:didClickedAtImageLayout:)]) {

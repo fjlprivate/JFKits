@@ -38,7 +38,7 @@
     _ctOrigin = origin;
     if (cancelled()) return nil;
     // 创建翻转坐标系的仿射
-    CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, frame.origin.x, frame.origin.y + frame.size.height);
+    CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, CGRectGetMinX(frame), CGRectGetMaxY(frame));
     tt = CGAffineTransformScale(tt, 1, -1);
     if (cancelled()) return nil;
     // 获取行的宽高等属性

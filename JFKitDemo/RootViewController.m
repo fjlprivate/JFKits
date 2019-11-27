@@ -44,6 +44,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell"];
+    cell.contentView.backgroundColor = JFColorWhite;
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"UITableViewCell"];
     }
@@ -77,6 +78,11 @@
                        @{@"title":@"TestAsyncView",
                          @"detail":@"TextAsyncViewViewController"
                          },
+                       //TestAsyncImageVC
+                       @{@"title":@"TestAsyncImageVC",
+                         @"detail":@"TestAsyncImageVC"
+                         },
+
                        ];
     }
     return _functions;

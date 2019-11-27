@@ -11,7 +11,6 @@
 
 /*------ View ------*/
 #import "JFAsyncView.h"
-#import "JFLabel.h" /////-----
 /*------ Model ------*/
 //#import "JFAsyncViewLayouts.h"
 #import "JFTextLayout.h" ////////

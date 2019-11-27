@@ -49,7 +49,6 @@
 		7A0D89D323347E900070FDBC /* JFTextLine.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896423347E900070FDBC /* JFTextLine.m */; };
 		7A0D89D423347E900070FDBC /* JFTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896523347E900070FDBC /* JFTextStorage.m */; };
 		7A0D89D523347E900070FDBC /* JFLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896723347E900070FDBC /* JFLayout.m */; };
-		7A0D89D623347E900070FDBC /* JFLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896A23347E900070FDBC /* JFLabel.m */; };
 		7A0D89D723347E900070FDBC /* JFImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896D23347E900070FDBC /* JFImageView.m */; };
 		7A0D89D823347E900070FDBC /* JFAsyncView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D896F23347E900070FDBC /* JFAsyncView.m */; };
 		7A0D89D923347E900070FDBC /* JFAsyncDisplayLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D897023347E900070FDBC /* JFAsyncDisplayLayer.m */; };
@@ -77,6 +76,7 @@
 		7A0D89EF23347E900070FDBC /* JFHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D89AA23347E900070FDBC /* JFHelper.m */; };
 		7A0D8AD4233EFB5B0070FDBC /* JFKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */; };
 		7A0D8AD7233EFE520070FDBC /* NSBundle+JFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */; };
+		7A488D4E236C05B7001AA048 /* TestAsyncImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */; };
 		7ABB1421233F38D40057CB77 /* TestVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABB1420233F38D40057CB77 /* TestVideoVC.m */; };
 		7AFF3129235428A6008ADF94 /* TextAsyncViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */; };
 		7AFF312C235428CE008ADF94 /* APTransHashHeaderLayouts.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */; };
@@ -179,11 +179,9 @@
 		7A0D896623347E900070FDBC /* JFAsyncViewLayouts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFAsyncViewLayouts.h; sourceTree = "<group>"; };
 		7A0D896723347E900070FDBC /* JFLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFLayout.m; sourceTree = "<group>"; };
 		7A0D896823347E900070FDBC /* JFTextRun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFTextRun.h; sourceTree = "<group>"; };
-		7A0D896A23347E900070FDBC /* JFLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFLabel.m; sourceTree = "<group>"; };
 		7A0D896B23347E900070FDBC /* JFAsyncView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFAsyncView.h; sourceTree = "<group>"; };
 		7A0D896C23347E900070FDBC /* JFAsyncDisplayLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFAsyncDisplayLayer.h; sourceTree = "<group>"; };
 		7A0D896D23347E900070FDBC /* JFImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFImageView.m; sourceTree = "<group>"; };
-		7A0D896E23347E900070FDBC /* JFLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFLabel.h; sourceTree = "<group>"; };
 		7A0D896F23347E900070FDBC /* JFAsyncView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFAsyncView.m; sourceTree = "<group>"; };
 		7A0D897023347E900070FDBC /* JFAsyncDisplayLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFAsyncDisplayLayer.m; sourceTree = "<group>"; };
 		7A0D897123347E900070FDBC /* JFImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFImageView.h; sourceTree = "<group>"; };
@@ -237,6 +235,8 @@
 		7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JFKit.bundle; sourceTree = "<group>"; };
 		7A0D8AD5233EFE520070FDBC /* NSBundle+JFExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+JFExtension.h"; sourceTree = "<group>"; };
 		7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+JFExtension.m"; sourceTree = "<group>"; };
+		7A488D4C236C05B7001AA048 /* TestAsyncImageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAsyncImageVC.h; sourceTree = "<group>"; };
+		7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAsyncImageVC.m; sourceTree = "<group>"; };
 		7ABB141F233F38D40057CB77 /* TestVideoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestVideoVC.h; sourceTree = "<group>"; };
 		7ABB1420233F38D40057CB77 /* TestVideoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestVideoVC.m; sourceTree = "<group>"; };
 		7AFF3127235428A6008ADF94 /* TextAsyncViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextAsyncViewViewController.h; sourceTree = "<group>"; };
@@ -472,8 +472,6 @@
 				7A0D896F23347E900070FDBC /* JFAsyncView.m */,
 				7A0D896C23347E900070FDBC /* JFAsyncDisplayLayer.h */,
 				7A0D897023347E900070FDBC /* JFAsyncDisplayLayer.m */,
-				7A0D896E23347E900070FDBC /* JFLabel.h */,
-				7A0D896A23347E900070FDBC /* JFLabel.m */,
 				7A0D897123347E900070FDBC /* JFImageView.h */,
 				7A0D896D23347E900070FDBC /* JFImageView.m */,
 			);
@@ -610,6 +608,15 @@
 			path = Helper;
 			sourceTree = "<group>";
 		};
+		7A488D4B236C0598001AA048 /* TestAsyncImage */ = {
+			isa = PBXGroup;
+			children = (
+				7A488D4C236C05B7001AA048 /* TestAsyncImageVC.h */,
+				7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */,
+			);
+			path = TestAsyncImage;
+			sourceTree = "<group>";
+		};
 		7AA742327D9CB25A426F44B2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -730,6 +737,7 @@
 		FAF924B520030BDA00B7C9A5 /* JFKitDemo */ = {
 			isa = PBXGroup;
 			children = (
+				7A488D4B236C0598001AA048 /* TestAsyncImage */,
 				7AFF31242354287A008ADF94 /* TestAsyncView */,
 				7ABB141E233F38B10057CB77 /* TestVideoKit */,
 				FAEF59632008AD82003F9A3C /* TestAsyncDisplayKit */,
@@ -924,7 +932,6 @@
 				FA21528D200367B400C49427 /* TextView1.m in Sources */,
 				7A0D89D923347E900070FDBC /* JFAsyncDisplayLayer.m in Sources */,
 				7A0D89DC23347E900070FDBC /* JFPhotoPickerBrowserViewController.m in Sources */,
-				7A0D89D623347E900070FDBC /* JFLabel.m in Sources */,
 				7A0D89B523347E900070FDBC /* UIImage+Format.m in Sources */,
 				7A0D89CF23347E900070FDBC /* JFTextAttachment.m in Sources */,
 				7A0D89B423347E900070FDBC /* NSData+ImageFormat.m in Sources */,
@@ -950,6 +957,7 @@
 				7A0D89EF23347E900070FDBC /* JFHelper.m in Sources */,
 				7A0D89DB23347E900070FDBC /* JFPhotoPickerModel.m in Sources */,
 				7A0D89E523347E900070FDBC /* JFImageDownloadOperation.m in Sources */,
+				7A488D4E236C05B7001AA048 /* TestAsyncImageVC.m in Sources */,
 				7A0D89E623347E900070FDBC /* ShortMediaDownloadOperation.m in Sources */,
 				7A0D89E023347E900070FDBC /* JFPageView.m in Sources */,
 				7A0D89CB23347E900070FDBC /* JFBanner.m in Sources */,

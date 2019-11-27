@@ -24,10 +24,7 @@
 //                [image class];
 //            });
 
-            self.frame = CGRectMake(imageLayout.left + imageLayout.insets.left,
-                                    imageLayout.top + imageLayout.insets.top,
-                                    imageLayout.viewSize.width,
-                                    imageLayout.viewSize.height);
+            self.frame = imageLayout.frame;
             self.clipsToBounds = YES;
             self.contentMode = imageLayout.contentMode;
             self.backgroundColor = imageLayout.backgroundColor;

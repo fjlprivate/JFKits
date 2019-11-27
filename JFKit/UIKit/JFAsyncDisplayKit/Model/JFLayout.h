@@ -32,6 +32,8 @@
 @property (nonatomic, assign) CGFloat height;
 @property (nonatomic, assign) CGFloat centerX;
 @property (nonatomic, assign) CGFloat centerY;
+// 内嵌边距
+@property (nonatomic, assign) UIEdgeInsets insets;
 
 /**
  是否截取建议尺寸(suggustSize);默认:YES;
@@ -39,9 +41,6 @@
  NO:不截取;直接=viewSize;
  */
 @property (nonatomic, assign) BOOL shouldSuggustingSize;
-
-// 内嵌边距
-@property (nonatomic, assign) UIEdgeInsets insets;
 
 // 边框
 @property (nonatomic, assign) CGFloat borderWidth;
@@ -60,14 +59,24 @@
 @property (nonatomic, assign) BOOL debug;
 
 # pragma mark - readonly
+@property (nonatomic, assign, readonly) CGRect frame;
+@property (nonatomic, assign, readonly) CGRect contentFrame;
+
 // 视图在界面中的位置
-@property (nonatomic, assign, readonly) CGPoint viewOrigin;
+//@property (nonatomic, assign, readonly) CGPoint viewOrigin;
 // 视图的初始尺寸
-@property (nonatomic, assign, readonly) CGSize viewSize;
+//@property (nonatomic, assign, readonly) CGSize viewSize;
 // 建议尺寸;
-@property (nonatomic, assign, readonly) CGSize suggustSize;
+//@property (nonatomic, assign, readonly) CGSize suggustSize;
 
 // 由子类实现
 - (void) relayouting;
+
+// 更新frame和contentFrame
+//- (void) updateFrame;
+
+- (void) updateWidthWithoutRelayouting:(CGFloat)width;
+- (void) updateHeightWithoutRelayouting:(CGFloat)height;
+
 
 @end

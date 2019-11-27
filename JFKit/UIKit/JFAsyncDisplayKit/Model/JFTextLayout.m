@@ -23,8 +23,18 @@
 @end
 
 @implementation JFTextLayout
-@synthesize suggustSize = _suggustSize;
-//@synthesize viewOrigin = _viewOrigin;
+//@synthesize borderColor = _borderColor;
+//@synthesize borderWidth = _borderWidth;
+//@synthesize width = _width;
+//@synthesize height = _height;
+//@synthesize left = _left;
+//@synthesize top = _top;
+//@synthesize right = _right;
+//@synthesize bottom = _bottom;
+//@synthesize centerX = _centerX;
+//@synthesize centerY = _centerY;
+//@synthesize frame = _frame;
+//@synthesize contentFrame = _contentFrame;
 
 # pragma mark - 绘制
 /**
@@ -33,16 +43,17 @@
  @param cancelled 退出操作的回调;
  */
 - (void) drawInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled {
+    NSLog(@":::drawInContext::JFTextLayout, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
     CGContextSaveGState(context);
     // 绘制背景色、边框
     UIColor* bgColor = self.backgroundColor;
     UIColor* textBgColor = self.textStorage.backgroundColor;
     UIColor* borderColor = self.borderColor;
-    // 背景色默认:白色
+    // layout背景色默认:白色
     if (!bgColor) {
         bgColor = [UIColor whiteColor];
     }
-    // 文本背景色默认:
+    // 未设置文本背景色，默认为layout背景色
     if (!textBgColor) {
         textBgColor = bgColor;
     }
@@ -51,86 +62,60 @@
         return;
     }
     
-    CGFloat startX = CGFLOAT_MAX;
-    CGFloat startY = CGFLOAT_MAX;
-    for (JFTextLine* ctLine in self.ctLines) {
+    // 绘制layout背景色、边框
+    {
+        CGMutablePathRef path = CGPathCreateMutable();
+        if (self.cornerRadius.width > 0 && self.cornerRadius.height > 0) {
+            CGFloat cornerW = self.cornerRadius.width;
+            CGFloat cornerH = self.cornerRadius.height;
+            // 圆角 * 2 不能超过layout的size
+            if (cornerW * 2 > CGRectGetWidth(self.frame)) {
+                cornerW = CGRectGetWidth(self.frame) * 0.5;
+            }
+            if (cornerH * 2 > CGRectGetHeight(self.frame)) {
+                cornerH = CGRectGetHeight(self.frame) * 0.5;
+            }
+            CGPathAddRoundedRect(path, NULL, self.frame, cornerW, cornerH);
+        } else {
+            CGPathAddRect(path, NULL, self.frame);
+        }
+        CGContextAddPath(context, path);
+//        CGPathRelease(path);
         if (cancelled()) {
             CGContextRestoreGState(context);
+            CGPathRelease(path);
             return;
         }
-        if (startX > ctLine.uiOrigin.x) {
-            startX = ctLine.uiOrigin.x;
-        }
-        if (startY > ctLine.uiOrigin.y) {
-            startY = ctLine.uiOrigin.y;
-        }
-    }
 
+        // fill
+        CGContextSetFillColorWithColor(context, bgColor.CGColor);
+        CGContextFillPath(context);
+        if (cancelled()) {
+            CGContextRestoreGState(context);
+            CGPathRelease(path);
+            return;
+        }
+
+        // strock
+        if (borderColor && self.borderWidth > 0) {
+            CGContextAddPath(context, path);
+            CGContextSetLineWidth(context, self.borderWidth);
+            CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
+            CGContextStrokePath(context);
+        }
+        CGPathRelease(path);
+    }
     
-    CGRect frame = CGRectMake(startX,
-                              startY,
-                              self.suggustSize.width,
-                              self.suggustSize.height);
-    // 绘制layout背景色
-    CGContextSetFillColorWithColor(context, bgColor.CGColor);
-    CGContextFillRect(context, frame);
     if (cancelled()) {
         CGContextRestoreGState(context);
         return;
     }
-    
-    // 设置了边框颜色才绘制
-    if (borderColor) {
-        CGMutablePathRef path = CGPathCreateMutable();
-        if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
-            CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
-            CGFloat halfBorderWidth = self.borderWidth * 0.5;
-            CGPathMoveToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
-            CGPathAddArc(path, NULL, startX + radius, startY + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - radius, startY + halfBorderWidth);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, startY + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
-            CGPathAddLineToPoint(path, NULL, startX + radius, CGRectGetMaxY(frame) - halfBorderWidth);
-            CGPathAddArc(path, NULL, startX + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
-            CGPathAddLineToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
-        } else {
-            CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
-        }
-        CGContextAddPath(context, path);
-        CGPathRelease(path);
-        if (cancelled()) {
-            CGContextRestoreGState(context);
-            return;
-        }
-        CGContextSetLineWidth(context, self.borderWidth);
-        CGContextSetStrokeColorWithColor(context, borderColor.CGColor);
-        CGContextStrokePath(context);
-        if (cancelled()) {
-            CGContextRestoreGState(context);
-            return;
-        }
-    }
+
 
     // 文本背景色跟layout背景色不一致才需要填充文本背景色
     if (textBgColor != bgColor) {
         CGMutablePathRef path = CGPathCreateMutable();
-        if (self.cornerRadius.width > 0 || self.cornerRadius.height > 0) {
-            CGFloat radius = MAX(self.cornerRadius.width, self.cornerRadius.height);
-            CGFloat halfBorderWidth = self.borderWidth * 0.5;
-            CGPathMoveToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
-            CGPathAddArc(path, NULL, startX + radius, startY + radius, radius - halfBorderWidth, M_PI, M_PI * 1.5, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, startY + halfBorderWidth);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, startY + radius, radius - halfBorderWidth, M_PI * 1.5, M_PI * 2, NO);
-            CGPathAddLineToPoint(path, NULL, CGRectGetMaxX(frame) - halfBorderWidth, CGRectGetMaxY(frame) - radius);
-            CGPathAddArc(path, NULL, CGRectGetMaxX(frame) - radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0, M_PI * 0.5, NO);
-            CGPathAddLineToPoint(path, NULL, startX + radius, CGRectGetMaxY(frame) - halfBorderWidth);
-            CGPathAddArc(path, NULL, startX + radius, CGRectGetMaxY(frame) - radius, radius - halfBorderWidth, M_PI * 0.5, M_PI * 1, NO);
-            CGPathAddLineToPoint(path, NULL, startX + halfBorderWidth, startY + radius);
-        } else {
-            CGPathAddRect(path, NULL, CGRectInset(frame, self.borderWidth * 0.5, self.borderWidth * 0.5));
-        }
-        
+        CGPathAddRect(path, NULL, self.contentFrame);
         CGContextAddPath(context, path);
         CGPathRelease(path);
         if (cancelled()) {
@@ -163,17 +148,17 @@
                     return;
                 }
                 CGRect highlightframe = [framevalue CGRectValue];
-                highlightframe.origin.x += CGRectGetMinX(frame);
-                highlightframe.origin.y += CGRectGetMinY(frame);
+                highlightframe.origin.x += self.left;
+                highlightframe.origin.y += self.top;
                 CGContextFillRect(context, highlightframe);
             }
         }
     }
-
     
     // 转换矩阵:<UIKit> -> <CoreText>
     // 翻转矩阵时，要用originSize:CTLine等都是在原始size生成的
-    CGContextTranslateCTM(context, startX + self.insets.left, startY + self.viewSize.height - self.insets.bottom);
+//    CGContextTranslateCTM(context, CGRectGetMinX(self.contentFrame), self.top + self.height - self.insets.bottom);
+    CGContextTranslateCTM(context, CGRectGetMinX(self.contentFrame), CGRectGetMaxY(self.contentFrame));
     CGContextScaleCTM(context, 1, -1);
     if (cancelled()) {
         CGContextRestoreGState(context);
@@ -217,38 +202,45 @@
         }
     }
     
+    CGContextRestoreGState(context);
+
+    
     // 测试时:绘制行边框
     if (self.debug) {
-        CGContextTranslateCTM(context, - startX - self.insets.left, startY + self.viewSize.height - self.insets.bottom);
-        CGContextScaleCTM(context, 1, -1);
-        if (cancelled()) {
-            CGContextRestoreGState(context);
-            return;
-        }
+//        if (cancelled()) {
+//            CGContextRestoreGState(context);
+//            return;
+//        }
+
+        CGContextSaveGState(context);
+
+//        CGContextTranslateCTM(context, - CGRectGetMinX(self.contentFrame), self.top + self.height - self.insets.bottom);
+//        CGContextTranslateCTM(context, - CGRectGetMinX(self.contentFrame), self.height - self.insets.bottom - self.insets.top - self.top - self.insets.top);
+//
+//        CGContextScaleCTM(context, 1, -1);
+        
         for (JFTextLine* line in self.ctLines) {
+            if (cancelled()) {
+                break;
+            }
             CGContextSetLineWidth(context, 0.5);
             CGContextSetStrokeColorWithColor(context, [UIColor orangeColor].CGColor);
             CGContextStrokeRect(context, CGRectMake(line.uiOrigin.x,
                                                     line.uiOrigin.y,
                                                     line.width,
                                                     line.descent + line.ascent));
-            if (cancelled()) {
-                CGContextRestoreGState(context);
-                return;
-            }
         }
+        CGContextRestoreGState(context);
     }
-    CGContextRestoreGState(context);
 }
 
 # pragma mark - 计算布局
 - (void) relayouting {
+    // 先计算frame等
+    [super relayouting];
+//    NSLog(@":::relayouting::JFTextLayout, L(%.02lf),W(%.02lf),T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
     // 判断是否需要计算布局:尺寸过小||文本为空;就不用布局了
-    if (self.viewSize.width < 0.1 ||
-        self.viewSize.height < 0.1 ||
-        !self.textStorage //|| self.textStorage.text.length == 0
-        )
-    {
+    if (self.left == CGFLOAT_MIN || self.top == CGFLOAT_MIN || self.width< 0.1 || self.height < 0.1 || !self.textStorage) {
         return;
     }
     
@@ -264,10 +256,12 @@
     [self freeFramer];
     
     /* --- 计算布局 --- */
-    CGRect frame = CGRectMake(self.left +  self.insets.left,
-                              self.top + self.insets.top,
-                              self.viewSize.width - self.insets.left - self.insets.right,
-                              self.viewSize.height - self.insets.top - self.insets.bottom);
+//    CGRect frame = CGRectMake(self.left + self.insets.left,
+//                              self.top + self.insets.top,
+//                              self.width - self.insets.left - self.insets.right,
+//                              self.height - self.insets.top - self.insets.bottom);
+    CGRect frame = self.contentFrame;
+    NSLog(@"-=---=-=-=-=-=-relayouting::contentFrame[%@]", NSStringFromCGRect(frame));
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
     self.framePath = CGPathCreateWithRect(frame, NULL);
     self.frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _framePath, NULL);
@@ -376,19 +370,64 @@
         }
         // 累加当前行高:非最后一行,需要加上行间距
         suggustHeight += ctLine.ascent + ctLine.descent + ((i == numberOfLines - 1) ? 0 : ctLine.leading);
+
         [ctLines addObject:ctLine];
     }
+
+    CGFloat lastHeight = self.height;
+    CGFloat width = ceil(suggustWidth + self.insets.left + self.insets.right);
+    CGFloat height = ceil(suggustHeight + self.insets.top + self.insets.bottom);
+    NSLog(@"    ---JFTextLayout relayouting 更新width,height；insets:%@", NSStringFromUIEdgeInsets(self.insets));
+    [super updateWidthWithoutRelayouting:width];
+    [super updateHeightWithoutRelayouting:height];
     
-    // 根据布局重置实际的文本size,可以用于重置label的frame
-    if (self.shouldSuggustingSize) {
-        _suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
-                                      floor(suggustHeight + self.insets.top + self.insets.bottom));
-    } else {
-        _suggustSize = self.viewSize;
+//    if (self.left != CGFLOAT_MIN) {
+//        _right = self.left + _width;
+//    }
+//    else if (self.centerX != CGFLOAT_MIN) {
+//        _right = self.centerX + _width * 0.5;
+//    }
+////    _right = self.left + _width;
+//    if (self.top != CGFLOAT_MIN) {
+//        _bottom = self.top + _height;
+//    }
+//    else if (self.centerY != CGFLOAT_MIN) {
+//        _bottom = self.centerY + _height * 0.5;
+//    }
+
+    // 实际高度有更新:ctLine的origin也要更新，因为它在绘制的时候是要翻转的
+    CGFloat heightRemain = lastHeight - self.height;
+    for (JFTextLine* line in ctLines) {
+        if (layoutCancelled()) return;
+        CGPoint origin = line.ctOrigin;
+//        if (self.centerY == CGFLOAT_MIN) {
+            origin.y -= heightRemain;
+//        } else {
+//            origin.y -= heightRemain * 0.5;
+//        }
+        line.ctOrigin = origin;
     }
+    
+//    if (layoutCancelled()) return;
+    // 更新frame和contentFrame
+//    [super updateFrame];
+    
+    //     frame设置异常;是因为_width的问题么  ，在父类中取不到子类@synthesize修饰的_width
+    NSLog(@"    ---JFTextLayout setFrame:%@", NSStringFromCGRect(self.frame));
+    // _width取的当前类的对象，所有没有问题
+    NSLog(@"    ---JFTextLayout setFrame, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
+
+//    // 根据布局重置实际的文本size,可以用于重置label的frame
+//    if (self.shouldSuggustingSize) {
+//        _suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
+//                                      floor(suggustHeight + self.insets.top + self.insets.bottom));
+//    } else {
+//        _suggustSize = self.viewSize;
+//    }
     // 保存行对象
     self.ctLines = ctLines.copy;
 }
+
 
 # pragma mark - setter
 - (void)setTextStorage:(JFTextStorage *)textStorage {
@@ -399,18 +438,79 @@
     _numberOfLines = numberOfLines;
     [self relayouting];
 }
-- (void)setBackgroundColor:(UIColor *)backgroundColor {
-    [super setBackgroundColor:backgroundColor];
-    [self relayouting];
-}
-- (void)setShowMoreActColor:(UIColor *)showMoreActColor {
-    _showMoreActColor = showMoreActColor;
-    [self relayouting];
-}
-- (void)setShouldShowMoreAct:(BOOL)shouldShowMoreAct {
-    _shouldShowMoreAct = shouldShowMoreAct;
-    [self relayouting];
-}
+//- (void)setBackgroundColor:(UIColor *)backgroundColor {
+//    [super setBackgroundColor:backgroundColor];
+//    [self relayouting];
+//}
+//- (void)setShowMoreActColor:(UIColor *)showMoreActColor {
+//    _showMoreActColor = showMoreActColor;
+//    [self relayouting];
+//}
+//- (void)setShouldShowMoreAct:(BOOL)shouldShowMoreAct {
+//    _shouldShowMoreAct = shouldShowMoreAct;
+//    [self relayouting];
+//}
+//- (void)setBorderColor:(UIColor *)borderColor {
+//    _borderColor = borderColor;
+//    [self relayouting];
+//}
+//- (void)setBorderWidth:(CGFloat)borderWidth {
+//    _borderWidth = borderWidth;
+//    [self relayouting];
+//}
+//- (void)setLeft:(CGFloat)left {
+//    [super setLeft:left];
+//    [self relayouting];
+//}
+//- (void)setTop:(CGFloat)top {
+//    [super setTop:top];
+//    [self relayouting];
+//}
+//- (CGFloat)width {
+//    return _width;
+//}
+//- (CGFloat)height {
+//    return _height;
+//}
+//- (void)setWidth:(CGFloat)width {
+//    if (width == CGFLOAT_MIN) {
+//        _width = width;
+//        return;
+//    }
+//    _width = floor(width);
+//    [self relayouting];
+//}
+//
+//- (void)setHeight:(CGFloat)height {
+//    if (height == CGFLOAT_MIN) {
+//        _height = height;
+//        return;
+//    }
+//    _height = floor(height);
+//    [self relayouting];
+//}
+
+//- (void)setBottom:(CGFloat)bottom {
+//    if (bottom == CGFLOAT_MIN) {
+//        _bottom = bottom;
+//        return;
+//    }
+//    _bottom = floor(bottom);
+//    [self relayouting];
+//}
+//- (void)setRight:(CGFloat)right {
+//    if (right == CGFLOAT_MIN) {
+//        _right = right;
+//        return;
+//    }
+//    _right = floor(right);
+//    [self relayouting];
+//}
+//- (void)setInsets:(UIEdgeInsets)insets {
+//    [super setInsets:insets];
+//}
+
+
 
 # pragma mark - getter
 
@@ -433,7 +533,8 @@
  */
 + (instancetype) textLayoutWithFrame:(CGRect)frame text:(JFTextStorage*)text insets:(UIEdgeInsets)insets backgroundColor:(UIColor*)backgroundColor
 {
-    JFTextLayout* textLayout = [[self alloc] initWithFrame:frame insets:insets backgroundColor:backgroundColor];
+    JFTextLayout* textLayout = [[JFTextLayout alloc] initWithFrame:frame insets:insets backgroundColor:backgroundColor];
+    
     textLayout.textStorage = text;
     textLayout.shouldShowMoreAct = YES;
     return textLayout;
@@ -449,6 +550,16 @@
 + (instancetype) textLayoutWithText:(JFTextStorage*)text
 {
     return [self textLayoutWithFrame:CGRectZero text:text insets:UIEdgeInsetsZero backgroundColor:nil];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets backgroundColor:(UIColor *)backgroundColor {
+    if (self = [super initWithFrame:frame insets:insets backgroundColor:backgroundColor]) {
+//        _width = CGFLOAT_MIN;
+//        _height = CGFLOAT_MIN;
+//        _bottom = CGFLOAT_MIN;
+//        _right = CGFLOAT_MIN;
+    }
+    return self;
 }
 
 - (void)dealloc {
