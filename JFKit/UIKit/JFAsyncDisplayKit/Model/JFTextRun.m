@@ -43,7 +43,7 @@
     CGFloat width = CTRunGetTypographicBounds(ctRun, CFRangeMake(0, 0), &ascent, &descent, &leading);
     if (cancelled()) return nil;
     // 获取翻转的仿射矩阵
-    CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, frame.origin.x, frame.origin.y + frame.size.height);
+    CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, CGRectGetMinX(frame), CGRectGetMaxY(frame));
     tt = CGAffineTransformScale(tt, 1, -1);
     CGRect ctFrame = CGRectMake(ctLineOrigin.x + glyphsOrigins[0].x,
                                 ctLineOrigin.y - descent,
@@ -84,7 +84,7 @@
         }
     }
     _imageAttachments = images.copy;
-    _highlightAttachments = highlights.copy;
+//    _highlightAttachments = highlights.copy;
     return self;
 }
 

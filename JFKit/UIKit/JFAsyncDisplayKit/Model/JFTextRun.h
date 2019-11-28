@@ -25,6 +25,6 @@
 // 附件组:图片
 @property (nonatomic, copy) NSArray<JFTextAttachmentImage*>* imageAttachments;
 // 附件组:高亮
-@property (nonatomic, copy) NSArray<JFTextAttachmentHighlight*>* highlightAttachments;
+//@property (nonatomic, copy) NSArray<JFTextAttachmentHighlight*>* highlightAttachments;
 
 @end

@@ -18,12 +18,21 @@
  */
 @property (nonatomic, assign) CGRect viewFrame;
 
+# pragma mark - 高亮相关
+// 被高亮的高亮属性和它相关的textLayout
+@property (nonatomic, weak) JFTextLayout* highlightedTextLayout;
+@property (nonatomic, weak) JFTextAttachmentHighlight* selectedHighlight;
 
-/**
- 所有layouts内容的尺寸，包括间距;
- 自动设置;
- */
-@property (nonatomic, assign) CGSize contentSize;
+// 点亮指定坐标point的高亮;点亮成功返回:YES;否则返回:NO;
+- (BOOL) raiseHighlightAtPoint:(CGPoint)point;
+// 恢复被点亮的高亮
+- (void) resetHighlightWhichRaised;
+
+
+//// 在指定坐标point是否存在高亮属性
+//- (JFTextAttachmentHighlight*) containsHighlightAtPoint:(CGPoint)point;
+//// 更新高亮属性状态
+//- ()
 
 # pragma mark - ** 必须使用下面的n个方法来[增、减、更新]layout
 - (void) addLayout:(JFLayout*)layout;
@@ -33,6 +42,17 @@
 
 - (NSInteger) indexForLayout:(JFLayout*)layout;
 @property (nonatomic, strong) NSMutableArray<JFLayout*>* layouts;
+
+
+
+
+
+
+///**
+// 所有layouts内容的尺寸，包括间距;  --------已废弃
+// 自动设置;
+// */
+//@property (nonatomic, assign) CGSize contentSize;
 
 
 @end

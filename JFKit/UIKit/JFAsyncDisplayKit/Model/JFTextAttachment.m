@@ -21,13 +21,6 @@
 
 @implementation JFTextAttachmentHighlight
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.isHighlight = YES;
-    }
-    return self;
-}
 # pragma mark - getter
 
 - (NSMutableArray *)uiFrames {

@@ -78,6 +78,7 @@
 		7A0D8AD7233EFE520070FDBC /* NSBundle+JFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */; };
 		7A488D4E236C05B7001AA048 /* TestAsyncImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */; };
 		7ABB1421233F38D40057CB77 /* TestVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABB1420233F38D40057CB77 /* TestVideoVC.m */; };
+		7AE3655C238E70E9000A8DAD /* TestAsyncJsonModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AE3655B238E70E9000A8DAD /* TestAsyncJsonModel.m */; };
 		7AFF3129235428A6008ADF94 /* TextAsyncViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */; };
 		7AFF312C235428CE008ADF94 /* APTransHashHeaderLayouts.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */; };
 		7AFF312F235428D6008ADF94 /* APTransHashCellHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 7AFF312D235428D6008ADF94 /* APTransHashCellHeader.m */; };
@@ -239,6 +240,8 @@
 		7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAsyncImageVC.m; sourceTree = "<group>"; };
 		7ABB141F233F38D40057CB77 /* TestVideoVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestVideoVC.h; sourceTree = "<group>"; };
 		7ABB1420233F38D40057CB77 /* TestVideoVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestVideoVC.m; sourceTree = "<group>"; };
+		7AE3655A238E70E9000A8DAD /* TestAsyncJsonModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAsyncJsonModel.h; sourceTree = "<group>"; };
+		7AE3655B238E70E9000A8DAD /* TestAsyncJsonModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAsyncJsonModel.m; sourceTree = "<group>"; };
 		7AFF3127235428A6008ADF94 /* TextAsyncViewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextAsyncViewViewController.h; sourceTree = "<group>"; };
 		7AFF3128235428A6008ADF94 /* TextAsyncViewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TextAsyncViewViewController.m; sourceTree = "<group>"; };
 		7AFF312A235428CE008ADF94 /* APTransHashHeaderLayouts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APTransHashHeaderLayouts.h; sourceTree = "<group>"; };
@@ -659,6 +662,8 @@
 			children = (
 				7AFF312A235428CE008ADF94 /* APTransHashHeaderLayouts.h */,
 				7AFF312B235428CE008ADF94 /* APTransHashHeaderLayouts.m */,
+				7AE3655A238E70E9000A8DAD /* TestAsyncJsonModel.h */,
+				7AE3655B238E70E9000A8DAD /* TestAsyncJsonModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -897,6 +902,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7A0D89ED23347E900070FDBC /* ShortMediaCache.m in Sources */,
+				7AE3655C238E70E9000A8DAD /* TestAsyncJsonModel.m in Sources */,
 				7A0D89D023347E900070FDBC /* JFTextRun.m in Sources */,
 				7A0D89E323347E900070FDBC /* JFImageCache.m in Sources */,
 				7A0D89B023347E900070FDBC /* UIImage+Extension.m in Sources */,

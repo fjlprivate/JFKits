@@ -23,18 +23,6 @@
 @end
 
 @implementation JFTextLayout
-//@synthesize borderColor = _borderColor;
-//@synthesize borderWidth = _borderWidth;
-//@synthesize width = _width;
-//@synthesize height = _height;
-//@synthesize left = _left;
-//@synthesize top = _top;
-//@synthesize right = _right;
-//@synthesize bottom = _bottom;
-//@synthesize centerX = _centerX;
-//@synthesize centerY = _centerY;
-//@synthesize frame = _frame;
-//@synthesize contentFrame = _contentFrame;
 
 # pragma mark - 绘制
 /**
@@ -43,7 +31,7 @@
  @param cancelled 退出操作的回调;
  */
 - (void) drawInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled {
-    NSLog(@":::drawInContext::JFTextLayout, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
+//    NSLog(@":::drawInContext::JFTextLayout, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
     CGContextSaveGState(context);
     // 绘制背景色、边框
     UIColor* bgColor = self.backgroundColor;
@@ -80,7 +68,6 @@
             CGPathAddRect(path, NULL, self.frame);
         }
         CGContextAddPath(context, path);
-//        CGPathRelease(path);
         if (cancelled()) {
             CGContextRestoreGState(context);
             CGPathRelease(path);
@@ -111,7 +98,6 @@
         return;
     }
 
-
     // 文本背景色跟layout背景色不一致才需要填充文本背景色
     if (textBgColor != bgColor) {
         CGMutablePathRef path = CGPathCreateMutable();
@@ -129,7 +115,6 @@
             return;
         }
     }
-
     
     // 绘制高亮附件
     for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
@@ -148,16 +133,21 @@
                     return;
                 }
                 CGRect highlightframe = [framevalue CGRectValue];
-                highlightframe.origin.x += self.left;
-                highlightframe.origin.y += self.top;
-                CGContextFillRect(context, highlightframe);
+//                highlightframe.origin.x += self.left;
+//                highlightframe.origin.y += self.top;
+                CGMutablePathRef path = CGPathCreateMutable();
+                CGPathAddRect(path, NULL, highlightframe);
+                CGContextAddPath(context, path);
+                CGContextFillPath(context);
+//                NSLog(@"========================绘制高亮,frame:[%@]", NSStringFromCGRect(highlightframe));
+                CGPathRelease(path);
+//                CGContextFillRect(context, highlightframe);
             }
         }
     }
     
     // 转换矩阵:<UIKit> -> <CoreText>
     // 翻转矩阵时，要用originSize:CTLine等都是在原始size生成的
-//    CGContextTranslateCTM(context, CGRectGetMinX(self.contentFrame), self.top + self.height - self.insets.bottom);
     CGContextTranslateCTM(context, CGRectGetMinX(self.contentFrame), CGRectGetMaxY(self.contentFrame));
     CGContextScaleCTM(context, 1, -1);
     if (cancelled()) {
@@ -169,6 +159,9 @@
         if (cancelled()) {
             CGContextRestoreGState(context);
             return;
+        }
+        if ([self.ctLines indexOfObject:line] == 0) {
+//            NSLog(@"    =============-=-=-=-=-=-=-= line.origin[%@]", NSStringFromCGPoint(line.uiOrigin));
         }
         CGContextSetTextPosition(context, line.ctOrigin.x, line.ctOrigin.y);
         // 绘制行
@@ -199,6 +192,10 @@
                     CGContextDrawImage(context, imageCtFrame, image.CGImage);
                 }
             }
+            // 高亮附件
+//            for (JFTextAttachmentHighlight* highlight in run.highlightAttachments) {
+//                
+//            }
         }
     }
     
@@ -207,18 +204,7 @@
     
     // 测试时:绘制行边框
     if (self.debug) {
-//        if (cancelled()) {
-//            CGContextRestoreGState(context);
-//            return;
-//        }
-
         CGContextSaveGState(context);
-
-//        CGContextTranslateCTM(context, - CGRectGetMinX(self.contentFrame), self.top + self.height - self.insets.bottom);
-//        CGContextTranslateCTM(context, - CGRectGetMinX(self.contentFrame), self.height - self.insets.bottom - self.insets.top - self.top - self.insets.top);
-//
-//        CGContextScaleCTM(context, 1, -1);
-        
         for (JFTextLine* line in self.ctLines) {
             if (cancelled()) {
                 break;
@@ -238,11 +224,11 @@
 - (void) relayouting {
     // 先计算frame等
     [super relayouting];
-//    NSLog(@":::relayouting::JFTextLayout, L(%.02lf),W(%.02lf),T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
-    // 判断是否需要计算布局:尺寸过小||文本为空;就不用布局了
-    if (self.left == CGFLOAT_MIN || self.top == CGFLOAT_MIN || self.width< 0.1 || self.height < 0.1 || !self.textStorage) {
+    if (self.width< 0.1 || self.height < 0.1 || !self.textStorage) {
         return;
     }
+    CGFloat startX = self.left == CGFLOAT_MIN ? 0 : self.left;
+    CGFloat startY = self.top == CGFLOAT_MIN ? 0 : self.top;
     
     // 准备工作: 定义布局退出block
     [_asyncFlag incrementFlag];
@@ -254,14 +240,15 @@
     
     // 先释放历史生成的 framesetter等
     [self freeFramer];
+    [self clearHighlightsFrames];
     
     /* --- 计算布局 --- */
-//    CGRect frame = CGRectMake(self.left + self.insets.left,
-//                              self.top + self.insets.top,
-//                              self.width - self.insets.left - self.insets.right,
-//                              self.height - self.insets.top - self.insets.bottom);
-    CGRect frame = self.contentFrame;
-    NSLog(@"-=---=-=-=-=-=-relayouting::contentFrame[%@]", NSStringFromCGRect(frame));
+    CGRect frame = CGRectMake(startX + self.insets.left,
+                              startY + self.insets.top,
+                              self.width - self.insets.left - self.insets.right,
+                              self.height - self.insets.top - self.insets.bottom);
+//    CGRect frame = self.contentFrame;
+//    NSLog(@"-=---=-=-=-=-=-relayouting::contentFrame[%@]", NSStringFromCGRect(frame));
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
     self.framePath = CGPathCreateWithRect(frame, NULL);
     self.frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _framePath, NULL);
@@ -377,55 +364,31 @@
     CGFloat lastHeight = self.height;
     CGFloat width = ceil(suggustWidth + self.insets.left + self.insets.right);
     CGFloat height = ceil(suggustHeight + self.insets.top + self.insets.bottom);
-    NSLog(@"    ---JFTextLayout relayouting 更新width,height；insets:%@", NSStringFromUIEdgeInsets(self.insets));
+//    NSLog(@"    ---JFTextLayout relayouting 更新width,height；insets:%@", NSStringFromUIEdgeInsets(self.insets));
     [super updateWidthWithoutRelayouting:width];
     [super updateHeightWithoutRelayouting:height];
     
-//    if (self.left != CGFLOAT_MIN) {
-//        _right = self.left + _width;
-//    }
-//    else if (self.centerX != CGFLOAT_MIN) {
-//        _right = self.centerX + _width * 0.5;
-//    }
-////    _right = self.left + _width;
-//    if (self.top != CGFLOAT_MIN) {
-//        _bottom = self.top + _height;
-//    }
-//    else if (self.centerY != CGFLOAT_MIN) {
-//        _bottom = self.centerY + _height * 0.5;
-//    }
 
     // 实际高度有更新:ctLine的origin也要更新，因为它在绘制的时候是要翻转的
-    CGFloat heightRemain = lastHeight - self.height;
-    for (JFTextLine* line in ctLines) {
-        if (layoutCancelled()) return;
-        CGPoint origin = line.ctOrigin;
-//        if (self.centerY == CGFLOAT_MIN) {
-            origin.y -= heightRemain;
-//        } else {
-//            origin.y -= heightRemain * 0.5;
-//        }
-        line.ctOrigin = origin;
+    if (lastHeight != self.height) {
+            CGFloat heightRemain = lastHeight - self.height;
+            for (JFTextLine* line in ctLines) {
+                if (layoutCancelled()) return;
+                CGPoint origin = line.ctOrigin;
+                origin.y -= heightRemain;
+                line.ctOrigin = origin;
+            }
     }
-    
-//    if (layoutCancelled()) return;
-    // 更新frame和contentFrame
-//    [super updateFrame];
-    
-    //     frame设置异常;是因为_width的问题么  ，在父类中取不到子类@synthesize修饰的_width
-    NSLog(@"    ---JFTextLayout setFrame:%@", NSStringFromCGRect(self.frame));
-    // _width取的当前类的对象，所有没有问题
-    NSLog(@"    ---JFTextLayout setFrame, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
-
-//    // 根据布局重置实际的文本size,可以用于重置label的frame
-//    if (self.shouldSuggustingSize) {
-//        _suggustSize = CGSizeMake(floor(suggustWidth + self.insets.left + self.insets.right),
-//                                      floor(suggustHeight + self.insets.top + self.insets.bottom));
-//    } else {
-//        _suggustSize = self.viewSize;
-//    }
+        
     // 保存行对象
     self.ctLines = ctLines.copy;
+}
+
+// 清理所有高亮附件的frames
+- (void) clearHighlightsFrames {
+    for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
+        [highlight.uiFrames removeAllObjects];
+    }
 }
 
 
@@ -438,78 +401,6 @@
     _numberOfLines = numberOfLines;
     [self relayouting];
 }
-//- (void)setBackgroundColor:(UIColor *)backgroundColor {
-//    [super setBackgroundColor:backgroundColor];
-//    [self relayouting];
-//}
-//- (void)setShowMoreActColor:(UIColor *)showMoreActColor {
-//    _showMoreActColor = showMoreActColor;
-//    [self relayouting];
-//}
-//- (void)setShouldShowMoreAct:(BOOL)shouldShowMoreAct {
-//    _shouldShowMoreAct = shouldShowMoreAct;
-//    [self relayouting];
-//}
-//- (void)setBorderColor:(UIColor *)borderColor {
-//    _borderColor = borderColor;
-//    [self relayouting];
-//}
-//- (void)setBorderWidth:(CGFloat)borderWidth {
-//    _borderWidth = borderWidth;
-//    [self relayouting];
-//}
-//- (void)setLeft:(CGFloat)left {
-//    [super setLeft:left];
-//    [self relayouting];
-//}
-//- (void)setTop:(CGFloat)top {
-//    [super setTop:top];
-//    [self relayouting];
-//}
-//- (CGFloat)width {
-//    return _width;
-//}
-//- (CGFloat)height {
-//    return _height;
-//}
-//- (void)setWidth:(CGFloat)width {
-//    if (width == CGFLOAT_MIN) {
-//        _width = width;
-//        return;
-//    }
-//    _width = floor(width);
-//    [self relayouting];
-//}
-//
-//- (void)setHeight:(CGFloat)height {
-//    if (height == CGFLOAT_MIN) {
-//        _height = height;
-//        return;
-//    }
-//    _height = floor(height);
-//    [self relayouting];
-//}
-
-//- (void)setBottom:(CGFloat)bottom {
-//    if (bottom == CGFLOAT_MIN) {
-//        _bottom = bottom;
-//        return;
-//    }
-//    _bottom = floor(bottom);
-//    [self relayouting];
-//}
-//- (void)setRight:(CGFloat)right {
-//    if (right == CGFLOAT_MIN) {
-//        _right = right;
-//        return;
-//    }
-//    _right = floor(right);
-//    [self relayouting];
-//}
-//- (void)setInsets:(UIEdgeInsets)insets {
-//    [super setInsets:insets];
-//}
-
 
 
 # pragma mark - getter
@@ -554,10 +445,6 @@
 
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets backgroundColor:(UIColor *)backgroundColor {
     if (self = [super initWithFrame:frame insets:insets backgroundColor:backgroundColor]) {
-//        _width = CGFLOAT_MIN;
-//        _height = CGFLOAT_MIN;
-//        _bottom = CGFLOAT_MIN;
-//        _right = CGFLOAT_MIN;
     }
     return self;
 }

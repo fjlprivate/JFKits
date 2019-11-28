@@ -55,7 +55,7 @@
 // 用于标记
 @property (nonatomic, assign) NSInteger tag;
 
-// 测试line边框绘制:默认:NO;
+// 测试line边框绘制:默认:NO; *** 请保证width,height最先设置 ***
 @property (nonatomic, assign) BOOL debug;
 
 # pragma mark - readonly

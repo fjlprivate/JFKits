@@ -36,6 +36,15 @@
             s_trxId.font = JFSystemFont(JFScaleWidth6(14));
             s_trxId.textColor = JFRGBAColor(0x333333, 1);
 //            s_trxId.backgroundColor = JFColorOrange;//JFColorWhite;
+            JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
+            highlight.range = NSMakeRange(24, 10);
+            highlight.normalTextColor = JFColorOrange;
+            highlight.highlightTextColor = JFColorWhite;
+            highlight.normalBackgroundColor = JFRGBAColor(0xeeeeee, 1);
+            highlight.highlightBackgroundColor = JFColorOrange;
+            highlight.linkData = @"www.baidu.com1";
+            [s_trxId addHighlight:highlight];
+
             s_trxId.textAlignment = NSTextAlignmentRight;
             JFTextLayout* t_trxId = [JFTextLayout textLayoutWithText:s_trxId];
             t_trxId.backgroundColor = s_trxId.backgroundColor;
@@ -45,7 +54,7 @@
             t_trxId.top = t_trxIdT.top;
             t_trxId.left = JFSCREEN_WIDTH - t_trxId.width - JFScaleWidth6(15);
             t_trxId.numberOfLines = 0;
-            t_trxId.debug = YES;
+//            t_trxId.debug = YES;
             [self addLayout:t_trxId];
             if (bottom < t_trxId.bottom) {
                 bottom = t_trxId.bottom;
@@ -74,6 +83,16 @@
             s_createdAt.font = JFSystemFont(JFScaleWidth6(14));
             s_createdAt.textColor = JFRGBAColor(0x333333, 1);
 //            s_createdAt.backgroundColor = JFColorOrange;
+            
+            JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
+            highlight.range = NSMakeRange(5, 2);
+            highlight.normalTextColor = JFColorOrange;
+            highlight.highlightTextColor = JFColorWhite;
+            highlight.normalBackgroundColor = JFRGBAColor(0xeeeeee, 1);
+            highlight.highlightBackgroundColor = JFColorOrange;
+            highlight.linkData = @"www.baidu.com2";
+            [s_createdAt addHighlight:highlight];
+
             JFTextLayout* t_createdAt = [JFTextLayout textLayoutWithText:s_createdAt];
             t_createdAt.backgroundColor = s_createdAt.backgroundColor;
             t_createdAt.width = JFSCREEN_WIDTH;
@@ -81,7 +100,7 @@
             // center有问题
             t_createdAt.centerY = t_createdAtT.centerY;
             t_createdAt.right = JFSCREEN_WIDTH - JFScaleWidth6(15);
-            t_createdAt.debug = YES;
+//            t_createdAt.debug = YES;
             CGFloat corner = t_createdAt.height * 0.5;
             t_createdAt.cornerRadius = CGSizeMake(corner, corner);
 
@@ -106,8 +125,8 @@
         t_expirationT.width = 200;
         t_expirationT.height = 50;
         t_expirationT.debug = YES;
-        CGFloat corner = t_expirationT.height * 0.5;
-        t_expirationT.cornerRadius = CGSizeMake(corner, corner);
+//        CGFloat corner = t_expirationT.height * 0.5;
+//        t_expirationT.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_expirationT];
         if (bottom < t_expirationT.bottom) {
             bottom = t_expirationT.bottom;
@@ -165,8 +184,8 @@
         t_state2.right = JFSCREEN_WIDTH - JFScaleWidth6(15);
         t_state2.debug = YES;
         NSLog(@"================t_state2.height[%.02lf]", t_state2.height);
-        corner = t_state2.height * 0.5;
-        t_state2.cornerRadius = CGSizeMake(corner, corner);
+//        corner = t_state2.height * 0.5;
+//        t_state2.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_state2];
 
 
@@ -174,16 +193,17 @@
         s_state1.font = JFSystemFont(JFScaleWidth6(12));
         s_state1.textColor = JFColorWhite;
         JFTextLayout* t_state1 = [JFTextLayout textLayoutWithText:s_state1];
-//        t_state1.backgroundColor = JFRGBAColor(0x0AA3D1, 1);
-        t_state1.backgroundColor = JFColorOrange;
+        t_state1.backgroundColor = JFRGBAColor(0x0AA3D1, 1);
+//        t_state1.backgroundColor = JFColorOrange;
         t_state1.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(10), JFScaleWidth6(2), JFScaleWidth6(10));
 //        t_state1.borderColor =
+        t_state1.debug = YES;
         t_state1.width = 200;
         t_state1.height = 50;
         t_state1.centerY = t_stateT.centerY;
         t_state1.right = t_state2.left - JFScaleWidth6(15);
-        corner = t_state1.height * 0.5;
-        t_state1.cornerRadius = CGSizeMake(corner, corner);
+//        corner = t_state1.height * 0.5;
+//        t_state1.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_state1];
 
 
@@ -267,18 +287,21 @@
         JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
         highlight.range = NSMakeRange(2, 3);
         highlight.normalTextColor = JFColorOrange;
-        highlight.highlightTextColor = JFColorOrange;
-        highlight.normalBackgroundColor = JFRGBAColor(0xf5f5f5, 1);
-        highlight.highlightBackgroundColor = JFRGBAColor(0xeeeeee, 1);
+        highlight.highlightTextColor = JFColorWhite;
+        highlight.normalBackgroundColor = JFRGBAColor(0xeeeeee, 1);
+        highlight.highlightBackgroundColor = JFColorOrange;
+        highlight.linkData = @"www.baidu.com3";
         [s_actionsT addHighlight:highlight];
         JFTextLayout* t_actionsT = [JFTextLayout textLayoutWithText:s_actionsT];
 //        t_actionsT.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
 //        t_actionsT.debug = YES;
+//        t_actionsT.backgroundColor = JFRGBAColor(0x13BD68, 1);
+
         t_actionsT.top = bottom + JFScaleWidth6(15);
         t_actionsT.left = JFScaleWidth6(15);
         t_actionsT.width = 200;
         t_actionsT.height = 50;
-        t_actionsT.debug = YES;
+//        t_actionsT.debug = YES;
         [self addLayout:t_actionsT];
         if (bottom < t_actionsT.bottom) {
             bottom = t_actionsT.bottom;

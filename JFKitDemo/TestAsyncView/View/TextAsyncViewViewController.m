@@ -8,8 +8,9 @@
 
 #import "TextAsyncViewViewController.h"
 #import "APTransHashCellHeader.h"
+#import "TestAsyncJsonModel.h"
 
-@interface TextAsyncViewViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface TextAsyncViewViewController () <UITableViewDelegate, UITableViewDataSource, JFAsyncViewDelegate>
 @property (nonatomic, strong) UITableView* tableView;
 @property (nonatomic, strong) NSArray<APTransHashHeaderLayouts*>* dataSource;
 @end
@@ -18,54 +19,49 @@
 
 - (void) refreshDatas {
     NSMutableArray* list = @[].mutableCopy;
-    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:@{
-                                                                      @"actions" : @[
-                                                                              @{
-                                                                                  @"account" : @"token.fee",
-                                                                                  @"authorization" :             @[
-                                                                                          @{
-                                                                                              @"actor" : @"fengdadada",
-                                                                                              @"permission" : @"active"
-                                                                                              }
-                                                                                          ],
-                                                                                  @"data" :             @{
-                                                                                          @"accountfee":@"accountfee",
-                                                                                          @"from":@"fengdadada",
-                                                                                          @"memo@":@"",
-                                                                                          @"quantity":@"2.0000 ANTT",
-                                                                                          @"quantityfee@":@"0.0200 ANTT",
-                                                                                          @"to":@"sss",
-                                                                                          },
-                                                                                  @"hex_data":@"0080492699c4a65a00000000000030c60080522b4f4d1132204e00000000000004414e5454000000c80000000000000004414e545400000000",
-                                                                                  @"name":@"transferfee"
-                                                                                  }
-                                                                              ],
-                                                                      @"block_id":@"01433727f6c6a881ce9459a6c717ac0f821f6c1fcdddceb3a6afad87dffdf98c",
-                                                                      @"block_num":@"21182247",
-                                                                      @"createdAt":@"1570672109549",
-                                                                      @"delay_sec" :@"0",
-                                                                      @"expiration": @"2019-10-10 09:48:59",
-                                                                      @"implicit": @"0",
-                                                                      @"irreversible":@"1",
-                                                                      @"max_cpu_usage_ms":@"0",
-                                                                      @"max_net_usage_words":@"0",
-                                                                      @"quantityfee":@"0.02",
-                                                                      @"ref_block_num":@"14118",
-                                                                      @"ref_block_prefix":@"2542529338",
-                                                                      @"signatures":    @[
-                                                                              @"SIG_K1_K8aJLFFYSu6kFPGc4AThqZSBu6xvqtpWiTCwmSvf4avS7tNKLb137zcMRBnUmAdiYgZpSa8M5kKgHSvSToMsdwxhGiTjk4"
-                                                                              ],
-                                                                      @"signing_keys" :     @{
-                                                                              @"0": @"EOS6CxFS48BkuwuS5X9YNwvGMd66yZCbzsSUUFtNvChLGBgbqVUY3"
-                                                                              },
-                                                                      @"tradeCode":@"10014",
-                                                                      @"trx_id" : @"6440bbebbca509b83da83532d95d416d8cb61e3e87074df3431bbac31d327269",
-                                                                      @"updatedAt" : @"1570672202000"
-                                                                      }]
-    ];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     self.dataSource = list;
     [self.tableView reloadData];
 }
+
+# pragma mark - JFAsyncViewDelegate
+/**
+ 点击了文本区;
+ 如果highlight为空，则点击的是整个textLayout文本区;
+
+ @param asyncView 当前异步加载视图;
+ @param textLayout 文本布局对象;
+ @param highlight 高亮属性;
+ */
+- (void) asyncView:(JFAsyncView*)asyncView didClickedAtTextLayout:(JFTextLayout*)textLayout withHighlight:(JFTextAttachmentHighlight*)highlight
+{
+    if (highlight) {
+        NSLog(@"--------------------点击了cell[%ld]的高亮[%@]", asyncView.tag, highlight.linkData);
+    }
+}
+
+
+/**
+ 长按文本区;
+ 如果highlight为空，则点击的是整个textLayout文本区;
+ 
+ @param asyncView 当前异步加载视图;
+ @param textLayout 文本布局对象;
+ @param highlight 高亮属性;
+ */
+- (void) asyncView:(JFAsyncView*)asyncView didLongpressAtTextLayout:(JFTextLayout*)textLayout withHighlight:(JFTextAttachmentHighlight*)highlight {
+    NSLog(@"--------------------长按文本区cell[%ld]", asyncView.tag);
+}
+
+
 
 # pragma mark - UITableViewDelegate, UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -78,6 +74,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     APTransHashCellHeader* cell = [tableView dequeueReusableCellWithIdentifier:@"APTransHashCellHeader"];
     cell.layouts = self.dataSource[indexPath.row];
+    cell.asyncView.tag = indexPath.row;
+    cell.asyncView.delegate = self;
     return cell;
 }
 
@@ -99,6 +97,7 @@
         _tableView.backgroundView.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
         _tableView.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.delaysContentTouches = NO;
     }
     return _tableView;
 }
