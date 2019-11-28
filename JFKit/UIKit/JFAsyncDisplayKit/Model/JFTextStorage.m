@@ -88,10 +88,6 @@
     _kern = kern;
     [self setKern:kern atRange:NSMakeRange(0, self.text.length)];
 }
-//- (void)setBackgroundColor:(UIColor *)backgroundColor {
-//    _backgroundColor = backgroundColor;
-//    [self setBackgroundColor:backgroundColor atRange:NSMakeRange(0, self.text.length)];
-//}
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     _textAlignment = textAlignment;
     [self setTextAlignment:textAlignment atRange:NSMakeRange(0, self.text.length)];

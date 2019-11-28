@@ -31,7 +31,6 @@
  @param cancelled 退出操作的回调;
  */
 - (void) drawInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled {
-//    NSLog(@":::drawInContext::JFTextLayout, L(%.02lf),W(%.02lf), T(%.02lf),H(%.02lf)", self.left,self.width,self.top,self.height);
     CGContextSaveGState(context);
     // 绘制背景色、边框
     UIColor* bgColor = self.backgroundColor;
@@ -132,16 +131,7 @@
                     CGContextRestoreGState(context);
                     return;
                 }
-                CGRect highlightframe = [framevalue CGRectValue];
-//                highlightframe.origin.x += self.left;
-//                highlightframe.origin.y += self.top;
-                CGMutablePathRef path = CGPathCreateMutable();
-                CGPathAddRect(path, NULL, highlightframe);
-                CGContextAddPath(context, path);
-                CGContextFillPath(context);
-//                NSLog(@"========================绘制高亮,frame:[%@]", NSStringFromCGRect(highlightframe));
-                CGPathRelease(path);
-//                CGContextFillRect(context, highlightframe);
+                CGContextFillRect(context, [framevalue CGRectValue]);
             }
         }
     }
@@ -160,16 +150,21 @@
             CGContextRestoreGState(context);
             return;
         }
-        if ([self.ctLines indexOfObject:line] == 0) {
-//            NSLog(@"    =============-=-=-=-=-=-=-= line.origin[%@]", NSStringFromCGPoint(line.uiOrigin));
-        }
         CGContextSetTextPosition(context, line.ctOrigin.x, line.ctOrigin.y);
         // 绘制行
         CTLineDraw(line.ctLine, context);
         // 如果有附件,要绘制附件
         for (JFTextRun* run in line.ctRuns) {
+            if (cancelled()) {
+                CGContextRestoreGState(context);
+                return;
+            }
             // 图片附件
             for (JFTextAttachmentImage* imageAttachment in run.imageAttachments) {
+                if (cancelled()) {
+                    CGContextRestoreGState(context);
+                    return;
+                }
                 CGRect imageCtFrame = imageAttachment.ctFrame;
                 imageCtFrame.origin.y += -line.descent + (line.ascent + line.descent - imageCtFrame.size.height) * 0.5;
                 // 绘制背景色
@@ -192,16 +187,11 @@
                     CGContextDrawImage(context, imageCtFrame, image.CGImage);
                 }
             }
-            // 高亮附件
-//            for (JFTextAttachmentHighlight* highlight in run.highlightAttachments) {
-//                
-//            }
         }
     }
     
     CGContextRestoreGState(context);
 
-    
     // 测试时:绘制行边框
     if (self.debug) {
         CGContextSaveGState(context);
@@ -247,8 +237,6 @@
                               startY + self.insets.top,
                               self.width - self.insets.left - self.insets.right,
                               self.height - self.insets.top - self.insets.bottom);
-//    CGRect frame = self.contentFrame;
-//    NSLog(@"-=---=-=-=-=-=-relayouting::contentFrame[%@]", NSStringFromCGRect(frame));
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
     self.framePath = CGPathCreateWithRect(frame, NULL);
     self.frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _framePath, NULL);
@@ -289,11 +277,11 @@
             // 创建省略号富文本
             NSMutableAttributedString* tokenString = [[NSMutableAttributedString alloc] initWithString:JFEllipsesCharacter attributes:tokenAttri];
             if (layoutCancelled()) return;
+            //
             if (self.shouldShowMoreAct && self.showMoreActColor) {
                 [tokenString addAttribute:NSForegroundColorAttributeName value:self.showMoreActColor range:[JFEllipsesCharacter rangeOfString:@"全文"]];
                 // 添加高亮属性
                 JFTextAttachmentHighlight* highLight = [JFTextAttachmentHighlight new];
-//                highLight.isHighlight = YES;
                 highLight.linkData = @"全文";
                 highLight.normalBackgroundColor = self.textStorage.backgroundColor;
                 highLight.range = NSMakeRange(NSNotFound, 0);
@@ -331,7 +319,6 @@
                                              origin:linesOrigins[i]
                                               frame:frame
                                           cancelled:layoutCancelled];
-            
         }
         // 不需要截断,或未到截断行
         else {
@@ -341,7 +328,6 @@
                                               frame:frame
                                           cancelled:layoutCancelled];
         }
-        
 
         
         if (layoutCancelled()) return;
@@ -364,11 +350,9 @@
     CGFloat lastHeight = self.height;
     CGFloat width = ceil(suggustWidth + self.insets.left + self.insets.right);
     CGFloat height = ceil(suggustHeight + self.insets.top + self.insets.bottom);
-//    NSLog(@"    ---JFTextLayout relayouting 更新width,height；insets:%@", NSStringFromUIEdgeInsets(self.insets));
     [super updateWidthWithoutRelayouting:width];
     [super updateHeightWithoutRelayouting:height];
     
-
     // 实际高度有更新:ctLine的origin也要更新，因为它在绘制的时候是要翻转的
     if (lastHeight != self.height) {
             CGFloat heightRemain = lastHeight - self.height;

@@ -84,7 +84,6 @@
         }
     }
     _imageAttachments = images.copy;
-//    _highlightAttachments = highlights.copy;
     return self;
 }
 

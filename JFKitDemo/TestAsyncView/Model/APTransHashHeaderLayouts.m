@@ -12,7 +12,7 @@
 @implementation APTransHashHeaderLayouts
 - (instancetype) initWithModel:(NSDictionary*)model {
     if (self = [super init]) {
-    
+        CGFloat corner = 0;
         CGFloat bottom = 0;
         // 交易hash : trx_id
         JFTextStorage* s_trxIdT = [JFTextStorage storageWithText:NSLocalizedString(@"交易Hash", nil)];
@@ -24,26 +24,14 @@
         t_trxIdT.left = JFScaleWidth6(15);
         t_trxIdT.width = 200;
         t_trxIdT.height = 50;
-        t_trxIdT.debug = YES;
         [self addLayout:t_trxIdT];
         bottom = t_trxIdT.bottom;
         // 交易hash : trx_id
         NSString* trx_id = [NSString stringWithFormat:@"%@", model[@"trx_id"]];
         if (!IsNon(trx_id)) {
-//            NSRange range = [trx_id rangeOfString:@"8353"];
-//            JFTextAttachment
             JFTextStorage* s_trxId = [JFTextStorage storageWithText:trx_id];
             s_trxId.font = JFSystemFont(JFScaleWidth6(14));
             s_trxId.textColor = JFRGBAColor(0x333333, 1);
-//            s_trxId.backgroundColor = JFColorOrange;//JFColorWhite;
-            JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
-            highlight.range = NSMakeRange(24, 10);
-            highlight.normalTextColor = JFColorOrange;
-            highlight.highlightTextColor = JFColorWhite;
-            highlight.normalBackgroundColor = JFRGBAColor(0xeeeeee, 1);
-            highlight.highlightBackgroundColor = JFColorOrange;
-            highlight.linkData = @"www.baidu.com1";
-            [s_trxId addHighlight:highlight];
 
             s_trxId.textAlignment = NSTextAlignmentRight;
             JFTextLayout* t_trxId = [JFTextLayout textLayoutWithText:s_trxId];
@@ -54,7 +42,6 @@
             t_trxId.top = t_trxIdT.top;
             t_trxId.left = JFSCREEN_WIDTH - t_trxId.width - JFScaleWidth6(15);
             t_trxId.numberOfLines = 0;
-//            t_trxId.debug = YES;
             [self addLayout:t_trxId];
             if (bottom < t_trxId.bottom) {
                 bottom = t_trxId.bottom;
@@ -66,7 +53,6 @@
         s_createdAtT.textColor = JFRGBAColor(0xB3B3B3, 1);
         JFTextLayout* t_createdAtT = [JFTextLayout textLayoutWithText:s_createdAtT];
         t_createdAtT.backgroundColor = s_createdAtT.backgroundColor;
-        t_createdAtT.debug = YES;
         t_createdAtT.top = bottom + JFScaleWidth6(15);
         t_createdAtT.left = JFScaleWidth6(15);
         t_createdAtT.width = 200;
@@ -82,16 +68,6 @@
             JFTextStorage* s_createdAt = [JFTextStorage storageWithText:createdAt];
             s_createdAt.font = JFSystemFont(JFScaleWidth6(14));
             s_createdAt.textColor = JFRGBAColor(0x333333, 1);
-//            s_createdAt.backgroundColor = JFColorOrange;
-            
-            JFTextAttachmentHighlight* highlight = [JFTextAttachmentHighlight new];
-            highlight.range = NSMakeRange(5, 2);
-            highlight.normalTextColor = JFColorOrange;
-            highlight.highlightTextColor = JFColorWhite;
-            highlight.normalBackgroundColor = JFRGBAColor(0xeeeeee, 1);
-            highlight.highlightBackgroundColor = JFColorOrange;
-            highlight.linkData = @"www.baidu.com2";
-            [s_createdAt addHighlight:highlight];
 
             JFTextLayout* t_createdAt = [JFTextLayout textLayoutWithText:s_createdAt];
             t_createdAt.backgroundColor = s_createdAt.backgroundColor;
@@ -124,7 +100,6 @@
         t_expirationT.left = JFScaleWidth6(15);
         t_expirationT.width = 200;
         t_expirationT.height = 50;
-        t_expirationT.debug = YES;
 //        CGFloat corner = t_expirationT.height * 0.5;
 //        t_expirationT.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_expirationT];
@@ -166,44 +141,41 @@
         t_stateT.left = JFScaleWidth6(15);
         t_stateT.width = 200;
         t_stateT.height = 50;
-        t_stateT.debug = YES;
         [self addLayout:t_stateT];
         if (bottom < t_stateT.bottom) {
             bottom = t_stateT.bottom;
         }
         
-        JFTextStorage* s_state2 = [JFTextStorage storageWithText:NSLocalizedString(@"已执f行", nil)];
-        s_state2.font = JFSystemFont(JFScaleWidth6(12));
+        JFTextStorage* s_state2 = [JFTextStorage storageWithText:NSLocalizedString(@"已执行", nil)];
+        s_state2.font = JFSystemFont(JFScaleWidth6(14));
         s_state2.textColor = JFColorWhite;
         JFTextLayout* t_state2 = [JFTextLayout textLayoutWithText:s_state2];
         t_state2.backgroundColor = JFRGBAColor(0x13BD68, 1);
-        t_state2.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(10), JFScaleWidth6(2), JFScaleWidth6(10));
+        t_state2.insets = UIEdgeInsetsMake(JFScaleWidth6(3.35), JFScaleWidth6(10), JFScaleWidth6(3.35), JFScaleWidth6(10));
         t_state2.width = 200;
         t_state2.height = 50;
         t_state2.centerY = t_stateT.centerY;
         t_state2.right = JFSCREEN_WIDTH - JFScaleWidth6(15);
-        t_state2.debug = YES;
         NSLog(@"================t_state2.height[%.02lf]", t_state2.height);
-//        corner = t_state2.height * 0.5;
-//        t_state2.cornerRadius = CGSizeMake(corner, corner);
+        corner = t_state2.height * 0.5;
+        t_state2.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_state2];
 
 
         JFTextStorage* s_state1 = [JFTextStorage storageWithText:NSLocalizedString(@"ffffffffff", nil)];
-        s_state1.font = JFSystemFont(JFScaleWidth6(12));
+        s_state1.font = JFSystemFont(JFScaleWidth6(14));
         s_state1.textColor = JFColorWhite;
         JFTextLayout* t_state1 = [JFTextLayout textLayoutWithText:s_state1];
         t_state1.backgroundColor = JFRGBAColor(0x0AA3D1, 1);
 //        t_state1.backgroundColor = JFColorOrange;
         t_state1.insets = UIEdgeInsetsMake(JFScaleWidth6(2), JFScaleWidth6(10), JFScaleWidth6(2), JFScaleWidth6(10));
 //        t_state1.borderColor =
-        t_state1.debug = YES;
         t_state1.width = 200;
         t_state1.height = 50;
         t_state1.centerY = t_stateT.centerY;
         t_state1.right = t_state2.left - JFScaleWidth6(15);
-//        corner = t_state1.height * 0.5;
-//        t_state1.cornerRadius = CGSizeMake(corner, corner);
+        corner = t_state1.height * 0.5;
+        t_state1.cornerRadius = CGSizeMake(corner, corner);
         [self addLayout:t_state1];
 
 
@@ -245,7 +217,6 @@
         s_block_idT.textColor = JFRGBAColor(0xB3B3B3, 1);
         s_block_idT.backgroundColor = JFColorWhite;
         JFTextLayout* t_block_idT = [JFTextLayout textLayoutWithText:s_block_idT];
-        t_block_idT.debug = YES;
         t_block_idT.top = bottom + JFScaleWidth6(15);
         t_block_idT.left = JFScaleWidth6(15);
         t_block_idT.width = 200;
@@ -503,5 +474,31 @@
     }
     return self;
 }
+
+
+
+- (instancetype) initQuanwenLayouts {
+    if (self = [super init]) {
+        JFTextStorage* storage = [JFTextStorage storageWithText:@"哦哦啊见谁都放After while absolutely假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机"];
+        storage.font = JFSystemFont(14);
+        storage.textColor = JFRGBAColor(0x333333, 1);
+        storage.lineSpacing = 0.5;
+//        storage.kern = 0.2;
+        JFTextLayout* layout = [JFTextLayout textLayoutWithText:storage];
+        layout.numberOfLines = 4;
+        layout.top = JFScaleWidth6(15);
+        layout.left = JFScaleWidth6(15);
+        layout.width = JFSCREEN_WIDTH - JFScaleWidth6(15 * 2);
+        layout.height = 1000;
+        layout.showMoreActColor = JFColorOrange;
+        [self addLayout:layout];
+        
+        self.viewFrame = CGRectMake(0, 0, JFSCREEN_WIDTH, layout.bottom + JFScaleWidth6(15));
+        
+        
+    }
+    return self;
+}
+
 
 @end

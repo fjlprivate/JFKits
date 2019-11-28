@@ -61,18 +61,15 @@
         return;
     }
     [self.layouts addObject:layout];
-//    [self resizeContentSize];
 }
 - (void) removeLayout:(JFLayout*)layout {
     if (!layout) {
         return;
     }
     [self.layouts removeObject:layout];
-//    [self resizeContentSize];
 }
 - (void) removeAllLayouts {
     [self.layouts removeAllObjects];
-//    [self resizeContentSize];
 }
 - (void) replaceLayout:(JFLayout*)layout atIndex:(NSInteger)index {
     if (IsNon(self.layouts)) {
@@ -80,7 +77,6 @@
     }
     if (index >= 0 && index <= self.layouts.count) {
         [self.layouts replaceObjectAtIndex:index withObject:layout];
-//        [self resizeContentSize];
     }
 }
 - (NSInteger) indexForLayout:(JFLayout*)layout {
@@ -95,22 +91,6 @@
 }
 
 
-
-
-//# pragma mark - 计算内容尺寸
-//- (void) resizeContentSize {
-//    CGFloat w = 0;
-//    CGFloat h = 0;
-//    for (JFLayout* layout in self.layouts) {
-//        if (w < layout.right) {
-//            w = layout.right;
-//        }
-//        if (h < layout.bottom) {
-//            h = layout.bottom;
-//        }
-//    }
-//    self.contentSize = CGSizeMake(w, h);
-//}
 
 # pragma mark - getter
 - (NSMutableArray<JFLayout *> *)layouts {

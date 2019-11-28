@@ -46,8 +46,8 @@
             filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "365"
-            endingLineNumber = "365"
+            startingLineNumber = "350"
+            endingLineNumber = "350"
             landmarkName = "-relayouting"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "JFKitDemo/TestAsyncView/Model/APTransHashHeaderLayouts.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
             landmarkName = "-initWithModel:"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,8 +78,8 @@
             filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "127"
-            endingLineNumber = "127"
+            startingLineNumber = "126"
+            endingLineNumber = "126"
             landmarkName = "-drawInContext:cancelled:"
             landmarkType = "7">
          </BreakpointContent>

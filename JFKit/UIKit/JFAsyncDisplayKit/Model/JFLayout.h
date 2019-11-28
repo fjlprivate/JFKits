@@ -62,19 +62,9 @@
 @property (nonatomic, assign, readonly) CGRect frame;
 @property (nonatomic, assign, readonly) CGRect contentFrame;
 
-// 视图在界面中的位置
-//@property (nonatomic, assign, readonly) CGPoint viewOrigin;
-// 视图的初始尺寸
-//@property (nonatomic, assign, readonly) CGSize viewSize;
-// 建议尺寸;
-//@property (nonatomic, assign, readonly) CGSize suggustSize;
-
 // 由子类实现
 - (void) relayouting;
-
-// 更新frame和contentFrame
-//- (void) updateFrame;
-
+// 子类更新变量值
 - (void) updateWidthWithoutRelayouting:(CGFloat)width;
 - (void) updateHeightWithoutRelayouting:(CGFloat)height;
 

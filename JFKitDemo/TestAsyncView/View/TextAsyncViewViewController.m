@@ -20,6 +20,9 @@
 - (void) refreshDatas {
     NSMutableArray* list = @[].mutableCopy;
     [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
@@ -96,7 +99,7 @@
         _tableView.tableFooterView = [UIView new];
         _tableView.backgroundView.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
         _tableView.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+//        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.delaysContentTouches = NO;
     }
     return _tableView;

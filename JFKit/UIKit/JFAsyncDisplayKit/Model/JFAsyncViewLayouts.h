@@ -29,11 +29,6 @@
 - (void) resetHighlightWhichRaised;
 
 
-//// 在指定坐标point是否存在高亮属性
-//- (JFTextAttachmentHighlight*) containsHighlightAtPoint:(CGPoint)point;
-//// 更新高亮属性状态
-//- ()
-
 # pragma mark - ** 必须使用下面的n个方法来[增、减、更新]layout
 - (void) addLayout:(JFLayout*)layout;
 - (void) removeLayout:(JFLayout*)layout;
@@ -42,17 +37,6 @@
 
 - (NSInteger) indexForLayout:(JFLayout*)layout;
 @property (nonatomic, strong) NSMutableArray<JFLayout*>* layouts;
-
-
-
-
-
-
-///**
-// 所有layouts内容的尺寸，包括间距;  --------已废弃
-// 自动设置;
-// */
-//@property (nonatomic, assign) CGSize contentSize;
 
 
 @end

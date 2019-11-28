@@ -9,14 +9,6 @@
 #import "JFTextAttachment.h"
 
 @implementation JFTextAttachmentImage
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-    }
-    return self;
-}
-
 @end
 
 @implementation JFTextAttachmentHighlight

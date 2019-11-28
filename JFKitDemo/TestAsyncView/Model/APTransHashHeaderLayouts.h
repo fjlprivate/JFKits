@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithModel:(NSDictionary*)model;
 @property (nonatomic, assign) CGRect sectionFrame;
 @property (nonatomic, assign) CGRect lineFrame;
+
+- (instancetype) initQuanwenLayouts;
 @end
 
 NS_ASSUME_NONNULL_END
