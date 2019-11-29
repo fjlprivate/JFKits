@@ -1,5 +1,6 @@
 # '异步图文混排框架' ： JFAsyncDisplayKit
 
+!(image)[https://github.com/fjlprivate/JFKits/blob/master/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20-%202019-11-29%20at%2017.34.22.png]
 
 ## 用法
 
