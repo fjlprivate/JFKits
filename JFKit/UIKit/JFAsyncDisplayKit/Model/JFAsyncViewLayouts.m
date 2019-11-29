@@ -18,8 +18,8 @@
 
 # pragma mark - 高亮相关
 
-// 点亮指定坐标point的高亮;点亮成功返回:YES;否则返回:NO;
-- (BOOL) raiseHighlightAtPoint:(CGPoint)point {
+// 点亮指定坐标point的高亮;点亮成功返回:JFTextAttachmentHighlight;否则返回:nil;
+- (JFTextAttachmentHighlight*) raiseHighlightAtPoint:(CGPoint)point {
     for (JFLayout* layout in self.layouts) {
         if ([layout isKindOfClass:[JFTextLayout class]]) {
             JFTextLayout* textLayout = (JFTextLayout*)layout;
@@ -28,27 +28,35 @@
                     CGRect frame = [frameValue CGRectValue];
                     if (CGRectContainsPoint(frame, point)) {
                         hightlight.isHighlight = YES;
-                        [textLayout.textStorage setTextColor:hightlight.highlightTextColor atRange:hightlight.range];
+                        // 更新高亮附件区间的富文本字符串的颜色
+                        if (!([hightlight.linkData isKindOfClass:[NSString class]] && [hightlight.linkData isEqualToString:JFTextViewAll])) {
+                            [textLayout.textStorage setTextColor:hightlight.highlightTextColor atRange:hightlight.range];
+                        }
                         // 引发relayouting
-                        textLayout.textStorage = textLayout.textStorage;
+//                        textLayout.textStorage = textLayout.textStorage;
+                        textLayout.height = 20000;
                         self.highlightedTextLayout = textLayout;
                         self.selectedHighlight = hightlight;
-                        return YES;
+                        return hightlight;
                     }
                 }
             }
         }
     }
-    return NO;
+    return nil;
 }
 
 // 恢复被点亮的高亮
 - (void) resetHighlightWhichRaised {
     if (self.highlightedTextLayout && self.selectedHighlight) {
         self.selectedHighlight.isHighlight = NO;
-        [self.highlightedTextLayout.textStorage setTextColor:self.selectedHighlight.normalTextColor atRange:self.selectedHighlight.range];
+        // 更新高亮附件区间的富文本字符串的颜色
+        if (!([self.selectedHighlight.linkData isKindOfClass:[NSString class]] && [self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
+            [self.highlightedTextLayout.textStorage setTextColor:self.selectedHighlight.normalTextColor atRange:self.selectedHighlight.range];
+        }
         // 引发relayouting
-        self.highlightedTextLayout.textStorage = self.highlightedTextLayout.textStorage;
+        self.highlightedTextLayout.height = 20000;
+//        self.highlightedTextLayout.textStorage = self.highlightedTextLayout.textStorage;
         self.highlightedTextLayout = nil;
         self.selectedHighlight = nil;
     }

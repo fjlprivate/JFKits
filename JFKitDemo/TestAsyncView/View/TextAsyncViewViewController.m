@@ -21,10 +21,13 @@
     NSMutableArray* list = @[].mutableCopy;
     [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
 
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
 //    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
@@ -48,6 +51,20 @@
 {
     if (highlight) {
         NSLog(@"--------------------点击了cell[%ld]的高亮[%@]", asyncView.tag, highlight.linkData);
+        // 点击了'全文'
+        if ([highlight.linkData isKindOfClass:[NSString class]] && [highlight.linkData isEqualToString:JFTextViewAll]) {
+            APTransHashHeaderLayouts* layouts = [self.dataSource objectAtIndex:asyncView.tag];
+            [layouts spreadUp];
+//            [self.tableView reloadData];
+//            [UIView performWithoutAnimation:^{
+//                [asyncView.layer setNeedsDisplay];
+//            }];
+//            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:asyncView.tag inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+//            });
+        }
+        
+        
     }
 }
 

@@ -479,25 +479,34 @@
 
 - (instancetype) initQuanwenLayouts {
     if (self = [super init]) {
-        JFTextStorage* storage = [JFTextStorage storageWithText:@"哦哦啊见谁都放After while absolutely假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机哦哦啊见谁都放假哦啊的见佛案件欧舒丹金佛氨基酸的佛奥京东方骄傲的减肥哦啊哦啊四季豆发酵的佛OA打飞机"];
+        JFTextStorage* storage = [JFTextStorage storageWithText:@"我们现在有一种很怪异的实现方式，就是不管是中文，英文还是中英文混合的CTLine，在字体大小确定的情况下，设定每一行的高度为一个固定值，这样子在绘制的时候一行一行的去CTLineDraw绘制，绘制之前再微调Y值，反正每一行的行高都是确定的，绘制起来也方便，只是感觉这种方式怪怪的，非主流。不过这样子调整的话，因为CoreText本身就是英文字符比中文字符高，排版看起来不大美观，估计要美观的话只好指定每一行的确切高度了。我们现在在处理时如果调整的字体大小，那么指定的行高需要重新再设置，感觉有点麻烦，不知你有没其他好方案？"];
         storage.font = JFSystemFont(14);
         storage.textColor = JFRGBAColor(0x333333, 1);
         storage.lineSpacing = 0.5;
 //        storage.kern = 0.2;
         JFTextLayout* layout = [JFTextLayout textLayoutWithText:storage];
         layout.numberOfLines = 4;
+        layout.showMoreActColor = JFColorOrange.copy;
         layout.top = JFScaleWidth6(15);
         layout.left = JFScaleWidth6(15);
         layout.width = JFSCREEN_WIDTH - JFScaleWidth6(15 * 2);
         layout.height = 1000;
-        layout.showMoreActColor = JFColorOrange;
         [self addLayout:layout];
         
-        self.viewFrame = CGRectMake(0, 0, JFSCREEN_WIDTH, layout.bottom + JFScaleWidth6(15));
+        self.viewFrame = CGRectMake(0, 0, JFSCREEN_WIDTH, layout.bottom + JFScaleWidth6(13));
         
         
     }
     return self;
+}
+// 展开全文
+- (void) spreadUp {
+    for (JFTextLayout* textLayout in self.layouts) {
+        textLayout.shouldShowMoreAct = NO;
+        textLayout.numberOfLines = 0;
+        textLayout.height = 1000;
+        self.viewFrame = CGRectMake(0, 0, JFSCREEN_WIDTH, textLayout.bottom + JFScaleWidth6(13));
+    }
 }
 
 

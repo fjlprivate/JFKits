@@ -23,8 +23,8 @@
 @property (nonatomic, weak) JFTextLayout* highlightedTextLayout;
 @property (nonatomic, weak) JFTextAttachmentHighlight* selectedHighlight;
 
-// 点亮指定坐标point的高亮;点亮成功返回:YES;否则返回:NO;
-- (BOOL) raiseHighlightAtPoint:(CGPoint)point;
+// 点亮指定坐标point的高亮;点亮成功返回:JFTextAttachmentHighlight;否则返回:nil;
+- (JFTextAttachmentHighlight*) raiseHighlightAtPoint:(CGPoint)point;
 // 恢复被点亮的高亮
 - (void) resetHighlightWhichRaised;
 

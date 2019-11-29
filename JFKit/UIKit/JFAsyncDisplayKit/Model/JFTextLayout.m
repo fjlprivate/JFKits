@@ -263,57 +263,10 @@
         CTLineRef line = CFArrayGetValueAtIndex(lines, i);
         JFTextLine* ctLine = nil;
         
-        // 需要截断,且已到截断行
+        // 需要截断,且已到截断行 : 生成并替换截断行
         if (i == numberOfLines - 1 && numberOfLines < linesCount) {
-            // 省略号
-            NSString* JFEllipsesCharacter = self.shouldShowMoreAct ? @"\u2026全文" : @"\u2026";
-            CFRange lastLineRange = CTLineGetStringRange(line);
-            // 截断模式:截末尾
-            CTLineTruncationType truncationType = kCTLineTruncationEnd;
-            // 最后一个截断的字符的位置
-            NSUInteger truncationPosition = lastLineRange.location + lastLineRange.length - 1;
-            // 获取最后一个字符的属性
-            NSDictionary* tokenAttri = [self.textStorage.text attributesAtIndex:truncationPosition effectiveRange:NULL];
-            // 创建省略号富文本
-            NSMutableAttributedString* tokenString = [[NSMutableAttributedString alloc] initWithString:JFEllipsesCharacter attributes:tokenAttri];
+            CTLineRef truncatedLine = [self truncatedLine:line frame:frame cancelled:layoutCancelled];
             if (layoutCancelled()) return;
-            //
-            if (self.shouldShowMoreAct && self.showMoreActColor) {
-                [tokenString addAttribute:NSForegroundColorAttributeName value:self.showMoreActColor range:[JFEllipsesCharacter rangeOfString:@"全文"]];
-                // 添加高亮属性
-                JFTextAttachmentHighlight* highLight = [JFTextAttachmentHighlight new];
-                highLight.linkData = @"全文";
-                highLight.normalBackgroundColor = self.textStorage.backgroundColor;
-                highLight.range = NSMakeRange(NSNotFound, 0);
-                [self.textStorage addHighlight:highLight];
-                [tokenString addAttribute:JFTextAttachmentHighlightName value:highLight range:[JFEllipsesCharacter rangeOfString:@"全文"]];
-            }
-            if (layoutCancelled()) return;
-            // 生成line
-            CTLineRef truncationToken = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)tokenString);
-            // 将当前行富文本复制一份
-            NSMutableAttributedString* truncationString = [[self.textStorage.text attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)] mutableCopy];
-            // 去掉末尾的空白字符
-            if (lastLineRange.length > 0) {
-                unichar lastCharacter = [[truncationString string] characterAtIndex:lastLineRange.length - 1];
-                NSCharacterSet* whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-                if ([whiteSpaceSet characterIsMember:lastCharacter]) {
-                    [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
-                }
-            }
-            // 拼接省略号
-            [truncationString appendAttributedString:tokenString];
-            if (layoutCancelled()) return;
-
-            // 将拼接后的string转成CTLine
-            CTLineRef truncationLine = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)truncationString);
-            // 截断
-            CTLineRef truncatedLine = CTLineCreateTruncatedLine(truncationLine, frame.size.width, truncationType, truncationToken);
-            if (!truncatedLine) {
-                truncatedLine = CFRetain(truncationToken);
-            }
-            CFRelease(truncationLine);
-            CFRelease(truncationToken);
             // 创建 JFTextLine
             ctLine = [JFTextLine textLineWithCTLine:truncatedLine
                                              origin:linesOrigins[i]
@@ -328,7 +281,6 @@
                                               frame:frame
                                           cancelled:layoutCancelled];
         }
-
         
         if (layoutCancelled()) return;
         // 创建JFTextLine直接退出
@@ -370,10 +322,121 @@
 
 // 清理所有高亮附件的frames
 - (void) clearHighlightsFrames {
+    NSMutableArray* list = @[].mutableCopy;
     for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
-        [highlight.uiFrames removeAllObjects];
+        if ([highlight.linkData isKindOfClass:[NSString class]] && [highlight.linkData isEqualToString:JFTextViewAll]) {
+            [list addObject:highlight];
+        }
     }
+    [self.textStorage.highlights removeObjectsInArray:list];
+//    for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
+//        [highlight.uiFrames removeAllObjects];
+//    }
 }
+
+- (CTLineRef) truncatedLine:(CTLineRef)line frame:(CGRect)frame cancelled:(IsCancelled)cancelled {
+    // 获取最后一行在全文本的range
+    CFRange lastLineRange = CTLineGetStringRange(line);
+    // 获取最后一个字符的属性
+    NSDictionary* tokenAttri = [self.textStorage.text attributesAtIndex:lastLineRange.location + lastLineRange.length - 1 effectiveRange:NULL];
+    // 省略号
+    NSString* JFEllipsesCharacter = [NSString stringWithFormat:@"%@%@", @"\u2026", self.shouldShowMoreAct ? JFTextViewAll : @""];
+    // 创建省略号富文本
+    NSMutableAttributedString* tokenString = [[NSMutableAttributedString alloc] initWithString:JFEllipsesCharacter attributes:tokenAttri];
+    if (cancelled()) return nil;
+    
+    if (self.shouldShowMoreAct) {
+        // 添加高亮属性
+        JFTextAttachmentHighlight* highLight = [JFTextAttachmentHighlight new];
+        highLight.linkData = JFTextViewAll;
+        highLight.normalBackgroundColor = self.textStorage.backgroundColor;
+        highLight.highlightBackgroundColor = self.textStorage.backgroundColor;
+        if (self.showMoreActColor) {
+            highLight.normalTextColor = self.showMoreActColor;
+            highLight.highlightTextColor = tokenAttri[NSForegroundColorAttributeName];//self.showMoreActColor;
+        } else {
+            highLight.normalTextColor = tokenAttri[NSForegroundColorAttributeName];
+            highLight.highlightTextColor = tokenAttri[NSForegroundColorAttributeName];
+        }
+        // 因为'全文'高亮总是新创建的，所以无法区分isHighlight;固定显示默认色
+        [tokenString addAttribute:NSForegroundColorAttributeName
+                            value:highLight.normalTextColor
+                            range:[JFEllipsesCharacter rangeOfString:JFTextViewAll]];
+
+        highLight.range = NSMakeRange(NSNotFound, JFTextViewAll.length);
+        // 添加高亮到textStorage;但location==NSNotfound,所以还要添加到attributeString中,让生成run时能取到这个highlight
+        [self.textStorage addHighlight:highLight];
+        [tokenString addAttribute:JFTextAttachmentHighlightName value:highLight range:[JFEllipsesCharacter rangeOfString:JFTextViewAll]];
+    }
+    if (cancelled()) return nil;
+    // 生成line : '…全文'
+    CTLineRef truncationToken = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)tokenString);
+    
+    
+    // 将最后一行富文本复制一份出来
+    NSAttributedString* originAttriString = [self.textStorage.text attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)];
+    NSMutableAttributedString* truncationString = [[NSMutableAttributedString alloc] initWithAttributedString:originAttriString];
+    // 去掉末尾的空白字符 ---- 留给业务层去处理
+//    while (truncationString.length > 0) {
+//        unichar lastCharacter = [[truncationString string] characterAtIndex:truncationString.length - 1];
+//        NSCharacterSet* whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+//        if ([whiteSpaceSet characterIsMember:lastCharacter]) {
+//            [truncationString deleteCharactersInRange:NSMakeRange(truncationString.length - 1, 1)];
+//        }
+//        else {
+//            break;
+//        }
+//    }
+    
+//    if (lastLineRange.length > 0) {
+//        unichar lastCharacter = [[truncationString string] characterAtIndex:lastLineRange.length - 1];
+//        NSCharacterSet* whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+//        if ([whiteSpaceSet characterIsMember:lastCharacter]) {
+//            [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
+//        }
+//    }
+    // 拼接省略号
+    [truncationString appendAttributedString:tokenString];
+    if (cancelled()) {
+        CFRelease(truncationToken);
+        return nil;
+    }
+
+    
+    // 将拼接后的string转成CTLine
+    CTLineRef truncationLine = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)truncationString);
+    // 截断
+    CTLineRef truncatedLine = CTLineCreateTruncatedLine(truncationLine, frame.size.width, kCTLineTruncationEnd, truncationToken);
+    /* 更新'全文'高亮的location */
+    CFArrayRef runs = CTLineGetGlyphRuns(truncatedLine);
+    for (int i = 0; i < CFArrayGetCount(runs); i++) {
+        if (cancelled()) {
+            CFRelease(truncationLine);
+            CFRelease(truncationToken);
+            return nil;
+        }
+        CTRunRef run = CFArrayGetValueAtIndex(runs, i);
+        CFDictionaryRef attributes = CTRunGetAttributes(run);
+        NSDictionary* attriDic = (__bridge NSDictionary*)attributes;
+        JFTextAttachmentHighlight* highlight = attriDic[JFTextAttachmentHighlightName];
+        if (highlight && highlight.range.location == NSNotFound) {
+            CFRange runRange = CTRunGetStringRange(run);
+            highlight.range = NSMakeRange(runRange.location + lastLineRange.location, highlight.range.length);
+            break;
+        }
+
+    }
+    
+    
+    if (!truncatedLine) {
+        truncatedLine = CFRetain(truncationToken);
+    }
+    CFRelease(truncationLine);
+    CFRelease(truncationToken);
+    
+    return truncatedLine;
+}
+
 
 
 # pragma mark - setter
@@ -385,6 +448,10 @@
     _numberOfLines = numberOfLines;
     [self relayouting];
 }
+//- (void)setShowMoreActColor:(UIColor *)showMoreActColor {
+//    _showMoreActColor = showMoreActColor;
+//    [self relayouting];
+//}
 
 
 # pragma mark - getter

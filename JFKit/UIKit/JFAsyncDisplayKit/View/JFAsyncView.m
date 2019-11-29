@@ -19,7 +19,7 @@
 @property (nonatomic, strong) NSMutableArray* labelsDisplay;
 @property (nonatomic, strong) NSMutableArray* imageViewsDisplay;
 @property (nonatomic, strong) JFAsyncFlag* flag;
-@property (nonatomic, assign) BOOL selectedHighlight;
+@property (nonatomic, weak) JFTextAttachmentHighlight* selectedHighlight;
 @end
 
 @implementation JFAsyncView
@@ -38,6 +38,9 @@
     UITouch* touch = touches.anyObject;
     CGPoint location = [touch locationInView:self];
     self.selectedHighlight = [self.layouts raiseHighlightAtPoint:location];
+//    if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
+//        [self.layer setNeedsDisplay];
+//    }
     if (self.selectedHighlight) {
         [self.layer setNeedsDisplay];
     }
@@ -51,16 +54,26 @@
             [self.delegate asyncView:self didClickedAtTextLayout:textLayout withHighlight:highlight];
         }
         [self.layouts resetHighlightWhichRaised];
-        [self.layer setNeedsDisplay];
-        self.selectedHighlight = NO;
+//        if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
+//            [self.layer setNeedsDisplay];
+//        }
+        if (self.selectedHighlight) {
+            [self.layer setNeedsDisplay];
+        }
+        self.selectedHighlight = nil;
     }
 }
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.selectedHighlight) {
         [self.layouts resetHighlightWhichRaised];
-        [self.layer setNeedsDisplay];
-        self.selectedHighlight = NO;
+//        if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
+//            [self.layer setNeedsDisplay];
+//        }
+        if (self.selectedHighlight) {
+            [self.layer setNeedsDisplay];
+        }
+        self.selectedHighlight = nil;
     }
 }
 

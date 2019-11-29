@@ -11,6 +11,9 @@
 #import "JFTextStorage.h"
 
 
+static NSString* const JFTextViewAll = @"全文";
+static NSString* const JFTextViewLimit = @"收起";
+
 @interface JFTextLayout : JFLayout
 
 /**

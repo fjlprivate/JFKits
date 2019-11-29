@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGRect lineFrame;
 
 - (instancetype) initQuanwenLayouts;
+// 展开全文
+- (void) spreadUp;
 @end
 
 NS_ASSUME_NONNULL_END
