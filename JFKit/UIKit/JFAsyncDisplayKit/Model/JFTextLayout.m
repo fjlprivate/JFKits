@@ -150,8 +150,8 @@
             CGContextRestoreGState(context);
             return;
         }
-        CGContextSetTextPosition(context, line.ctOrigin.x, line.ctOrigin.y);
         // 绘制行
+        CGContextSetTextPosition(context, line.ctOrigin.x, line.ctOrigin.y);
         CTLineDraw(line.ctLine, context);
         // 如果有附件,要绘制附件
         for (JFTextRun* run in line.ctRuns) {
@@ -166,7 +166,7 @@
                     return;
                 }
                 CGRect imageCtFrame = imageAttachment.ctFrame;
-                imageCtFrame.origin.y += -line.descent + (line.ascent + line.descent - imageCtFrame.size.height) * 0.5;
+//                imageCtFrame.origin.y += -line.descent + (line.ascent + line.descent - imageCtFrame.size.height) * 0.5;
                 // 绘制背景色
                 if (imageAttachment.backgroundColor) {
                     CGContextSetFillColorWithColor(context, imageAttachment.backgroundColor.CGColor);
@@ -191,6 +191,25 @@
     }
     
     CGContextRestoreGState(context);
+    
+//    CGContextSaveGState(context);
+//    for (JFTextAttachmentImage* imageAttachment in self.textStorage.images) {
+//        UIImage* image = nil;
+//        if ([imageAttachment.image isKindOfClass:[UIImage class]]) {
+//            image = imageAttachment.image;
+//        }
+//        else if ([imageAttachment.image isKindOfClass:[NSString class]]) {
+//            image = [UIImage imageNamed:imageAttachment.image];
+//        }
+//        if (image) {
+//            [image drawInRect:imageAttachment.uiFrame];
+////            CGContextDrawImage(context, imageCtFrame, image.CGImage);
+//        }
+//
+//    }
+//    CGContextRestoreGState(context);
+
+    
 
     // 测试时:绘制行边框
     if (self.debug) {
@@ -236,7 +255,7 @@
     CGRect frame = CGRectMake(startX + self.insets.left,
                               startY + self.insets.top,
                               self.width - self.insets.left - self.insets.right,
-                              self.height - self.insets.top - self.insets.bottom);
+                              self.height - self.insets.top - self.insets.bottom + 1);
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
     self.framePath = CGPathCreateWithRect(frame, NULL);
     self.frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _framePath, NULL);
@@ -302,18 +321,29 @@
     CGFloat lastHeight = self.height;
     CGFloat width = ceil(suggustWidth + self.insets.left + self.insets.right);
     CGFloat height = ceil(suggustHeight + self.insets.top + self.insets.bottom);
+
     [super updateWidthWithoutRelayouting:width];
     [super updateHeightWithoutRelayouting:height];
     
     // 实际高度有更新:ctLine的origin也要更新，因为它在绘制的时候是要翻转的
     if (lastHeight != self.height) {
-            CGFloat heightRemain = lastHeight - self.height;
-            for (JFTextLine* line in ctLines) {
+        CGFloat heightRemain = lastHeight - self.height;
+        for (JFTextLine* line in ctLines) {
+            if (layoutCancelled()) return;
+            CGPoint origin = line.ctOrigin;
+            origin.y -= heightRemain;
+            line.ctOrigin = origin;
+            // 所有图片附件的ctOrigin也要更新
+            for (JFTextRun* run in line.ctRuns) {
                 if (layoutCancelled()) return;
-                CGPoint origin = line.ctOrigin;
-                origin.y -= heightRemain;
-                line.ctOrigin = origin;
+                for (JFTextAttachmentImage* image in run.imageAttachments) {
+                    if (layoutCancelled()) return;
+                    CGRect ctFrame = image.ctFrame;
+                    ctFrame.origin.y -= heightRemain;
+                    image.ctFrame = ctFrame;
+                }
             }
+        }
     }
         
     // 保存行对象

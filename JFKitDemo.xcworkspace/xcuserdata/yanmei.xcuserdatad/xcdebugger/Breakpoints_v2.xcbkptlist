@@ -55,22 +55,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "DB8806F6-63BD-4B50-A967-0E5C7542A022"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "126"
-            endingLineNumber = "126"
-            landmarkName = "-drawInContext:cancelled:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "67C4083E-B18B-48A6-86E4-18728FFF166A"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -97,6 +81,86 @@
             startingLineNumber = "28"
             endingLineNumber = "28"
             landmarkName = "-raiseHighlightAtPoint:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "14A1C681-4B86-4345-963A-0C6CA429D468"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "148"
+            endingLineNumber = "148"
+            landmarkName = "-drawInContext:cancelled:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "14A1C681-4B86-4345-963A-0C6CA429D468 - e7ce02e76ede0bf4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[JFTextLayout drawInContext:cancelled:]"
+                  moduleName = "JFKitDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yanmei/fjl/JFKitDemo/JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "148"
+                  endingLineNumber = "148"
+                  offsetFromSymbolStart = "3060">
+               </Location>
+               <Location
+                  uuid = "14A1C681-4B86-4345-963A-0C6CA429D468 - e7ce02e76ede0bf4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[JFTextLayout drawInContext:cancelled:]"
+                  moduleName = "JFKitDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yanmei/fjl/JFKitDemo/JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "148"
+                  endingLineNumber = "148"
+                  offsetFromSymbolStart = "3088">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "4A16B3F5-6CC0-4056-8F78-70C5059C9E3D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
+            landmarkName = "-relayouting"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "93BCE173-8F8C-491E-854A-15F4F5F90604"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "-relayouting"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

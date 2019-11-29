@@ -34,6 +34,7 @@
 @property (nonatomic, assign, readonly) CGFloat leading;
 @property (nonatomic, assign, readonly) CGFloat width;
 
+- (void) resetRuns;
 @property (nonatomic, strong, readonly) NSArray<JFTextRun*>* ctRuns;
 
 @end

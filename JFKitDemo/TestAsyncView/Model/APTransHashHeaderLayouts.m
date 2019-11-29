@@ -37,11 +37,11 @@
             JFTextLayout* t_trxId = [JFTextLayout textLayoutWithText:s_trxId];
             t_trxId.backgroundColor = s_trxId.backgroundColor;
             t_trxId.insets = UIEdgeInsetsMake(JFScaleWidth6(0), JFScaleWidth6(0), JFScaleWidth6(0), JFScaleWidth6(2));
+            t_trxId.numberOfLines = 0;
             t_trxId.width = JFScaleWidth6(231);
             t_trxId.height = 200;
             t_trxId.top = t_trxIdT.top;
             t_trxId.left = JFSCREEN_WIDTH - t_trxId.width - JFScaleWidth6(15);
-            t_trxId.numberOfLines = 0;
             [self addLayout:t_trxId];
             if (bottom < t_trxId.bottom) {
                 bottom = t_trxId.bottom;
@@ -145,7 +145,7 @@
         if (bottom < t_stateT.bottom) {
             bottom = t_stateT.bottom;
         }
-        
+
         JFTextStorage* s_state2 = [JFTextStorage storageWithText:NSLocalizedString(@"已执行", nil)];
         s_state2.font = JFSystemFont(JFScaleWidth6(14));
         s_state2.textColor = JFColorWhite;
@@ -479,10 +479,41 @@
 
 - (instancetype) initQuanwenLayouts {
     if (self = [super init]) {
-        JFTextStorage* storage = [JFTextStorage storageWithText:@"我们现在有一种很怪异的实现方式，就是不管是中文，英文还是中英文混合的CTLine，在字体大小确定的情况下，设定每一行的高度为一个固定值，这样子在绘制的时候一行一行的去CTLineDraw绘制，绘制之前再微调Y值，反正每一行的行高都是确定的，绘制起来也方便，只是感觉这种方式怪怪的，非主流。不过这样子调整的话，因为CoreText本身就是英文字符比中文字符高，排版看起来不大美观，估计要美观的话只好指定每一行的确切高度了。我们现在在处理时如果调整的字体大小，那么指定的行高需要重新再设置，感觉有点麻烦，不知你有没其他好方案？"];
+        JFTextStorage* storage = [JFTextStorage storageWithText:@"我们现jjf在有一种很怪异的实现方式，就是不管是中文，英文还是jhiy中英文混合的CTLinejq，在字体大小确定的情况下，设定每一行的高度为一个固定值，这样子在绘制的时候一行一行的去CTLineDraw绘制，绘制之前再微调Y值，反正每一行的行高都是确定的，绘制起来也方便，只是感觉这种方式怪怪的，非主流。不过这样子调整的话，因为CoreText本身就是英文字符比中文字符高，排版看起来不大美观，估计要美观的话只好指定每一行的确切高度了。我们现在在处理时如果调整的字体大小，那么指定的行高需要重新再设置，感觉有点麻烦，不知你有没其他好方案？"];
         storage.font = JFSystemFont(14);
         storage.textColor = JFRGBAColor(0x333333, 1);
-        storage.lineSpacing = 0.5;
+        storage.lineSpacing = 3;
+        
+        // icon_robot_orange
+        JFTextAttachmentImage* img1 = [JFTextAttachmentImage new];
+        img1.image = [UIImage imageNamed:@"icon_robot_orange"];
+        img1.imageSize = CGSizeMake(JFScaleWidth6(15), JFScaleWidth6(15));
+        img1.index = 4;
+        img1.kern = 1;
+//        img1.backgroundColor = JFRGBAColor(0x333333, 1);
+        [storage addImage:img1];
+        // icon_tool
+        JFTextAttachmentImage* img2 = [JFTextAttachmentImage new];
+        img2.image = [UIImage imageNamed:@"icon_tool"];
+        img2.imageSize = CGSizeMake(JFScaleWidth6(15), JFScaleWidth6(15));
+        img2.index = 33;
+        img2.kern = 1;
+        [storage addImage:img2];
+        // personal_icon_attention
+        JFTextAttachmentImage* img3 = [JFTextAttachmentImage new];
+        img3.image = [UIImage imageNamed:@"personal_icon_attention"];
+        img3.imageSize = CGSizeMake(JFScaleWidth6(15), JFScaleWidth6(15));
+        img3.index = 50;
+        img3.kern = 1;
+        [storage addImage:img3];
+        // detail_icon_collection_selected
+        JFTextAttachmentImage* img4 = [JFTextAttachmentImage new];
+        img4.image = [UIImage imageNamed:@"detail_icon_collection_selected"];
+        img4.imageSize = CGSizeMake(JFScaleWidth6(15), JFScaleWidth6(15));
+        img4.index = 100;
+        [storage addImage:img4];
+
+        
 //        storage.kern = 0.2;
         JFTextLayout* layout = [JFTextLayout textLayoutWithText:storage];
         layout.numberOfLines = 4;
@@ -491,6 +522,7 @@
         layout.left = JFScaleWidth6(15);
         layout.width = JFSCREEN_WIDTH - JFScaleWidth6(15 * 2);
         layout.height = 1000;
+        layout.backgroundColor = JFRGBAColor(0xf5f5f5, 1);
         [self addLayout:layout];
         
         self.viewFrame = CGRectMake(0, 0, JFSCREEN_WIDTH, layout.bottom + JFScaleWidth6(13));

@@ -71,7 +71,7 @@
             if (image.imageSize.height > 0.01) {
                 uiFrame.size.width = uiFrame.size.height * image.imageSize.width/image.imageSize.height;
                 ctFrame.size.width = ctFrame.size.height * image.imageSize.width/image.imageSize.height;
-                ctFrame.origin.y = ctLineOrigin.y;
+//                ctFrame.origin.y = ctLineOrigin.y;
             }
             image.uiFrame = uiFrame;
             image.ctFrame = ctFrame;
@@ -84,6 +84,7 @@
         }
     }
     _imageAttachments = images.copy;
+    NSLog(@"====-----=====-----=====[%@]==ctFrame[%@],uiFrame[%@]",images.count > 0 ? @"YES":@"NO" , NSStringFromCGRect(ctFrame), NSStringFromCGRect(uiFrame));
     return self;
 }
 
