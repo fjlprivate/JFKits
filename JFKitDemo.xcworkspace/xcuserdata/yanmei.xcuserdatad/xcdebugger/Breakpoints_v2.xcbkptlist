@@ -142,9 +142,9 @@
             filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "349"
-            endingLineNumber = "349"
-            landmarkName = "-relayouting"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
+            landmarkName = "-truncatedLine:frame:cancelled:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -158,8 +158,8 @@
             filePath = "JFKit/UIKit/JFAsyncDisplayKit/Model/JFTextLayout.m"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "280"
-            endingLineNumber = "280"
+            startingLineNumber = "260"
+            endingLineNumber = "260"
             landmarkName = "-relayouting"
             landmarkType = "7">
          </BreakpointContent>

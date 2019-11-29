@@ -10,14 +10,10 @@
 #import "JFAsyncFlag.h"
 
 @interface JFLayout()
-// 视图在界面中的位置
-@property (nonatomic, assign) CGPoint viewOrigin;
-// 视图的初始尺寸
-@property (nonatomic, assign) CGSize viewSize;
-// 建议尺寸;
-@property (nonatomic, assign) CGSize suggustSize;
 @property (nonatomic, assign) CGRect frame;
 @property (nonatomic, assign) CGRect contentFrame;
+// 原始frame;用于生成context
+@property (nonatomic, assign) CGRect originFrame;
 
 @property (nonatomic, strong) JFAsyncFlag* flag;
 @end
@@ -35,7 +31,31 @@
 # pragma mark - 布局相关
 // 由子类实现
 - (void) relayouting {
-    
+    if (self.width < 0.1 || self.height < 0.1) {
+        return;
+    }
+    CGRect frame = self.originFrame;
+    // 只能更新origin
+    if (!CGRectEqualToRect(frame, CGRectZero)) {
+        if (self.left != CGFLOAT_MIN) {
+            frame.origin.x = self.left;
+        }
+        if (self.top != CGFLOAT_MIN) {
+            frame.origin.y = self.top;
+        }
+    }
+    // 可以更新所有
+    else {
+        frame.size.width = self.width;
+        frame.size.height = self.height;
+        if (self.left != CGFLOAT_MIN) {
+            frame.origin.x = self.left;
+        }
+        if (self.top != CGFLOAT_MIN) {
+            frame.origin.y = self.top;
+        }
+    }
+    self.originFrame = frame;
 }
 
 - (void) updateWidthWithoutRelayouting:(CGFloat)width {
@@ -321,10 +341,9 @@
         _insets = UIEdgeInsetsZero;
         
         _shouldSuggustingSize = YES;
-        _viewOrigin = CGPointZero;
-        _viewSize = CGSizeZero;
         _backgroundColor = [UIColor whiteColor];
         _flag = [JFAsyncFlag new];
+        _originFrame = CGRectZero;
     }
     return self;
 }

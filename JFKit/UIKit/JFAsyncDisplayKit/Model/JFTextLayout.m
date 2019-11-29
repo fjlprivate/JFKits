@@ -138,7 +138,7 @@
     
     // 转换矩阵:<UIKit> -> <CoreText>
     // 翻转矩阵时，要用originSize:CTLine等都是在原始size生成的
-    CGContextTranslateCTM(context, CGRectGetMinX(self.contentFrame), CGRectGetMaxY(self.contentFrame));
+    CGContextTranslateCTM(context, CGRectGetMinX(self.originFrame) + self.insets.left, CGRectGetMaxY(self.originFrame) - self.insets.bottom);
     CGContextScaleCTM(context, 1, -1);
     if (cancelled()) {
         CGContextRestoreGState(context);
@@ -166,7 +166,6 @@
                     return;
                 }
                 CGRect imageCtFrame = imageAttachment.ctFrame;
-//                imageCtFrame.origin.y += -line.descent + (line.ascent + line.descent - imageCtFrame.size.height) * 0.5;
                 // 绘制背景色
                 if (imageAttachment.backgroundColor) {
                     CGContextSetFillColorWithColor(context, imageAttachment.backgroundColor.CGColor);
@@ -191,25 +190,7 @@
     }
     
     CGContextRestoreGState(context);
-    
-//    CGContextSaveGState(context);
-//    for (JFTextAttachmentImage* imageAttachment in self.textStorage.images) {
-//        UIImage* image = nil;
-//        if ([imageAttachment.image isKindOfClass:[UIImage class]]) {
-//            image = imageAttachment.image;
-//        }
-//        else if ([imageAttachment.image isKindOfClass:[NSString class]]) {
-//            image = [UIImage imageNamed:imageAttachment.image];
-//        }
-//        if (image) {
-//            [image drawInRect:imageAttachment.uiFrame];
-////            CGContextDrawImage(context, imageCtFrame, image.CGImage);
-//        }
-//
-//    }
-//    CGContextRestoreGState(context);
-
-    
+        
 
     // 测试时:绘制行边框
     if (self.debug) {
@@ -236,8 +217,6 @@
     if (self.width< 0.1 || self.height < 0.1 || !self.textStorage) {
         return;
     }
-    CGFloat startX = self.left == CGFLOAT_MIN ? 0 : self.left;
-    CGFloat startY = self.top == CGFLOAT_MIN ? 0 : self.top;
     
     // 准备工作: 定义布局退出block
     [_asyncFlag incrementFlag];
@@ -252,10 +231,11 @@
     [self clearHighlightsFrames];
     
     /* --- 计算布局 --- */
-    CGRect frame = CGRectMake(startX + self.insets.left,
-                              startY + self.insets.top,
-                              self.width - self.insets.left - self.insets.right,
-                              self.height - self.insets.top - self.insets.bottom + 1);
+    CGRect frame = CGRectMake(CGRectGetMinX(self.originFrame) + self.insets.left,
+                              CGRectGetMinY(self.originFrame) + self.insets.top,
+                              CGRectGetWidth(self.originFrame) - self.insets.left - self.insets.right,
+                              CGRectGetHeight(self.originFrame) - self.insets.top - self.insets.bottom);
+
     self.frameSetter = CTFramesetterCreateWithAttributedString((__bridge CFAttributedStringRef)self.textStorage.text);
     self.framePath = CGPathCreateWithRect(frame, NULL);
     self.frameRef = CTFramesetterCreateFrame(_frameSetter, CFRangeMake(0, 0), _framePath, NULL);
@@ -318,33 +298,10 @@
         [ctLines addObject:ctLine];
     }
 
-    CGFloat lastHeight = self.height;
     CGFloat width = ceil(suggustWidth + self.insets.left + self.insets.right);
     CGFloat height = ceil(suggustHeight + self.insets.top + self.insets.bottom);
-
     [super updateWidthWithoutRelayouting:width];
     [super updateHeightWithoutRelayouting:height];
-    
-    // 实际高度有更新:ctLine的origin也要更新，因为它在绘制的时候是要翻转的
-    if (lastHeight != self.height) {
-        CGFloat heightRemain = lastHeight - self.height;
-        for (JFTextLine* line in ctLines) {
-            if (layoutCancelled()) return;
-            CGPoint origin = line.ctOrigin;
-            origin.y -= heightRemain;
-            line.ctOrigin = origin;
-            // 所有图片附件的ctOrigin也要更新
-            for (JFTextRun* run in line.ctRuns) {
-                if (layoutCancelled()) return;
-                for (JFTextAttachmentImage* image in run.imageAttachments) {
-                    if (layoutCancelled()) return;
-                    CGRect ctFrame = image.ctFrame;
-                    ctFrame.origin.y -= heightRemain;
-                    image.ctFrame = ctFrame;
-                }
-            }
-        }
-    }
         
     // 保存行对象
     self.ctLines = ctLines.copy;
@@ -359,9 +316,6 @@
         }
     }
     [self.textStorage.highlights removeObjectsInArray:list];
-//    for (JFTextAttachmentHighlight* highlight in self.textStorage.highlights) {
-//        [highlight.uiFrames removeAllObjects];
-//    }
 }
 
 - (CTLineRef) truncatedLine:(CTLineRef)line frame:(CGRect)frame cancelled:(IsCancelled)cancelled {
@@ -383,7 +337,7 @@
         highLight.highlightBackgroundColor = self.textStorage.backgroundColor;
         if (self.showMoreActColor) {
             highLight.normalTextColor = self.showMoreActColor;
-            highLight.highlightTextColor = tokenAttri[NSForegroundColorAttributeName];//self.showMoreActColor;
+            highLight.highlightTextColor = tokenAttri[NSForegroundColorAttributeName];;
         } else {
             highLight.normalTextColor = tokenAttri[NSForegroundColorAttributeName];
             highLight.highlightTextColor = tokenAttri[NSForegroundColorAttributeName];
@@ -406,25 +360,6 @@
     // 将最后一行富文本复制一份出来
     NSAttributedString* originAttriString = [self.textStorage.text attributedSubstringFromRange:NSMakeRange(lastLineRange.location, lastLineRange.length)];
     NSMutableAttributedString* truncationString = [[NSMutableAttributedString alloc] initWithAttributedString:originAttriString];
-    // 去掉末尾的空白字符 ---- 留给业务层去处理
-//    while (truncationString.length > 0) {
-//        unichar lastCharacter = [[truncationString string] characterAtIndex:truncationString.length - 1];
-//        NSCharacterSet* whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-//        if ([whiteSpaceSet characterIsMember:lastCharacter]) {
-//            [truncationString deleteCharactersInRange:NSMakeRange(truncationString.length - 1, 1)];
-//        }
-//        else {
-//            break;
-//        }
-//    }
-    
-//    if (lastLineRange.length > 0) {
-//        unichar lastCharacter = [[truncationString string] characterAtIndex:lastLineRange.length - 1];
-//        NSCharacterSet* whiteSpaceSet = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-//        if ([whiteSpaceSet characterIsMember:lastCharacter]) {
-//            [truncationString deleteCharactersInRange:NSMakeRange(lastLineRange.length - 1, 1)];
-//        }
-//    }
     // 拼接省略号
     [truncationString appendAttributedString:tokenString];
     if (cancelled()) {
@@ -432,7 +367,6 @@
         return nil;
     }
 
-    
     // 将拼接后的string转成CTLine
     CTLineRef truncationLine = CTLineCreateWithAttributedString((__bridge CFAttributedStringRef)truncationString);
     // 截断
@@ -478,10 +412,6 @@
     _numberOfLines = numberOfLines;
     [self relayouting];
 }
-//- (void)setShowMoreActColor:(UIColor *)showMoreActColor {
-//    _showMoreActColor = showMoreActColor;
-//    [self relayouting];
-//}
 
 
 # pragma mark - getter

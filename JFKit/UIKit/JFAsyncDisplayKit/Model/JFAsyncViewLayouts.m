@@ -33,8 +33,7 @@
                             [textLayout.textStorage setTextColor:hightlight.highlightTextColor atRange:hightlight.range];
                         }
                         // 引发relayouting
-//                        textLayout.textStorage = textLayout.textStorage;
-                        textLayout.height = 20000;
+                        textLayout.textStorage = textLayout.textStorage;
                         self.highlightedTextLayout = textLayout;
                         self.selectedHighlight = hightlight;
                         return hightlight;
@@ -55,8 +54,7 @@
             [self.highlightedTextLayout.textStorage setTextColor:self.selectedHighlight.normalTextColor atRange:self.selectedHighlight.range];
         }
         // 引发relayouting
-        self.highlightedTextLayout.height = 20000;
-//        self.highlightedTextLayout.textStorage = self.highlightedTextLayout.textStorage;
+        self.highlightedTextLayout.textStorage = self.highlightedTextLayout.textStorage;
         self.highlightedTextLayout = nil;
         self.selectedHighlight = nil;
     }

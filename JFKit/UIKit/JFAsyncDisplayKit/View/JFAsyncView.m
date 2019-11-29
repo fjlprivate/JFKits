@@ -38,9 +38,6 @@
     UITouch* touch = touches.anyObject;
     CGPoint location = [touch locationInView:self];
     self.selectedHighlight = [self.layouts raiseHighlightAtPoint:location];
-//    if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
-//        [self.layer setNeedsDisplay];
-//    }
     if (self.selectedHighlight) {
         [self.layer setNeedsDisplay];
     }
@@ -54,9 +51,6 @@
             [self.delegate asyncView:self didClickedAtTextLayout:textLayout withHighlight:highlight];
         }
         [self.layouts resetHighlightWhichRaised];
-//        if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
-//            [self.layer setNeedsDisplay];
-//        }
         if (self.selectedHighlight) {
             [self.layer setNeedsDisplay];
         }
@@ -67,9 +61,6 @@
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.selectedHighlight) {
         [self.layouts resetHighlightWhichRaised];
-//        if (self.selectedHighlight && self.selectedHighlight.linkData && (![self.selectedHighlight.linkData isKindOfClass:[NSString class]] || ![self.selectedHighlight.linkData isEqualToString:JFTextViewAll])) {
-//            [self.layer setNeedsDisplay];
-//        }
         if (self.selectedHighlight) {
             [self.layer setNeedsDisplay];
         }

@@ -62,6 +62,9 @@
 @property (nonatomic, assign, readonly) CGRect frame;
 @property (nonatomic, assign, readonly) CGRect contentFrame;
 
+// 原始frame;用于生成context
+@property (nonatomic, assign, readonly) CGRect originFrame;
+
 // 由子类实现
 - (void) relayouting;
 // 子类更新变量值

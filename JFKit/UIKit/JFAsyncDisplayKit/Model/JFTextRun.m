@@ -41,6 +41,7 @@
     CGFloat descent;
     CGFloat leading;
     CGFloat width = CTRunGetTypographicBounds(ctRun, CFRangeMake(0, 0), &ascent, &descent, &leading);
+    
     if (cancelled()) return nil;
     // 获取翻转的仿射矩阵
     CGAffineTransform tt = CGAffineTransformTranslate(CGAffineTransformIdentity, CGRectGetMinX(frame), CGRectGetMaxY(frame));
@@ -71,10 +72,14 @@
             if (image.imageSize.height > 0.01) {
                 uiFrame.size.width = uiFrame.size.height * image.imageSize.width/image.imageSize.height;
                 ctFrame.size.width = ctFrame.size.height * image.imageSize.width/image.imageSize.height;
-//                ctFrame.origin.y = ctLineOrigin.y;
             }
-            image.uiFrame = uiFrame;
-            image.ctFrame = ctFrame;
+            // 如果不更新origin.y，在图片下面会超出汉字底部，很难看
+            CGRect iframe = uiFrame;
+            iframe.origin.y -= descent * 0.25;
+            image.uiFrame = iframe;
+            iframe = ctFrame;
+            iframe.origin.y += descent * 0.25;
+            image.ctFrame = iframe;
             [images addObject:image];
         }
         // 计算行间距
@@ -84,7 +89,6 @@
         }
     }
     _imageAttachments = images.copy;
-    NSLog(@"====-----=====-----=====[%@]==ctFrame[%@],uiFrame[%@]",images.count > 0 ? @"YES":@"NO" , NSStringFromCGRect(ctFrame), NSStringFromCGRect(uiFrame));
     return self;
 }
 
