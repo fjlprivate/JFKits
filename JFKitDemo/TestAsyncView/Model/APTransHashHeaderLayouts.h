@@ -11,9 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface APTransHashHeaderLayouts : JFAsyncViewLayouts
-- (instancetype) initWithModel:(NSDictionary*)model;
-@property (nonatomic, assign) CGRect sectionFrame;
-@property (nonatomic, assign) CGRect lineFrame;
 
 - (instancetype) initQuanwenLayouts;
 // 展开全文

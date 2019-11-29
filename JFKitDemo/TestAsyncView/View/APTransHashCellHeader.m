@@ -38,8 +38,6 @@
 - (void)setLayouts:(APTransHashHeaderLayouts *)layouts {
     _layouts = layouts;
     self.asyncView.layouts = layouts;
-    self.vSection.frame = layouts.sectionFrame;
-    self.vLine.frame = layouts.lineFrame;
 }
 
 - (UIView *)vSection {

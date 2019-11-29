@@ -8,7 +8,6 @@
 
 #import "TextAsyncViewViewController.h"
 #import "APTransHashCellHeader.h"
-#import "TestAsyncJsonModel.h"
 
 @interface TextAsyncViewViewController () <UITableViewDelegate, UITableViewDataSource, JFAsyncViewDelegate>
 @property (nonatomic, strong) UITableView* tableView;
@@ -19,21 +18,12 @@
 
 - (void) refreshDatas {
     NSMutableArray* list = @[].mutableCopy;
-    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
-    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
-    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
 
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
-//    [list addObject:[[APTransHashHeaderLayouts alloc] initWithModel:[TestAsyncJsonModel makeOneJson]]];
     self.dataSource = list;
     [self.tableView reloadData];
 }
