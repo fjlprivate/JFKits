@@ -74,7 +74,6 @@
 		7A0D89ED23347E900070FDBC /* ShortMediaCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D89A423347E900070FDBC /* ShortMediaCache.m */; };
 		7A0D89EE23347E900070FDBC /* ShortMediaDiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D89A523347E900070FDBC /* ShortMediaDiskCache.m */; };
 		7A0D89EF23347E900070FDBC /* JFHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D89AA23347E900070FDBC /* JFHelper.m */; };
-		7A0D8AD4233EFB5B0070FDBC /* JFKit.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */; };
 		7A0D8AD7233EFE520070FDBC /* NSBundle+JFExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */; };
 		7A488D4E236C05B7001AA048 /* TestAsyncImageVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A488D4D236C05B7001AA048 /* TestAsyncImageVC.m */; };
 		7ABB1421233F38D40057CB77 /* TestVideoVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 7ABB1420233F38D40057CB77 /* TestVideoVC.m */; };
@@ -232,7 +231,6 @@
 		7A0D89A823347E900070FDBC /* JFMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFMacro.h; sourceTree = "<group>"; };
 		7A0D89AA23347E900070FDBC /* JFHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JFHelper.m; sourceTree = "<group>"; };
 		7A0D89AB23347E900070FDBC /* JFHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JFHelper.h; sourceTree = "<group>"; };
-		7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = JFKit.bundle; sourceTree = "<group>"; };
 		7A0D8AD5233EFE520070FDBC /* NSBundle+JFExtension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSBundle+JFExtension.h"; sourceTree = "<group>"; };
 		7A0D8AD6233EFE520070FDBC /* NSBundle+JFExtension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+JFExtension.m"; sourceTree = "<group>"; };
 		7A488D4C236C05B7001AA048 /* TestAsyncImageVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAsyncImageVC.h; sourceTree = "<group>"; };
@@ -302,7 +300,6 @@
 				7A0D89A923347E900070FDBC /* Helper */,
 				7A0D890B23347E900070FDBC /* Category */,
 				7A0D898523347E900070FDBC /* Component */,
-				7A0D8AD3233EFB5B0070FDBC /* JFKit.bundle */,
 			);
 			path = JFKit;
 			sourceTree = "<group>";
@@ -845,7 +842,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A0D8AD4233EFB5B0070FDBC /* JFKit.bundle in Resources */,
 				FAF924C020030BDA00B7C9A5 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
