@@ -7,11 +7,26 @@
 * 创建视图:JFAsyncView
 
 JFAsyncView 的布局和内容由 JFAsyncViewLayouts 来提供；
+```
+JFAsyncView* asyncView = [[JFAsyncView alloc] init];
+asyncView.layouts = layouts; // layouts : JFAsyncViewLayouts
+```
 
 * 生成JFAsyncViewLayouts
 
 JFAsyncViewLayouts由多个JFLayout组成；
 添加完所有的JFLayout后，要更新 JFAsyncViewLayouts.viewFrame；
+```
+JFAsyncViewLayouts* layouts = [JFAsyncViewLayouts new];
+[layouts addLayout:textLayout]; // 添加一个文本布局
+[layouts addLayout:textLayout]; 
+[layouts addLayout:imageLayout]; // 添加一个图片布局
+...
+[layouts addLayout:imageLayout]; // 添加一个图片布局
+CGFloat bottom = imageLayout.bottom; // 保存最底部的值，作为整个frame的高度
+
+layouts.viewFrame = CGRectMake(0,0,width, bottom);
+```
 
 * 生成JFTextLayout(JFLayout)
 
