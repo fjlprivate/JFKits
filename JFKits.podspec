@@ -13,7 +13,7 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://github.com/fjlprivate/JFKits.git"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "fjlprivate" => "869325397@qq.com" }
-  spec.platform     = :ios, "8.0"
+  spec.platform     = :ios, "9.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
   spec.source_files = "JFKit/**/*"
 #  spec.resources     = "JFKit/*.bundle"
