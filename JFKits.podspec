@@ -17,9 +17,9 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
   spec.source_files = "JFKit/**/*"
 #  spec.resources     = "JFKit/*.bundle"
-  spec.resource_bundles = {
-    "JFKit" => ["JFKit/JFKit.bundle"]
-  }
+#  spec.resource_bundles = {
+#    "JFKit" => ["JFKit/JFKit.bundle"]
+#  }
 
   spec.requires_arc = true
 
