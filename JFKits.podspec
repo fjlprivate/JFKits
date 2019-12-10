@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |spec|
   spec.name         = "JFKits"
-  spec.version      = "0.1.0"
+  spec.version      = "0.1.1"
   spec.summary      = "我的工具集"
   spec.homepage     = "https://github.com/fjlprivate/JFKits.git"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
