@@ -17,6 +17,7 @@
     _imageLayout = imageLayout;
     [UIView performWithoutAnimation:^{
         if (imageLayout) {
+            self.tag = imageLayout.tag;
             // 先移除旧的显示
 //            id image = self.image;
 //            self.image = nil;
@@ -30,11 +31,13 @@
             self.backgroundColor = imageLayout.backgroundColor;
             self.layer.cornerRadius = MAX(imageLayout.cornerRadius.width, imageLayout.cornerRadius.height);
             if (imageLayout.image) {
+                // UIImage
                 if ([imageLayout.image isKindOfClass:[UIImage class]]) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         self.image = imageLayout.image;
                     });
                 }
+                // NSURL
                 else if ([imageLayout.image isKindOfClass:[NSURL class]]) {
 //                    [self sd_setImageWithURL:imageLayout.image placeholderImage:imageLayout.placeHolder];
 //                    [self yy_setImageWithURL:imageLayout.image placeholder:imageLayout.placeHolder];
@@ -53,6 +56,7 @@
                         }];
                     }
                 }
+                // NSString
                 else if ([imageLayout.image isKindOfClass:[NSString class]]) {
                     NSURL* url = [NSURL URLWithString:imageLayout.image];
 //                    [self sd_setImageWithURL:url placeholderImage:imageLayout.placeHolder];
@@ -65,6 +69,7 @@
                 self.image = imageLayout.placeHolder;
             }
         } else {
+            self.tag = NSNotFound;
             self.frame = CGRectZero;
             id image = self.image;
             self.image = nil;

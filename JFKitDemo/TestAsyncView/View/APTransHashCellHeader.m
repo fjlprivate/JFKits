@@ -18,6 +18,7 @@
 @implementation APTransHashCellHeader
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.clipsToBounds = YES;
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [self.contentView addSubview:self.asyncView];
         [self.contentView addSubview:self.vSection];

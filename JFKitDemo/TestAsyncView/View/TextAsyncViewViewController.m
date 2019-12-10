@@ -71,6 +71,16 @@
     NSLog(@"--------------------长按文本区cell[%ld]", asyncView.tag);
 }
 
+/**
+ 点击了图片区;
+ @param asyncView 当前异步加载视图;
+ @param imageLayout 图片布局对象;
+ */
+- (void) asyncView:(JFAsyncView*)asyncView didClickedAtImageLayout:(JFImageLayout*)imageLayout {
+    NSLog(@"--------------------点击了图片[%ld]区cell[%ld]",imageLayout.tag, asyncView.tag);
+}
+
+
 
 
 # pragma mark - UITableViewDelegate, UITableViewDataSource
