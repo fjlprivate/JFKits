@@ -20,9 +20,9 @@
     NSMutableArray* list = @[].mutableCopy;
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
     [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
-    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
-    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
-    [list addObject:[[APTransHashHeaderLayouts alloc] initQuanwenLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initImageTextLayouts]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initWithJsonNode]];
+    [list addObject:[[APTransHashHeaderLayouts alloc] initWithJsonNode]];
 
     self.dataSource = list;
     [self.tableView reloadData];

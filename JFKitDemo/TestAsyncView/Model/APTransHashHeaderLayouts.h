@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface APTransHashHeaderLayouts : JFAsyncViewLayouts
 
 - (instancetype) initQuanwenLayouts;
+- (instancetype) initImageTextLayouts;
+- (instancetype) initWithJsonNode;
 // 展开全文
 - (void) spreadUp;
 @end
