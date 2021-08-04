@@ -14,13 +14,30 @@
 
 
 @interface JFAsyncView() <JFImageViewDelegate,JFAsyncDisplayLayerDelegate>
-//@property (nonatomic, strong) NSMutableArray* labelsStorage;
-//@property (nonatomic, strong) NSMutableArray* labelsDisplay;
-@property (nonatomic, strong) NSMutableArray* imageViewsStorage; // 图片视图缓存列表[未加载]
-@property (nonatomic, strong) NSMutableArray* imageViewsDisplay; // 图片视图缓存列表[已加载]
+
+/* 图片容器池
+ * @{
+ *      @(JFImageLayout.tag):JFImageView,
+ *      @(JFImageLayout.tag):JFImageView,
+ *      ...
+ *  }
+ */
+@property (nonatomic, strong) NSMutableDictionary* imageViews;
+
 @property (nonatomic, strong) JFAsyncFlag* flag;
 @property (nonatomic, weak) JFTextAttachmentHighlight* selectedHighlight; // 选中的高亮属性
+
 @end
+
+
+
+@interface JFAsyncView(LoadImages)
+// 加载图片
+- (void) reloadImages:(NSArray<JFImageLayout*>*)images cancelled:(IsCancelled)cancelled;
+@end
+
+
+
 
 @implementation JFAsyncView
 
@@ -32,141 +49,6 @@
     }
 }
 
-# pragma mark - 图片加载
-/* 加载图片
- * 1. 从缓存中取出一个imageView
- * 2. 已取出，则用来显示图片
- * 3. 没取出，则创建一个imageView，用来显示图片；同时把这个imageView添加到缓存中；
- * 4. 在view释放的时候清空
- */
-
-
-/*
- * storage列表 和 display列表
- * 不显示的统统放在storage列表，正在显示的统统放在display列表
- * 1. 轮训diaplay列表，比对tag对应的imageView，并加载image；所有比对不上的放到临时数组，状态都不动
-        未加载完的所有image也要缓存到临时数组
- * 2. 轮训未加载的image列表，从临时数组中取出一个imageView，进行image的加载
-        结果1：imageView还多，则重置掉它们，从当前view移除，缓存到storage列表
-        结果2：image还多，从storage中取出imageview进行加载；
- * 3. 从storage中取出剩下的imageView进行image的加载
-        如果storage列表还是不够，则新建imageView，并加载，并添加到display列表；所有已加载的storage列表也移除到display列表
- */
-- (void) relayoutImages:(NSArray<JFImageLayout*>*)images cancelled:(IsCancelled)cancelled{
-    // 视图临时缓存列表
-    NSMutableArray<JFImageView*>* tmpList = @[].mutableCopy;
-    // 剩余未加载的图片缓存列表
-    NSMutableArray<JFImageLayout*>* unloadImages = [NSMutableArray arrayWithArray:images];
-    NSMutableArray<JFImageLayout*>* loadedImages = @[].mutableCopy;
-    
-    // 1. 匹配并加载
-    for (JFImageView* imageView in self.imageViewsDisplay) {
-        if (cancelled()) {
-            return;
-        }
-        JFImageLayout* loadImage = nil;
-        // 从图片缓存中查找跟imageView.tag一致的图片
-        for (JFImageLayout* image in unloadImages) {
-            if (cancelled()) {
-                return;
-            }
-            if (image.tag == imageView.tag) {
-                loadImage = image;
-                break;
-            }
-        }
-        // 匹配到:加载
-        if (loadImage) {
-            imageView.imageLayout = loadImage;
-            // 转移到已加载列表
-            [loadedImages addObject:loadImage];
-            [unloadImages removeObject:loadImage];
-        }
-        // 未匹配到:添加到临时列表
-        else {
-            [tmpList addObject:imageView];
-        }
-    }
-    if (cancelled()) {
-        return;
-    }
-
-    // 2. 轮训临时缓存和未加载image列表
-    if (tmpList.count > 0 && unloadImages.count > 0) {
-        NSMutableArray* list = @[].mutableCopy;
-        for (JFImageLayout* image in unloadImages) {
-            if (cancelled()) {
-                return;
-            }
-            // 判空
-            if (tmpList.count == 0) {
-                break;
-            }
-            // 出栈一个imageView
-            JFImageView* imageView = tmpList.lastObject;
-            [tmpList removeLastObject];
-            // 加载图片
-            imageView.imageLayout = image;
-            // 转移到已加载列表
-            [loadedImages addObject:image];
-            [list addObject:image];
-        }
-        if (list.count) {
-            [unloadImages removeObjectsInArray:list];
-        }
-    }
-    // 图片容器有剩余:重置并移除到storage
-    if (tmpList.count > 0) {
-        for (JFImageView* imageView in tmpList) {
-            if (cancelled()) {
-                return;
-            }
-            imageView.imageLayout = nil;
-            [imageView removeFromSuperview];
-            [self.imageViewsStorage addObject:imageView];
-        }
-        [tmpList removeAllObjects];
-    }
-    // 图片缓存有剩余:从storage中取imageView进行加载
-    else if (unloadImages.count > 0) {
-        for (JFImageLayout* image in unloadImages) {
-            if (cancelled()) {
-                return;
-            }
-            // 从storage中取出一个并加载
-            JFImageView* imageView = nil;
-            if (self.imageViewsStorage.count > 0) {
-                imageView = self.imageViewsStorage.lastObject;
-                [self.imageViewsStorage removeLastObject];
-                [self addSubview:imageView];
-                imageView.imageLayout = image;
-            }
-            // 新建一个imageView加载
-            else {
-                imageView = [JFImageView new];
-                imageView.delegate = self;
-                [self addSubview:imageView];
-                imageView.imageLayout = image;
-            }
-            // 加载完毕后添加到display列表
-            if (imageView) {
-                [self.imageViewsDisplay addObject:imageView];
-            }
-        }
-    }
-}
-
-- (void) cleanImageViews {
-    for (JFImageView* imageView in self.imageViewsDisplay) {
-        imageView.imageLayout = nil;
-        [imageView removeFromSuperview];
-        [self.imageViewsStorage addObject:imageView];
-    }
-    if (self.imageViewsDisplay.count) {
-        [self.imageViewsDisplay removeAllObjects];
-    }
-    
-}
 
 
 
@@ -188,6 +70,9 @@
         if (self.delegate && [self.delegate respondsToSelector:@selector(asyncView:didClickedAtTextLayout:withHighlight:)]) {
             [self.delegate asyncView:self didClickedAtTextLayout:textLayout withHighlight:highlight];
         }
+        // 更新状态前中断绘制
+        JFAsyncDisplayLayer* layer = (JFAsyncDisplayLayer*)self.layer;
+        [layer cancelDisplaying];
         [self.layouts resetHighlightWhichRaised];
         if (self.selectedHighlight) {
             [self.layer setNeedsDisplay];
@@ -198,6 +83,8 @@
 
 - (void)touchesCancelled:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.selectedHighlight) {
+        JFAsyncDisplayLayer* layer = (JFAsyncDisplayLayer*)self.layer;
+        [layer cancelDisplaying];
         [self.layouts resetHighlightWhichRaised];
         if (self.selectedHighlight) {
             [self.layer setNeedsDisplay];
@@ -224,6 +111,11 @@
 
 - (void)asyncDisplayLayer:(JFAsyncDisplayLayer *)layer displayingInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled
 {
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(asyncView:willDrawInContext:cancelled:)]) {
+        [self.delegate asyncView:self willDrawInContext:context cancelled:cancelled];
+    }
+    
     NSMutableArray<JFImageLayout*>* images = @[].mutableCopy;
     for (JFLayout* layout in self.layouts.layouts) {
         if (cancelled()) {
@@ -241,14 +133,7 @@
         }
     }
     // 图片的加载
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (images.count > 0) {
-            [self relayoutImages:images cancelled:cancelled];
-        } else {
-            [self cleanImageViews];
-        }
-    });
+    [self reloadImages:images cancelled:cancelled];
 }
 
 - (void)asyncDisplayLayerDidEndDisplay:(JFAsyncDisplayLayer *)layer {
@@ -287,36 +172,120 @@
 }
 
 # pragma mark - getter
-
-//- (NSMutableArray *)labelsStorage {
-//    if (!_labelsStorage) {
-//        _labelsStorage = @[].mutableCopy;
-//    }
-//    return _labelsStorage;
-//}
-//- (NSMutableArray *)labelsDisplay {
-//    if (!_labelsDisplay) {
-//        _labelsDisplay = @[].mutableCopy;
-//    }
-//    return _labelsDisplay;
-//}
-- (NSMutableArray *)imageViewsStorage {
-    if (!_imageViewsStorage) {
-        _imageViewsStorage = @[].mutableCopy;
-    }
-    return _imageViewsStorage;
-}
-- (NSMutableArray *)imageViewsDisplay {
-    if (!_imageViewsDisplay) {
-        _imageViewsDisplay = @[].mutableCopy;
-    }
-    return _imageViewsDisplay;
-}
 - (JFAsyncFlag *)flag {
     if (!_flag) {
         _flag = [JFAsyncFlag new];
     }
     return _flag;
+}
+- (NSMutableDictionary *)imageViews {
+    if (!_imageViews) {
+        _imageViews = @{}.mutableCopy;
+    }
+    return _imageViews;
+}
+
+@end
+
+
+
+
+
+@implementation JFAsyncView (LoadImages)
+
+# pragma mark - 图片加载
+
+/* 重载图片源
+ * step1. 从容器池取出匹配tag的容器加载
+ * step2. 仍有图片未加载完，从容器池中取出未匹配的容器进行加载，并重置缓存key
+ * step3. 如果容器池用完了还有图片要加载，则新建容器进行加载，并添加到缓存
+ * step4. 清空多余的没有匹配的容器内容
+ */
+- (void) reloadImages:(NSArray<JFImageLayout*>*)images cancelled:(IsCancelled)cancelled {
+    
+    // 用来保存没有装载的图片
+    NSMutableArray<JFImageLayout*>* notLoadedImages = @[].mutableCopy;
+    // 用来保存所有未装载的容器
+    NSMutableArray<NSNumber*>* notLoadedKeys = [[NSMutableArray alloc] initWithArray:self.imageViews.allKeys];
+    
+    // 轮询数据源
+    for (JFImageLayout* image in images) {
+        if (cancelled()) {
+            return;
+        }
+        // 取图片tag对应的容器
+        JFImageView* imageView = [self.imageViews objectForKey:@(image.tag)];
+        
+        // 取到容器
+        if (imageView) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!imageView.superview) {
+                    [self addSubview:imageView];
+                }
+            });
+            // 装载
+            imageView.imageLayout = image;
+            // tag从未装载列表移除
+            [notLoadedKeys removeObject:@(image.tag)];
+        }
+        // 没取到容器
+        else {
+            // image添加到未装载列表
+            [notLoadedImages addObject:image];
+        }
+    }
+    // 有未装载的图片
+    for (JFImageLayout* image in notLoadedImages) {
+        if (cancelled()) {
+            return;
+        }
+        // 还有未装载的容器
+        if (notLoadedKeys.count > 0) {
+            // 取一个容器来装载
+            NSNumber* tag = notLoadedKeys.lastObject;
+            JFImageView* imageView = [self.imageViews objectForKey:tag];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (!imageView.superview) {
+                    [self addSubview:imageView];
+                }
+            });
+            imageView.imageLayout = image;
+            if (cancelled()) {
+                return;
+            }
+            // 新增key
+            [self.imageViews setObject:imageView forKey:@(image.tag)];
+            // 移除旧key
+            [self.imageViews removeObjectForKey:tag];
+            // 装载完后从未装载列表删除容器
+            [notLoadedKeys removeObject:tag];
+        }
+        // 已经没有未装载的容器了
+        else {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                JFImageView* imageView = [[JFImageView alloc] init];
+                [self.imageViews setObject:imageView forKey:@(image.tag)];
+                [self addSubview:imageView];
+                imageView.imageLayout = image;
+                imageView.delegate = self;
+            });
+        }
+    }
+    
+    // 有未装载的容器，置空容器
+    for (NSNumber* tag in notLoadedKeys) {
+        if (cancelled()) {
+            return;
+        }
+        JFImageView* imageView = [self.imageViews objectForKey:tag];
+        if (imageView) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [imageView removeFromSuperview];
+            });
+            imageView.imageLayout = nil;
+        }
+    }
+    
 }
 
 @end

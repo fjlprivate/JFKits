@@ -45,19 +45,25 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 #import "UIViewController+JFExtension.h"
 #import "AVAsset+JFExtension.h"
 #import "NSDate+JFExtension.h"
-
+//FontAwesome
+#import "UIFont+FontAwesome.h"
+#import "NSString+FontAwesome.h"
 
 #pragma mark - UIKit:控件集
 // 异步图文混排
 #import "JFAsyncDisplayKit.h"
-
-// banner
-#import "JFBanner.h"
-
+// 自定义alert
+#import "JFAlertView.h"
+// 自定义segment
+#import "JFSegmentView.h"
 
 #import "JFButton.h"
 #import "JFCycleImageView.h"
 #import "JFPageView.h"
+
+// banner
+#import "JFBanner.h"
+
 // 视频采集视图
 #import "JFVideoCapture.h"
 // 视频播放控件
@@ -66,6 +72,10 @@ FOUNDATION_EXPORT const unsigned char JFKitVersionString[];
 #import "JFImageBrowserViewController.h"
 // 图片|视频采集器
 #import "JFPhotoPickerViewController.h"
+
+#import "JFToast.h"
+
+
 
 #pragma mark - Component:组件集
 #import "JFAsyncFlag.h"

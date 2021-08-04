@@ -53,6 +53,13 @@
 // 布局完毕:setLayouts后
 - (void) didRelayoutInAsyncView:(JFAsyncView*)asyncView;
 
+
+/// 即将开始绘制
+/// @param asyncView  当前异步加载视图
+/// @param context  当前即将绘制的上下文
+/// @param cancelled  退出绘制的回调；在外部绘制时，要不时判断当前绘制是否结束
+- (void) asyncView:(JFAsyncView*)asyncView willDrawInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled;
+
 @end
 
 

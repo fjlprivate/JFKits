@@ -16,20 +16,81 @@
 
 @implementation RootViewController
 
+# pragma mark - getter
+
+- (NSArray *)functions {
+    if (!_functions) {
+        _functions = @[
+            @{@"title":@"异步图文混排",
+              @"detail":@"TextAsyncViewViewController" // TestAsyncView
+            },
+            @{@"title":@"JFAlertView",
+              @"detail":@"TestAlertVC"
+            },
+            @{@"title":@"JFSegmentView",
+              @"detail":@"TestSegmentVC"
+            },
+            @{@"title":@"异步绘制",
+              @"detail":@"TestAsyncDrawVC"
+            },
+            @{@"title":@"图片预览",
+              @"detail":@"TestImageBrowseVC"
+            },
+            @{
+                @"title":@"图片捏合缩放",
+                @"detail":@"TestScaleImageVC"
+            },
+            @{
+                @"title":@"FontAwesome",
+                @"detail":@"TestFontawesomeVC"
+            },
+            @{
+                @"title":@"自定义Decoration",
+                @"detail":@"TestCollectionVC"
+            },
+            @{
+                @"title":@"Presenter",
+                @"detail":@"TestPresenterVC"
+            },
+            @{
+                @"title":@"视频拍摄、播放",
+                @"detail":@"TestVideoVC"
+            },
+            @{
+                @"title":@"古典色",
+                @"detail":@"TestClassicColorVC"
+            },
+            @{
+                @"title":@"制作icon",
+                @"detail":@"MakeIconVC"
+            },
+        ];
+    }
+    return _functions;
+}
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    self.title = @"JFKits";
     // 功能列表
     UITableView* tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor whiteColor];
     tableView.delegate = self;
     tableView.dataSource = self;
+    if (@available(iOS 11, *)) {
+        tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
     [self.view addSubview:tableView];
     
     [tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
-        make.top.mas_equalTo(100);
+        make.top.mas_equalTo(JFNaviStatusBarHeight);
     }];
     
 }
@@ -50,6 +111,11 @@
     }
     cell.textLabel.text = [self.functions[indexPath.row] objectForKey:@"title"];
     cell.detailTextLabel.text = [self.functions[indexPath.row] objectForKey:@"detail"];
+    cell.textLabel.textColor = JFRGBAColor(JFColorQingDai, 1);
+    cell.detailTextLabel.textColor = JFRGBAColor(JFColorCangJia, 1);
+//    cell.textLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
+    cell.textLabel.font = [UIFont boldSystemFontOfSize:16];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -60,32 +126,5 @@
 }
 
 
-# pragma mark - getter
-
-- (NSArray *)functions {
-    if (!_functions) {
-        _functions = @[@{@"title":@"富文本1",
-                         @"detail":@"TestCoreTextVC"
-                         },
-                       @{@"title":@"TextKit",
-                         @"detail":@"TestTextKit"
-                         },
-                       // TestVideoVC
-                       @{@"title":@"TestVideo",
-                         @"detail":@"TestVideoVC"
-                         },
-                       //TextAsyncViewViewController.h
-                       @{@"title":@"TestAsyncView",
-                         @"detail":@"TextAsyncViewViewController"
-                         },
-                       //TestAsyncImageVC
-                       @{@"title":@"TestAsyncImageVC",
-                         @"detail":@"TestAsyncImageVC"
-                         },
-
-                       ];
-    }
-    return _functions;
-}
 
 @end

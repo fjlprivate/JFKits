@@ -46,4 +46,8 @@
 @property (nonatomic, assign) BOOL asynchronized;
 // 
 @property (nonatomic, weak) id<JFAsyncDisplayLayerDelegate> delegate;
+
+// 取消当前绘制
+- (void) cancelDisplaying;
+
 @end

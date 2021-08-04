@@ -31,6 +31,7 @@
  @param cancelled 退出操作的回调;
  */
 - (void) drawInContext:(CGContextRef)context cancelled:(IsCancelled)cancelled {
+
     CGContextSaveGState(context);
     // 绘制背景色、边框
     UIColor* bgColor = self.backgroundColor;
@@ -406,7 +407,7 @@
 # pragma mark - setter
 - (void)setTextStorage:(JFTextStorage *)textStorage {
     _textStorage = textStorage;
-    [self relayouting];
+    [self relayouting]; // 如果当前正在绘制，是中断
 }
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
     _numberOfLines = numberOfLines;

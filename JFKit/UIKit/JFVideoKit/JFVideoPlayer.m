@@ -245,7 +245,7 @@ static NSString* const JFVideoPlayerKVOKeyLoadedTime = @"loadedTimeRanges";
         _avPlayer = [[AVPlayer alloc] init];
         WeakSelf(wself);
         // 监听播放时间
-        self.playTimeObserver = [_avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1, 30)
+        self.playTimeObserver = [_avPlayer addPeriodicTimeObserverForInterval:CMTimeMake(1, 60) // 按60帧率回调时间进度
                                                                         queue:dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
                                                                    usingBlock:^(CMTime time) {
                                                                        if (wself.status != JFVideoPlayStatePlaying) {

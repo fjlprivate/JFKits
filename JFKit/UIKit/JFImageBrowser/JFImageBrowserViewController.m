@@ -12,39 +12,40 @@
 #import "JFZoomImageView.h"
 #import "JFImageBrowserActionView.h"
 #import "JFIBButton.h"
-
-static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大放大比例
-
-
+#import "JFImageBrowserCell.h"
+#import "JFMacro.h"
+#import "JFHelper.h"
 
 # pragma mark - [Class]图片浏览器
-@interface JFImageBrowserViewController () <UIViewControllerTransitioningDelegate, UIScrollViewDelegate>
+@interface JFImageBrowserViewController () <UIViewControllerTransitioningDelegate, UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate>
 // 图片组; NSArray<JFImageBrowserItem*>
 @property (nonatomic, copy) NSArray<JFImageBrowserItem*>* imageList;
-// 操作组
-@property (nonatomic, copy) NSArray<JFImageBrowserHandler*>* handlers;
-// 图片视图组
-@property (nonatomic, copy) NSArray<JFZoomImageView*>* imageViewList;
 // 当前浏览序号
 @property (nonatomic, assign) NSInteger curImageIndex;
 // 回场图片索引
 @property (nonatomic, assign) NSInteger dismissedImageIndex;
-// 图片scrollView
-@property (nonatomic, strong) UIScrollView* scrollView;
+// 图片容器
+@property (nonatomic, strong) UICollectionView* collectionView;
 // 页码标签
 @property (nonatomic, strong) UILabel* pageLabel;
-// actionSheet
-@property (nonatomic, strong) JFImageBrowserActionView* actionSheet;
 // actionButton
 @property (nonatomic, strong) JFIBButton* actionBtn;
+//
+@property (nonatomic, copy) NSArray<JFImageBrowserHandler*>* (^handleAfterLongpressed) (NSInteger atIndex);
 @end
 
 @implementation JFImageBrowserViewController
 
-+ (instancetype)jf_showFromVC:(UIViewController *)fromVC
-                withImageList:(NSArray<JFImageBrowserItem *> *)imageList
-                  andHandlers:(NSArray<JFImageBrowserHandler*>*)handlers
-                 startAtIndex:(NSInteger)startAtIndex
+/// 动画转场显示图片浏览器;
+/// 并将创建的图片浏览器对象返回;
+/// @param fromVC  加载图片浏览器的界面视图控制器
+/// @param imageList  图片组; NSArray<JFImageBrowserItem*>
+/// @param startAtIndex  起始浏览图片的索引
+/// @param handleAfterLongpressed  回调：从调用方获取长按事件的处理handles
++ (instancetype) jf_showFromVC:(UIViewController*)fromVC
+                 withImageList:(NSArray<JFImageBrowserItem*>*)imageList
+                  startAtIndex:(NSInteger)startAtIndex
+        handleAfterLongpressed:(NSArray<JFImageBrowserHandler*>* (^) (NSInteger atIndex))handleAfterLongpressed
 {
     if (!fromVC) {
         return nil;
@@ -58,10 +59,11 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
     JFImageBrowserViewController* imageBrowserVC = [JFImageBrowserViewController new];
     imageBrowserVC.imageList = imageList;
     imageBrowserVC.curImageIndex = startAtIndex;
-    imageBrowserVC.handlers = handlers;
+    imageBrowserVC.handleAfterLongpressed = handleAfterLongpressed;
     [fromVC presentViewController:imageBrowserVC animated:YES completion:nil];
     return imageBrowserVC;
 }
+
 
 
 
@@ -159,6 +161,30 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
     return transition;
 }
 
+
+# pragma mark - UICollectionViewDelegate,UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.imageList.count;
+}
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    JFImageBrowserCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"JFImageBrowserCell" forIndexPath:indexPath];
+    JFImageBrowserItem* item = self.imageList[indexPath.row];
+    [cell.imageView setImage:item.thumbnail];
+    WeakSelf(wself);
+    cell.imageView.tapGesEvent = ^(NSInteger numberOfTouches) {
+        if (numberOfTouches == 1) {
+            wself.dismissedImageIndex = indexPath.row;
+            [wself dismissViewControllerAnimated:YES completion:nil];
+        }
+    };
+    cell.imageView.longpressEvent = ^{
+        [wself handleForImageAtCurrentIndex];
+    };
+
+    return cell;
+}
+
+
 # pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x < 0) {
@@ -170,34 +196,26 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
 
 # pragma mark - tools
 
-- (IBAction) clickedActionBtn:(id)sender {
-    [self.actionSheet showActionSheet];
-}
+- (void) handleForImageAtCurrentIndex {
+    if (!self.handleAfterLongpressed) {
+        return;
+    }
+    NSArray* handles = self.handleAfterLongpressed(self.curImageIndex);
 
-- (CGRect) imageRectInZoomImageView:(JFZoomImageView*)zoomImageView {
-    CGRect frame = CGRectZero;
-    CGPoint offset = zoomImageView.contentOffset;
-    frame.origin = CGPointMake(-offset.x, -offset.y);
-    frame.size = zoomImageView.contentSize;
-        CGSize imageSize = zoomImageView.imageView.image.size;
-        CGFloat imgVWidth = frame.size.width;
-        CGFloat imgVHeight = frame.size.height;
-        CGFloat imgWidth = imgVWidth;
-        CGFloat imgHeight = imgVHeight;
-        if (imageSize.width/imageSize.height > imgVWidth/imgVHeight) {
-            imgHeight = imgWidth * imageSize.height/imageSize.width;
+    
+    JFImageBrowserActionView* actionSheet = [[JFImageBrowserActionView alloc] initWithFrame:self.view.bounds
+                                                             items:handles];
+    __weak typeof(self) wself = self;
+    __weak JFImageBrowserActionView* weakActionSheet = actionSheet;
+    actionSheet.didSelectWithItem = ^(JFImageBrowserHandler *item) {
+        [weakActionSheet hideActionSheet];
+        if (item.handleBlock) {
+            item.handleBlock(wself.curImageIndex);
         }
-        else if (imageSize.width/imageSize.height < imgVWidth/imgVHeight) {
-            imgWidth = imgHeight * imageSize.width/imageSize.height;
-        }
-    frame.origin.x += (imgVWidth - imgWidth) * 0.5;
-    frame.origin.y += (imgVHeight - imgHeight) * 0.5;
-    frame.size.width = imgWidth;
-    frame.size.height = imgHeight;
-
-    return frame;
+    };
+    [self.view addSubview:actionSheet];
+    [actionSheet showActionSheet];
 }
-
 
 # pragma mark - life cycle
 - (instancetype)init {
@@ -212,61 +230,33 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = self.bgColor;
-    [self.view addSubview:self.scrollView];
+    [self.view addSubview:self.collectionView];
     [self.view addSubview:self.pageLabel];
     [self.view addSubview:self.actionBtn];
-    [self.view addSubview:self.actionSheet];
-    self.actionBtn.hidden = !(self.handlers && self.handlers.count > 0);
-    
-    [self loadImageList];
     
     CGFloat centerYAction = [UIApplication sharedApplication].statusBarFrame.size.height + JFImageBrowserNavigationHeight * 0.5;
     CGSize labelSize = [self.pageLabel sizeThatFits:CGSizeZero];
+    labelSize.width += 30;
+    labelSize.height += 10;
     CGSize btnSize = [self.actionBtn sizeThatFits:CGSizeZero];
-    self.pageLabel.frame = CGRectMake(0, centerYAction - labelSize.height * 0.5, self.view.frame.size.width, labelSize.height);
+    btnSize.width += 10;
+    btnSize.height += 6;
+    self.pageLabel.frame = CGRectMake((JFSCREEN_WIDTH - labelSize.width) * 0.5,
+                                      centerYAction - labelSize.height * 0.5,
+                                      labelSize.width,
+                                      labelSize.height);
     self.actionBtn.frame = CGRectMake(self.view.frame.size.width - 15 - btnSize.width,
-                                      centerYAction - btnSize.height * 0.5, btnSize.width, btnSize.height);
+                                      centerYAction - btnSize.height * 0.5,
+                                      btnSize.width,
+                                      btnSize.height);
+}
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:self.curImageIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
-// 给scrollView加载图片组
-- (void) loadImageList {
-    __weak typeof(self) wself = self;
-    CGFloat totalWidth = 0;
-    CGRect frame = self.view.bounds;
-    CGFloat screenWidth = frame.size.width;
-    NSMutableArray* list = @[].mutableCopy;
-    for (int i = 0; i < self.imageList.count; i++) {
-        frame.origin.x = i * screenWidth;
-        JFZoomImageView* imageView = [[JFZoomImageView alloc] initWithFrame:frame];
-        imageView.maximumZoomScale = JFImageBrowserMaxZoomScale;
-        imageView.clipsToBounds = YES;
-        imageView.tag = i;
-        __weak typeof(imageView) weakImageView = imageView;
-        imageView.tapGesEvent = ^(NSInteger numberOfTouches) {
-            if (numberOfTouches == 1) {
-                wself.dismissedImageIndex = weakImageView.tag;
-                [wself dismissViewControllerAnimated:YES completion:nil];
-            }
-        };
-        imageView.longpressEvent = ^{
-            [wself.actionSheet showActionSheet];
-        };
-        [self.scrollView addSubview:imageView];
-        JFImageBrowserItem* item = self.imageList[i];
-        // 设置显示图片:缩略图
-        [imageView setImage:item.thumbnail];
-        // 设置显示图片:原图
-        [imageView setImage:item.mediaOrigin];
-        [list addObject:imageView];
-        totalWidth += screenWidth;
-    }
-    self.scrollView.contentSize = CGSizeMake(totalWidth, self.view.bounds.size.height);
-    [self.scrollView scrollRectToVisible:CGRectMake(self.curImageIndex * screenWidth, 0, screenWidth, self.view.bounds.size.height) animated:NO];
-    self.imageViewList = list.copy;
 }
 
 # pragma mark - setter
@@ -278,23 +268,33 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
 
 # pragma mark - getter
 
-- (UIScrollView *)scrollView {
-    if (!_scrollView) {
-        _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-        _scrollView.pagingEnabled = YES;
-        _scrollView.backgroundColor = [UIColor clearColor];
-        _scrollView.showsVerticalScrollIndicator = NO;
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.delegate = self;
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        UICollectionViewFlowLayout* layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = YES;
+        layout.sectionInset = UIEdgeInsetsZero;
+        layout.itemSize = CGSizeMake(JFSCREEN_WIDTH, JFSCREEN_HEIGHT);
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        _collectionView = [[UICollectionView alloc] initWithFrame:JFSCREEN_BOUNDS collectionViewLayout:layout];
+        [_collectionView registerClass:[JFImageBrowserCell class] forCellWithReuseIdentifier:@"JFImageBrowserCell"];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.pagingEnabled = YES;
+        _collectionView.canCancelContentTouches = NO;
+        _collectionView.delaysContentTouches = YES;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.showsHorizontalScrollIndicator = NO;
     }
-    return _scrollView;
+    return _collectionView;
 }
 
 - (UILabel *)pageLabel {
     if (!_pageLabel) {
         _pageLabel = [UILabel new];
         _pageLabel.font = [UIFont boldSystemFontOfSize:17];
-        _pageLabel.textColor = [UIColor whiteColor];
+        _pageLabel.textColor = UIColor.whiteColor;
+        _pageLabel.backgroundColor = [UIColor colorWithWhite:0 alpha:0.1];
         _pageLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _pageLabel;
@@ -311,24 +311,9 @@ static CGFloat const JFImageBrowserMaxZoomScale = 4.f;          // 图片最大�
         _actionBtn.backgroundColor = [UIColor colorWithWhite:0 alpha:0.1];
         _actionBtn.layer.cornerRadius = 4;
         _actionBtn.layer.masksToBounds = YES;
-        [_actionBtn addTarget:self action:@selector(clickedActionBtn:) forControlEvents:UIControlEventTouchUpInside];
+        [_actionBtn addTarget:self action:@selector(handleForImageAtCurrentIndex) forControlEvents:UIControlEventTouchUpInside];
     }
     return _actionBtn;
-}
-
-- (JFImageBrowserActionView *)actionSheet {
-    if (!_actionSheet) {
-        _actionSheet = [[JFImageBrowserActionView alloc] initWithFrame:self.view.bounds
-                                                                 items:self.handlers];
-        __weak typeof(self) wself = self;
-        _actionSheet.didSelectWithItem = ^(JFImageBrowserHandler *item) {
-            [wself.actionSheet hideActionSheet];
-            if (item.handleBlock) {
-                item.handleBlock(wself.curImageIndex);
-            }
-        };
-    }
-    return _actionSheet;
 }
 
 @end

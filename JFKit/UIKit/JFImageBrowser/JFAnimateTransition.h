@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, JFAnimateTransitionType) {
 
 + (instancetype) transitionWithType:(JFAnimateTransitionType)transitionType;
 
-// 转场动画时间,默认0.3s
+// 转场动画时间,默认0.25s
 @property (nonatomic, assign) NSTimeInterval animationDuration;
 
 // 图片内容: NSURL|NSString|UIImage

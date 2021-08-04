@@ -11,7 +11,6 @@
 #import "UIView+Extension.h"
 #import "Masonry.h"
 #import "UIImageView+WebCache.h"
-//#import <ReactiveCocoa.h>
 
 #import "JFVideoDisplayHandles.h"
 #import "JFMacro.h"

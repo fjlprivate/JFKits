@@ -114,7 +114,11 @@
             // 跳转系统设置
             NSURL* url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
             if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+                if (@available(iOS 10, *)) {
+                    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+                } else {
+                    [[UIApplication sharedApplication] openURL:url];
+                }
             };
         }];
         [alert addAction:cancel];

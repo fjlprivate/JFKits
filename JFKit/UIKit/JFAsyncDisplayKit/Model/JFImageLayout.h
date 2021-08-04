@@ -11,7 +11,7 @@
 @interface JFImageLayout : JFLayout
 /**
  图片内容;
- UIImage|NSURL|NSString
+ UIImage | NSURL | NSString
  */
 @property (nonatomic, strong) id image;
 

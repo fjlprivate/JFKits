@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, JFVideoCaptureState){
 // 控制整个流程
 @property (nonatomic, assign) JFVideoCaptureState state;
 // 视频时长计数;
-@property (nonatomic, assign) CGFloat timeCount;
+@property (nonatomic, assign) CGFloat duration;
 
 # pragma mark - 配置
 // 是否保存相册;默认:YES
@@ -68,9 +68,11 @@ typedef NS_ENUM(NSInteger, JFVideoCaptureState){
 // 是否压缩视频;默认:YES
 @property (nonatomic, assign) BOOL shouldCompressVideo;
 // 拍摄时长限制(在时间到达时自动停止拍摄);默认:30s
-@property (nonatomic, assign) NSInteger captureDuration;
+@property (nonatomic, assign) NSInteger captureTimeLimit;
 // 拍照片和视频的分界时间;默认:0.5s
 @property (nonatomic, assign) CGFloat startLimitTime;
+// 是否显示拍摄时间;默认:YES
+@property (nonatomic, assign) BOOL shouldShowTiming;
 
 # pragma mark - 协议
 @property (nonatomic, weak) id<JFVideoCaptureDelegate> delegate; // 用于数据和状态的回调

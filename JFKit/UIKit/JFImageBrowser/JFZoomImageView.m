@@ -10,6 +10,8 @@
 #import "UIImageView+WebCache.h"
 #import "SDWebImageDownloader.h"
 #import "YYWebImage.h"
+#import "JFHelper.h"
+#import <Masonry.h>
 
 @implementation JFZoomImageView
 
@@ -25,15 +27,31 @@
     if (!image) {
         return;
     }
+    WeakSelf(wself);
+    
+    void (^ handleImage) (UIImage* image) = ^(UIImage* image) {
+        wself.imageView.image = image;
+        wself.minimumZoomScale = 0;
+        [wself.imageView sizeToFit];
+    };
+    
     if ([image isKindOfClass:[UIImage class]]) {
-        self.imageView.image = image;
+        handleImage(image);
     }
     else if ([image isKindOfClass:[NSString class]]) {
-        [self.imageView yy_setImageWithURL:[NSURL URLWithString:image] options:YYWebImageOptionSetImageWithFadeAnimation];
+        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:image] options:SDWebImageQueryMemoryData progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            NSLog(@"++++++++ 下在图片进度::receivedSize(%ld) / expectedSize(%ld) = (%lf)", receivedSize, expectedSize, (CGFloat)receivedSize/(CGFloat)expectedSize);
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    handleImage(image);
+                }];
+        
     }
     else if ([image isKindOfClass:[NSURL class]]) {
-        NSURL* imageUrl = (NSURL*)image;
-        [self.imageView yy_setImageWithURL:imageUrl options:YYWebImageOptionSetImageWithFadeAnimation];
+        [[SDWebImageManager sharedManager] loadImageWithURL:image options:SDWebImageQueryMemoryData progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    handleImage(image);
+                }];
     }
 }
 
@@ -43,8 +61,8 @@
     if (self) {
         [self addSubview:self.imageView];
         self.delegate = self;
-        self.maximumZoomScale = 1;
-        self.contentSize = self.bounds.size;
+        self.maximumZoomScale = 2;
+        self.minimumZoomScale = 0;
         UITapGestureRecognizer* tapGes1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesTouched:)];
         UITapGestureRecognizer* tapGes2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesTouched:)];
         tapGes1.numberOfTapsRequired = 1;
@@ -54,18 +72,60 @@
         [self addGestureRecognizer:tapGes2];
         UILongPressGestureRecognizer* longpress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleWithLongpress:)];
         [self addGestureRecognizer:longpress];
+        
+        if (@available(ios 11, *)) {
+            self.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
+        
     }
     return self;
 }
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.imageView.frame = self.bounds;
+    if (self.bounds.size.height <= 0) {
+        return;
+    }
+
+    // 设置minScale，如果未设置
+    if (self.minimumZoomScale == 0 && self.imageView.image && self.bounds.size.height > 0) {
+        CGFloat minScale = 1;
+        CGSize imageSize =  self.imageView.image.size;
+        CGFloat boundsWidth = self.bounds.size.width;
+        CGFloat boundsHeight = self.bounds.size.height;
+
+        // 宽顶格
+        if (imageSize.width/imageSize.height > boundsWidth/boundsHeight) {
+            minScale = boundsWidth / imageSize.width;
+        }
+        // 高顶格
+        else {
+            minScale = boundsHeight / imageSize.height;
+        }
+        self.minimumZoomScale = minScale;
+        [self setZoomScale:minScale animated:NO];
+    }
+
+    // 更新图片中心;不放在 scrollViewDidZoom 调用的原因是，偶尔不会触发 scrollViewDidZoom
+    [self updateImageViewCenter];
+
+    
+    
+}
+
+// 更新图片的中心
+- (void) updateImageViewCenter {
+    CGFloat offsetX = (self.bounds.size.width > self.contentSize.width)?
+    (self.bounds.size.width - self.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (self.bounds.size.height > self.contentSize.height)?
+    (self.bounds.size.height - self.contentSize.height) * 0.5 : 0.0;
+    self.imageView.center = CGPointMake(self.contentSize.width * 0.5 + offsetX,
+                                        self.contentSize.height * 0.5 + offsetY);
 }
 
 - (IBAction) tapGesTouched:(UITapGestureRecognizer*)sender {
     if (sender.numberOfTapsRequired == 2) {
-        if (self.zoomScale < 1 || self.zoomScale == self.maximumZoomScale) {
-            [self setZoomScale:1 animated:YES];
+        if (self.zoomScale == self.maximumZoomScale) {
+            [self setZoomScale:self.minimumZoomScale animated:YES];
         } else {
             [self setZoomScale:self.maximumZoomScale animated:YES];
         }
@@ -84,15 +144,7 @@
     }
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    if (scrollView.zoomScale < 1) {
-        self.imageView.center = CGPointMake(scrollView.bounds.size.width * 0.5,
-                                            scrollView.bounds.size.height * 0.5);
-    } else {
-        self.imageView.center = CGPointMake(scrollView.contentSize.width * 0.5,
-                                            scrollView.contentSize.height * 0.5);
-    }
-}
+# pragma mark - UIScrollViewDelegate
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
     return self.imageView;

@@ -21,7 +21,7 @@
 # pragma mark - life cycle
 
 + (instancetype) transitionWithType:(JFAnimateTransitionType)transitionType {
-    return [[self alloc] initWithType:transitionType andDuration:0.5];
+    return [[self alloc] initWithType:transitionType andDuration:0.25];
 }
 
 - (instancetype) initWithType:(JFAnimateTransitionType)transitionType andDuration:(NSTimeInterval)duration {
@@ -61,6 +61,15 @@
     [containerView addSubview:toVC.view];
     toVC.view.hidden = YES;
 
+    // 添加原图遮罩
+    UIView* originMask = [UIView new];
+    originMask.backgroundColor = UIColor.whiteColor;
+    CGRect frame = self.originImageRect;
+    frame.origin.x = self.originImageRect.origin.x - fromVC.view.frame.origin.x;
+    frame.origin.y = self.originImageRect.origin.y - fromVC.view.frame.origin.y;
+    originMask.frame = frame;
+    [fromVC.view addSubview:originMask];
+    
     // 添加动画图片视图
     UIImageView* showImgView = [[UIImageView alloc] initWithFrame:self.originImageRect];
     showImgView.contentMode = UIViewContentModeScaleAspectFill;
@@ -77,7 +86,7 @@
     [containerView addSubview:showImgView];
     // 开始动画
     __weak typeof(self) wself = self;
-    [UIView animateWithDuration:self.animationDuration * (1 - 0.618) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:self.animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         showImgView.frame = wself.finalImageRect;
         fromVC.view.alpha = 0;
     } completion:^(BOOL finished) {
@@ -86,6 +95,7 @@
         if (finished) {
             showImgView.hidden = YES;
             [showImgView removeFromSuperview];
+            [originMask removeFromSuperview];
         }
     }];
 }
@@ -100,6 +110,17 @@
     UIView* containerView = [transitionContext containerView];
     // 添加toVC.view
     [containerView addSubview:toVC.view];
+    
+    // 添加原图遮罩
+    UIView* originMask = [UIView new];
+    originMask.backgroundColor = UIColor.whiteColor;
+    CGRect frame = self.finalImageRect;
+    frame.origin.x = self.finalImageRect.origin.x - toVC.view.frame.origin.x;
+    frame.origin.y = self.finalImageRect.origin.y - toVC.view.frame.origin.y;
+    originMask.frame = frame;
+    [toVC.view addSubview:originMask];
+
+    
     // 添加动画图片视图
     UIImageView* showImgView = [[UIImageView alloc] initWithFrame:self.originImageRect];
     showImgView.contentMode = UIViewContentModeScaleAspectFill;
@@ -115,7 +136,7 @@
     }
     [containerView addSubview:showImgView];
     // 开始动画
-    [UIView animateWithDuration:self.animationDuration * (1 - 0.618) delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:self.animationDuration delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         showImgView.frame = self.finalImageRect;
         toVC.view.alpha = 1;
     } completion:^(BOOL finished) {
@@ -123,6 +144,7 @@
         if (finished) {
             showImgView.hidden = YES;
             [showImgView removeFromSuperview];
+            [originMask removeFromSuperview];
         }
     }];
 

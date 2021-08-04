@@ -11,6 +11,8 @@
 #import "JFHelper.h"
 #import "Masonry.h"
 #import "UIImage+JFExtension.h"
+#import "NSString+FontAwesome.h"
+#import "UIFont+FontAwesome.h"
 
 // 底部区域的高度比(跟屏幕高度的比)
 static CGFloat const JFVDH_bottomBarHeightScale = 1/5.f;
@@ -23,7 +25,8 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
 // 渐变背景
 @property (nonatomic, strong) CAGradientLayer* gradientLayer;
 // 播放|暂停按钮图片
-@property (nonatomic, strong) UIImageView* playImageView;
+//@property (nonatomic, strong) UIImageView* playImageView;
+@property (nonatomic, strong) UIButton* btnPlay;
 // 退出按钮
 @property (nonatomic, strong) UIButton* cancelBtn;
 // 搓擦条
@@ -59,7 +62,7 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
     return [NSString stringWithFormat:@"%02ld:%02ld", min, sec];
 }
 
-- (void) clickedPlayImage:(UITapGestureRecognizer*)tapGes {
+- (void) clickedPlayImage:(id)event {
     if (self.didClickPlayPauseBtn) {
         self.didClickPlayPauseBtn();
     }
@@ -78,7 +81,7 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
     if (self) {
         [self.layer addSublayer:self.gradientLayer];
         [self addSubview:self.cancelBtn];
-        [self addSubview:self.playImageView];
+        [self addSubview:self.btnPlay];
         [self addSubview:self.curTimeLabel];
         [self addSubview:self.durationLabel];
         [self addSubview:self.slider];
@@ -86,7 +89,7 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
             make.left.mas_equalTo(JFScaleWidth6(15));
             make.centerY.equalTo(self.mas_top).offset(JFStatusBarHeight + JFNavigationBarHeight * 0.5);
         }];
-        [self.playImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.btnPlay mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.equalTo(self.mas_width).multipliedBy(1/6.f);
             make.centerX.centerY.mas_equalTo(0);
         }];
@@ -133,9 +136,11 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
 - (void)setState:(JFVideoPlayState)state {
     _state = state;
     if (state == JFVideoPlayStatePlaying) {
-        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePause];
+        [self.btnPlay setTitle:[NSString fontAwesomeIconStringForEnum:FAPause] forState:UIControlStateNormal];
+//        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePause];
     } else {
-        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
+        [self.btnPlay setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+//        self.playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
     }
 }
 - (void)setDidUpdateSlider:(void (^)(JFVideoSlider * _Nonnull))didUpdateSlider {
@@ -165,17 +170,36 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
     }
     return _gradientLayer;
 }
-- (UIImageView *)playImageView {
-    if (!_playImageView) {
-        _playImageView = [UIImageView new];
-        _playImageView.userInteractionEnabled = YES;
-        _playImageView.clipsToBounds = YES;
-        _playImageView.contentMode = UIViewContentModeScaleAspectFit;
-        _playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
-        [_playImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickedPlayImage:)]];
+- (UIButton *)btnPlay {
+    if (!_btnPlay) {
+        _btnPlay = [UIButton new];
+        [_btnPlay setTitle:[NSString fontAwesomeIconStringForEnum:FAPlay] forState:UIControlStateNormal];
+        [_btnPlay setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        _btnPlay.titleLabel.font = [UIFont fontAwesomeFontOfSize:40];
+        [_btnPlay addTarget:self action:@selector(clickedPlayImage:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _playImageView;
+    return _btnPlay;
 }
+//- (UILabel *)labPlay {
+//    if (!_labPlay) {
+//        _labPlay = [UILabel new];
+//        _labPlay.text = [NSString fontAwesomeIconStringForEnum:FAPlay];
+//        _labPlay.textColor = [UIColor whiteColor];
+//        _labPlay.font = [UIFont fontAwesomeFontOfSize:40];
+//    }
+//    return _labPlay;
+//}
+//- (UIImageView *)playImageView {
+//    if (!_playImageView) {
+//        _playImageView = [UIImageView new];
+//        _playImageView.userInteractionEnabled = YES;
+//        _playImageView.clipsToBounds = YES;
+//        _playImageView.contentMode = UIViewContentModeScaleAspectFit;
+//        _playImageView.image = [UIImage jf_kitImageWithName:JFVDH_imageNamePlay];
+//        [_playImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickedPlayImage:)]];
+//    }
+//    return _playImageView;
+//}
 - (UILabel *)curTimeLabel {
     if (!_curTimeLabel) {
         _curTimeLabel = [UILabel new];
@@ -205,7 +229,11 @@ static NSString* const JFVDH_imageNamePause = @"pause_white";
 - (UIButton *)cancelBtn {
     if (!_cancelBtn) {
         _cancelBtn = [UIButton new];
-        [_cancelBtn setImage:[UIImage jf_kitImageWithName:@"delete_fill"] forState:UIControlStateNormal];
+        [_cancelBtn setTitle:[NSString fontAwesomeIconStringForEnum:FATimes] forState:UIControlStateNormal];
+        [_cancelBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+        _cancelBtn.titleLabel.font = [UIFont fontAwesomeFontOfSize:32];
+
+//        [_cancelBtn setImage:[UIImage jf_kitImageWithName:@"delete_fill"] forState:UIControlStateNormal];
         [_cancelBtn addTarget:self action:@selector(clickedCancelBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _cancelBtn;

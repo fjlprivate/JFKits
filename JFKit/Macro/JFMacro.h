@@ -15,6 +15,8 @@
 #define JFSCREEN_BOUNDS         [UIScreen mainScreen].bounds
 #define JFSCREEN_WIDTH          [UIScreen mainScreen].bounds.size.width
 #define JFSCREEN_HEIGHT         [UIScreen mainScreen].bounds.size.height
+// 底部间距
+#define JFSCREEN_BOTTOM_INSET   JFSafeInsetBottom()
 
 #define JFSCREEN_SCALE          [UIScreen mainScreen].scale
 
@@ -25,9 +27,7 @@
 // 导航栏+状态栏高度
 #define JFNaviStatusBarHeight   (JFNavigationBarHeight+JFStatusBarHeight)
 // 下部切换部件高度
-#define JFTabBarHeight          self.tabBarController.tabBar.bounds.size.height
-// 全屏手机底部间隔
-#define JFSafeInsetBottom       34.f
+#define JFTabBarHeight          49.f
 
 // ******** [缩写] ********
 

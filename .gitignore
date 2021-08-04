@@ -1,3 +1,6 @@
 .DS_Store
-Build/
-DerivedData/
+**/.DS_Store
+JFKitDemo.xcworkspace
+Podfile.lock
+Pods
+JFKitDemo.xcodeproj/xcuserdata

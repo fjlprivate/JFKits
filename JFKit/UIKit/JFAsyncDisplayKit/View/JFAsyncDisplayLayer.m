@@ -31,6 +31,12 @@
     [self displayingAsynchronized:self.asynchronized];
 }
 
+// 取消当前绘制
+- (void) cancelDisplaying {
+    [self.asyncFlag incrementFlag];
+}
+
+
 // 是否异步绘制: YES[异步];NO[同步];
 - (void) displayingAsynchronized:(BOOL)asynchronized {
     [self.asyncFlag incrementFlag];

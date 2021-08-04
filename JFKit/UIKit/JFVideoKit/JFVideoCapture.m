@@ -13,6 +13,9 @@
 #import "JFVideoPathHelper.h"
 #import "JFVideoCaptureBtn.h"
 #import "UIImage+JFExtension.h"
+#import "NSString+FontAwesome.h"
+#import "UIFont+FontAwesome.h"
+#import "JFHelper.h"
 
 
 
@@ -32,7 +35,12 @@
 @property (nonatomic, strong) AVCaptureMovieFileOutput* movieFileOutput;
 
 // 倒计时;
-@property (nonatomic, weak) NSTimer* timer;
+@property (nonatomic, strong) CADisplayLink* timer;
+// 读秒
+@property (nonatomic, strong) UILabel* timeLabel;
+
+// 是否开始了记录拍摄数据到outer
+@property (nonatomic, assign) BOOL isStartRecording;
 
 // 采集按钮;
 @property (nonatomic, strong) JFVideoCaptureBtn* captureBtn;
@@ -61,7 +69,7 @@
 
 // 聚焦
 @property (nonatomic, assign) BOOL isFocus;
-@property (nonatomic, strong) UIImageView* focusCursor;
+@property (nonatomic, strong) UILabel* focusCursor;
 
 @property (nonatomic, strong) MASConstraint* revokeCenterXCostraint;
 @property (nonatomic, strong) MASConstraint* doneCenterXCostraint;
@@ -163,40 +171,44 @@
 // touch down :点下录制按钮
 - (IBAction) touchDownOnCaptureBtn:(id)sender {
     self.state = JFVideoCaptureStateExecuting;
+    self.isVideo = YES; // 默认是拍摄视频
     self.captureBtn.backgroundColor = [UIColor colorWithWhite:1 alpha:0.5];
 }
 // touch up outside: 停止
 - (IBAction) touchUpOutsideOnCaptureBtn:(id)sender {
     self.captureBtn.backgroundColor = [UIColor whiteColor];
-    if (self.state != JFVideoCaptureStateExecuting) {
-        return;
-    }
-    // 先停止计时;然后延时停止拍摄(视频就不用延时了)
-    [self stopTimer];
-    if (self.timeCount < self.startLimitTime) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.state = JFVideoCaptureStateCompressing;
-        });
-    } else {
-        self.state = JFVideoCaptureStateCompressing;
-    }
+    [self stopRecording];
 }
 // touch up inside: 停止
 - (IBAction) touchUpInsideOnCaptureBtn:(id)sender {
     self.captureBtn.backgroundColor = [UIColor whiteColor];
+    [self stopRecording];
+}
+
+- (void) stopRecording {
     if (self.state != JFVideoCaptureStateExecuting) {
         return;
     }
+
     // 先停止计时;然后延时停止拍摄(视频就不用延时了)
     [self stopTimer];
-    if (self.timeCount < self.startLimitTime) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.state = JFVideoCaptureStateCompressing;
-        });
-    } else {
+    
+    // 设置是视频or图片
+    self.isVideo = self.duration >= self.startLimitTime;
+    // 视频
+    if (self.isVideo) {
         self.state = JFVideoCaptureStateCompressing;
     }
+    // 图片
+    else {
+        // 已经开始了记录，则可以压缩了；否则等待开始记录
+        if (self.isStartRecording) {
+            self.state = JFVideoCaptureStateCompressing;
+        }
+    }
 }
+
+
 // 撤销
 - (IBAction) clickedRevokeBtn:(id)sender {
     // 删除原有的视频
@@ -214,11 +226,9 @@
         // 保存视频到相册
         [JFVideoPathHelper savingVideoIntoAlbumWithURL:self.videoCachedURL completionHandler:^(BOOL success, NSError *error) {
             // 保存完就回调出去
-            if (success) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [wself callBackWithSuccess];
-                });
-            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [wself callBackWithSuccess];
+            });
         }];
     } else {
         // 回调
@@ -228,10 +238,10 @@
 # pragma mark - 定时器
 // 启动定时器
 - (void) startTimer {
-    self.timeCount = 0;
-    NSTimer* timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(countingTimer) userInfo:nil repeats:YES];
+    self.duration = 0;
+    CADisplayLink* timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(countingTimer)];
+    [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
     self.timer = timer;
-    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 // 关闭定时器
 - (void) stopTimer {
@@ -242,11 +252,11 @@
 }
 // 计时
 - (void) countingTimer {
-    if (self.timeCount == self.captureDuration) {
+    if (self.duration == self.captureTimeLimit) {
         self.state = JFVideoCaptureStateCompressing;
         return;
     }
-    self.timeCount += 0.1;
+    self.duration += self.timer.duration;
 }
 
 # pragma mark - private
@@ -259,7 +269,7 @@
  */
 - (void) showHandleViews:(BOOL)show {
     if (show) {
-        self.captureBtn.hidden = YES;
+        self.timeLabel.hidden = self.captureBtn.hidden = YES;
         self.revokeBtn.hidden = NO;
         self.doneBtn.hidden = NO;
         [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
@@ -410,11 +420,6 @@
     }
 }
 
-//- (void)onHiddenFocusCurSorAction {
-//    self.focusCursor.alpha=0;
-//    self.isFocus = NO;
-//}
-
 // 设置聚焦光标位置
 -(void) setFocusCursorWithPoint:(CGPoint)point{
     if (!self.isFocus) {
@@ -429,7 +434,6 @@
                 self.focusCursor.alpha=0;
                 self.isFocus = NO;
             });
-//            [self performSelector:@selector(onHiddenFocusCurSorAction) withObject:nil afterDelay:0.5];
         }];
     }
 }
@@ -437,12 +441,25 @@
 
 # pragma mark - AVCaptureFileOutputRecordingDelegate
 
+//
+- (void)captureOutput:(AVCaptureFileOutput *)output didStartRecordingToOutputFileAtURL:(NSURL *)fileURL fromConnections:(NSArray<AVCaptureConnection *> *)connections {
+    self.isStartRecording = YES;
+    // 拍摄的是图片，进行压缩
+    if (!self.isVideo) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.state = JFVideoCaptureStateCompressing;
+        });
+    }
+}
+
 // 录制完毕
 - (void)                captureOutput:(AVCaptureFileOutput *)output
   didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
                       fromConnections:(NSArray<AVCaptureConnection *> *)connections
                                 error:(nullable NSError *)error
 {
+    self.isStartRecording = NO; // 重置
+
     if (error) {
         [self stopTimer];
         self.state = JFVideoCaptureStateWaiting;
@@ -495,7 +512,8 @@
     [self addObserver:self forKeyPath:@"state" options:NSKeyValueObservingOptionNew context:nil];
     _shouldSaveVideo = YES; // 默认保存视频到相册
     _shouldCompressVideo = YES; // 默认压缩视频
-    self.captureDuration = 60; // 默认60秒
+    self.captureTimeLimit = 60; // 默认60秒
+    self.shouldShowTiming = YES;
     _startLimitTime = 0.5;
     AVCaptureVideoPreviewLayer* avLayer = (AVCaptureVideoPreviewLayer*)self.layer;
     avLayer.session = self.captureSession;
@@ -511,9 +529,12 @@
     [self addSubview:self.doneBtn];
     [self addSubview:self.noteLabel];
     [self addSubview:self.focusCursor];
+    [self addSubview:self.timeLabel];
     
     self.revokeBtn.hidden = YES;
     self.doneBtn.hidden = YES;
+    self.revokeBtn.layer.cornerRadius = JFVideoRevokeBtnWidth * 0.5;
+    self.doneBtn.layer.cornerRadius = JFVideoDoneBtnWidth * 0.5;
     
     [self.takenImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(UIEdgeInsetsZero);
@@ -538,6 +559,9 @@
         make.centerX.mas_equalTo(0);
         make.bottom.equalTo(self.captureBtn.mas_top).offset(-15);
     }];
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self.captureBtn);
+    }];
     
     [self addGenstureRecognizer];
 }
@@ -548,16 +572,13 @@
 }
 
 # pragma mark - setter
-- (void)setCaptureDuration:(NSInteger)captureDuration {
-    _captureDuration = captureDuration;
-}
-- (void)setTimeCount:(CGFloat)timeCount {
-    _timeCount = timeCount;
-    if (timeCount < 0.01 || timeCount >= self.startLimitTime) {
-        self.captureBtn.progress = (CGFloat)timeCount/(CGFloat)self.captureDuration;
+- (void)setDuration:(CGFloat)duration {
+    _duration = duration;
+    if (duration < 0.01 || duration >= self.startLimitTime) {
+        self.captureBtn.progress = (CGFloat)duration/(CGFloat)self.captureTimeLimit;
     }
-    // 设置是视频|图片
-    self.isVideo = timeCount > self.startLimitTime;
+    self.timeLabel.text = [NSString stringWithFormat:@"%.1lfs", duration];
+    self.timeLabel.hidden = !(self.shouldShowTiming && duration >= self.startLimitTime);
 }
 
 # pragma mark - getter
@@ -616,6 +637,13 @@
         [_captureBtn addTarget:self action:@selector(touchDownOnCaptureBtn:) forControlEvents:UIControlEventTouchDown];
         [_captureBtn addTarget:self action:@selector(touchUpInsideOnCaptureBtn:) forControlEvents:UIControlEventTouchUpInside];
         [_captureBtn addTarget:self action:@selector(touchUpOutsideOnCaptureBtn:) forControlEvents:UIControlEventTouchUpOutside];
+        _captureBtn.layer.shadowColor = JFRGBAColor(0xf0f0f0, 1).CGColor;
+        _captureBtn.layer.shadowOpacity = 1;
+        _captureBtn.layer.shadowOffset = CGSizeMake(0, 0);
+        _captureBtn.layer.shadowRadius = 4;
+        _captureBtn.progressWidth = 8;
+        _captureBtn.progressTintColor = JFRGBAColor(JFColorCuiLv, 1);
+
     }
     return _captureBtn;
 }
@@ -623,16 +651,26 @@
 - (UIButton *)revokeBtn {
     if (!_revokeBtn) {
         _revokeBtn = [UIButton new];
-        [_revokeBtn setImage:[UIImage jf_kitImageWithName:JFVideoImageNameRevoke] forState:UIControlStateNormal];
+        [_revokeBtn setTitle:[NSString fontAwesomeIconStringForEnum:FAReply] forState:UIControlStateNormal];
+        [_revokeBtn setTitleColor:JFRGBAColor(0xffffff, 1) forState:UIControlStateNormal];
+        [_revokeBtn setTitleColor:JFRGBAColor(0xffffff, 0.5) forState:UIControlStateHighlighted];
+        _revokeBtn.titleLabel.font = [UIFont fontAwesomeFontOfSize:24];
         [_revokeBtn addTarget:self action:@selector(clickedRevokeBtn:) forControlEvents:UIControlEventTouchUpInside];
+        _revokeBtn.layer.masksToBounds = YES;
+        _revokeBtn.backgroundColor = JFRGBAColor(0, 0.1);
     }
     return _revokeBtn;
 }
 - (UIButton *)doneBtn {
     if (!_doneBtn) {
         _doneBtn = [UIButton new];
-        [_doneBtn setImage:[UIImage jf_kitImageWithName:JFVideoImageNameDoneBlue] forState:UIControlStateNormal];
+        [_doneBtn setTitle:[NSString fontAwesomeIconStringForEnum:FACheck] forState:UIControlStateNormal];
+        [_doneBtn setTitleColor:JFRGBAColor(0xffffff, 1) forState:UIControlStateNormal];
+        [_doneBtn setTitleColor:JFRGBAColor(0xffffff, 0.5) forState:UIControlStateHighlighted];
+        _doneBtn.titleLabel.font = [UIFont fontAwesomeFontOfSize:24];
         [_doneBtn addTarget:self action:@selector(clickedDoneBtn:) forControlEvents:UIControlEventTouchUpInside];
+        _doneBtn.layer.masksToBounds = YES;
+        _doneBtn.backgroundColor = JFRGBAColor(0, 0.1);
     }
     return _doneBtn;
 }
@@ -686,14 +724,25 @@
     }
     return _videoPalyerLayer;
 }
-- (UIImageView *)focusCursor {
+- (UILabel *)focusCursor {
     if (!_focusCursor) {
-        _focusCursor = [[UIImageView alloc] initWithImage:[UIImage jf_kitImageWithName:@"icon_capture_focus"]];
-        _focusCursor.contentMode = UIViewContentModeScaleAspectFit;
+        _focusCursor = [UILabel new];
+        _focusCursor.text = [NSString fontAwesomeIconStringForEnum:FAcircleThin];
+        _focusCursor.textColor = JFRGBAColor(JFColorHuangLiLiu, 0.5);
+        _focusCursor.font = [UIFont fontAwesomeFontOfSize:50];
         _focusCursor.alpha = 0;
         _focusCursor.bounds = CGRectMake(0, 0, 64, 64);
     }
     return _focusCursor;
+}
+- (UILabel *)timeLabel {
+    if (!_timeLabel) {
+        _timeLabel = [UILabel new];
+        _timeLabel.font = [UIFont boldSystemFontOfSize:18];
+        _timeLabel.textAlignment = NSTextAlignmentCenter;
+        _timeLabel.textColor = self.captureBtn.progressTintColor;
+    }
+    return _timeLabel;
 }
 
 @end

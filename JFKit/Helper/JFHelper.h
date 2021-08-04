@@ -344,10 +344,15 @@ static inline UIViewController* JFCurrentViewController(void) {
     return topVC;
 }
 
+// 判断是否iphonex
+static inline BOOL JFIsIphoneX() {
+    return JFIphoneType_V() == JFIPhoneVX;
+}
+
 // 获取iphoneX下边的边距
-static inline CGFloat JFScreenSafeBottom(void) {
-    if (@available(iOS 11, *)) {
-        return [UIApplication sharedApplication].keyWindow.safeAreaInsets.bottom;
+static inline CGFloat JFSafeInsetBottom(void) {
+    if (JFIsIphoneX()) {
+        return 34;
     } else {
         return 0;
     }

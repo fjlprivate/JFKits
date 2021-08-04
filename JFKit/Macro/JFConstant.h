@@ -54,6 +54,26 @@ typedef NS_ENUM(NSInteger, JFVideoPlayState) {
     JFVideoPlayStateFailed              = 5,        // 播放失败
 };
 
+// 古典色
+typedef NS_ENUM(NSInteger, JFColor) {
+    JFColorShiLv         = 0x206864,   // 石绿
+    JFColorCuiLv         = 0x02786a,   // 翠绿
+    JFColorZhuShaHong    = 0xeb4b17,   // 朱砂红
+    JFColorHuangLiLiu    = 0xfec85e,   // 黄栗留
+    JFColorQieLan        = 0x88abda,   // 窃蓝
+    JFColorEHuang        = 0xf2c867,   // 鹅黄
+    JFColorCangJia       = 0xa8bf8f,   // 苍葭
+    JFColorYanWei        = 0x4a4b9d,   // 延维
+    JFColorQingMing      = 0x3271ae,   // 青冥
+    JFColorShiYangJin    = 0xf8c6b5,   // 十样锦
+    JFColorYangFei       = 0xf091a0,   // 杨妃
+    JFColorCangLang      = 0x99bcac,   // 苍莨
+    JFColorZhiZi         = 0xfac015,   // 栀子
+    JFColorDanLi         = 0xe60012,   // 丹蘮
+    JFColorRuMengLing    = 0xddbb99,   // 如梦令
+    JFColorQingDai       = 0x45465e,   // 青黛
+};
+
 
 
 // 判断是否退出的block
