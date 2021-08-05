@@ -16,6 +16,10 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "9.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
   spec.source_files = "JFKit/**/*"
+  spec.resource_bundles = {
+   'JFKits' => ['JFKit/**/*.otf']
+  }
+
 
   spec.requires_arc = true
 
