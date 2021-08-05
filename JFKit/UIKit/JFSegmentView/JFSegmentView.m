@@ -9,7 +9,7 @@
 #import "JFSegmentView.h"
 #import "JFHelper.h"
 #import "UIView+Extension.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 
 @interface JFSegmentView()
 @property (nonatomic, strong) NSArray<NSString*>* items;

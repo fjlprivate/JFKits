@@ -6,7 +6,7 @@
 //
 
 #import "DecorationHeaderView.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 
 @implementation DecorationHeaderView
 - (instancetype)initWithFrame:(CGRect)frame {

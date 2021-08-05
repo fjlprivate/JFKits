@@ -7,7 +7,7 @@
 //
 
 #import "JFAlertView.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 #import <objc/runtime.h>
 #import "JFHelper.h"
 

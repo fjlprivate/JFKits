@@ -11,7 +11,7 @@
 #import "SDWebImageDownloader.h"
 #import "YYWebImage.h"
 #import "JFHelper.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 
 @implementation JFZoomImageView
 

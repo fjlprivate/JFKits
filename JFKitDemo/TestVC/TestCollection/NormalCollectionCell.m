@@ -6,7 +6,7 @@
 //
 
 #import "NormalCollectionCell.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 
 @implementation NormalCollectionCell
 

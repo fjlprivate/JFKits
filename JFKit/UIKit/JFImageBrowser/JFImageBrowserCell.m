@@ -7,7 +7,7 @@
 //
 
 #import "JFImageBrowserCell.h"
-#import <Masonry.h>
+#import <Masonry/Masonry.h>
 
 @implementation JFImageBrowserCell
 - (instancetype)initWithFrame:(CGRect)frame {
