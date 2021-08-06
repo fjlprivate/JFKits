@@ -44,7 +44,7 @@ Pod::Spec.new do |spec|
   end
 
   spec.subspec 'Component' do |component| 
-    component.source_files = 'JFKit/Component/*.{h,m}'
+    component.source_files = 'JFKit/Component/FontAwesome/*.{h,m}','JFKit/Component/JFAsyncFlag/*.{h,m}','JFKit/Component/JFImageDownloader/*.{h,m}','JFKit/Component/ShortMediaCache/*.{h,m}'
   end
 
   spec.subspec 'Category' do |category| 
