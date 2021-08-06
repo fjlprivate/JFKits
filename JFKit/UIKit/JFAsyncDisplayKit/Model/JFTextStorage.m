@@ -8,6 +8,7 @@
 
 #import "JFTextStorage.h"
 #import "NSMutableAttributedString+Extension.h"
+#import "NSMutableAttributedString+JFAsyncDiaplayKit.h"
 #import "JFHelper.h"
 
 @interface JFTextStorage()

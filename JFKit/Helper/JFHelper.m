@@ -9,7 +9,6 @@
 #import "JFHelper.h"
 #import <Photos/Photos.h>
 #import "SDWebImage.h"
-#import "NSError+Extension.h"
 
 @implementation JFHelper
 
@@ -48,7 +47,7 @@
     if (image == nil) {
         if (finishedBlock) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                finishedBlock([NSError jf_errorWithCode:99 localizedDescription:@"要保存的图片为空"]);
+                finishedBlock([NSError errorWithDomain:@"" code:99 userInfo:@{NSLocalizedDescriptionKey:@"要保存的图片为空"}]);
             });
         }
         return;
@@ -73,7 +72,7 @@
                 else {
                     if (finishedBlock) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            finishedBlock([NSError jf_errorWithCode:99 localizedDescription:@"保存失败"]);
+                            finishedBlock([NSError errorWithDomain:@"" code:99 userInfo:@{NSLocalizedDescriptionKey:@"保存失败"}]);
                         });
                     }
                 }
@@ -89,7 +88,7 @@
                 else if (error) {
                     if (finishedBlock) {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            finishedBlock([NSError jf_errorWithCode:99 localizedDescription:@"下载图片失败"]);
+                            finishedBlock([NSError errorWithDomain:@"" code:99 userInfo:@{NSLocalizedDescriptionKey:@"下载图片失败"}]);
                         });
                     }
                 }

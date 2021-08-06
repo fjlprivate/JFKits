@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "JFKits"
-  s.version      = "0.1.3.10"
+  s.version      = "0.1.3.11"
   s.summary      = "我的工具集"
   s.homepage     = "https://github.com/fjlprivate/JFKits.git"
   s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -37,7 +37,6 @@ Pod::Spec.new do |s|
     ss.public_header_files = 'JFKit/Helper/**/*.h'
 
     ss.dependency 'JFKits/Macro'
-    ss.dependency 'JFKits/Category'
     ss.dependency 'SDWebImage'
   end
 
@@ -48,7 +47,6 @@ Pod::Spec.new do |s|
 
     ss.dependency 'JFKits/Helper'
     ss.dependency 'JFKits/Macro'
-    ss.dependency 'JFKits/UIKit'
   end
 
   s.subspec 'Component' do |ss| 

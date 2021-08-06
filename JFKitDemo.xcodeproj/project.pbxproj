@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		084C227426BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 084C227326BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.m */; };
 		6144E179E7ACB4B58960116E /* libPods-JFKitDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E653BA76FE9CAB8568AC4DC7 /* libPods-JFKitDemo.a */; };
 		7A0D89AC23347E900070FDBC /* NSString+JFFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D890D23347E900070FDBC /* NSString+JFFormat.m */; };
 		7A0D89AD23347E900070FDBC /* NSString+JFRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A0D890F23347E900070FDBC /* NSString+JFRegex.m */; };
@@ -122,6 +123,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		084C227226BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+JFAsyncDiaplayKit.h"; sourceTree = "<group>"; };
+		084C227326BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+JFAsyncDiaplayKit.m"; sourceTree = "<group>"; };
 		7A0D890C23347E900070FDBC /* NSData+ImageFormat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageFormat.h"; sourceTree = "<group>"; };
 		7A0D890D23347E900070FDBC /* NSString+JFFormat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+JFFormat.m"; sourceTree = "<group>"; };
 		7A0D890E23347E900070FDBC /* CALayer+JFExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+JFExtension.h"; sourceTree = "<group>"; };
@@ -364,6 +367,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		084C227126BD2F500025AE2C /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				084C227226BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.h */,
+				084C227326BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		3A7F9A0C6BD43973C924E9DC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -520,6 +532,7 @@
 			isa = PBXGroup;
 			children = (
 				7A0D895723347E900070FDBC /* JFAsyncDisplayKit.h */,
+				084C227126BD2F500025AE2C /* Category */,
 				7A0D895823347E900070FDBC /* Model */,
 				7A0D896923347E900070FDBC /* View */,
 			);
@@ -1216,6 +1229,7 @@
 				7A0D89BB23347E900070FDBC /* UIImageView+JFExtention.m in Sources */,
 				7A0D89C623347E900070FDBC /* JFImageBrowserViewController.m in Sources */,
 				7A1F7E19247A0CDE00647C95 /* TestSegmentVC.m in Sources */,
+				084C227426BD2F800025AE2C /* NSMutableAttributedString+JFAsyncDiaplayKit.m in Sources */,
 				7A0D89CD23347E900070FDBC /* JFButton.m in Sources */,
 				7A0D89D323347E900070FDBC /* JFTextLine.m in Sources */,
 			);
