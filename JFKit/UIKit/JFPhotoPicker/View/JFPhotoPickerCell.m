@@ -11,7 +11,6 @@
 #import "JFButton.h"
 #import "Masonry.h"
 #import "JFPhotoPickerModel.h"
-#import "JFKit.h"
 
 @interface JFPhotoPickerCell()
 

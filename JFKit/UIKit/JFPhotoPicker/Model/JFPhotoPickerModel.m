@@ -7,7 +7,8 @@
 //
 
 #import "JFPhotoPickerModel.h"
-#import "JFKit.h"
+#import <UIKit/UIKit.h>
+#import "JFMacro.h"
 
 @implementation JFPhotoPickerModel
 

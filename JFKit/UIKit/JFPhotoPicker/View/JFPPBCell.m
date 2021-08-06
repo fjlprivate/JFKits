@@ -13,7 +13,7 @@
 #import "JFPhotoPickerViewModel.h"
 #import "JFZoomImageView.h"
 #import "JFVideoDisplay.h"
-#import "JFKit.h"
+#import "UIImage+JFExtension.h"
 
 @interface JFPPBCell() <UIGestureRecognizerDelegate>
 @property (nonatomic, strong) JFZoomImageView* imageView;
