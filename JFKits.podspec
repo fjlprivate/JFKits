@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |spec|
   spec.name         = "JFKits"
-  spec.version      = "0.1.3.6"
+  spec.version      = "0.1.3.7"
   spec.summary      = "我的工具集"
   spec.homepage     = "https://github.com/fjlprivate/JFKits.git"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
@@ -33,22 +33,32 @@ Pod::Spec.new do |spec|
 
   spec.subspec 'UIKit' do |uikit|
     uikit.source_files = 'JFKit/UIKit/JFPresenter/*.{h,m}','JFKit/UIKit/JFSegmentView/*.{h,m}','JFKit/UIKit/JFAlertView/*.{h,m}','JFKit/UIKit/JFVideoKit/*.{h,m}','JFKit/UIKit/JFImageBrowser/*.{h,m}','JFKit/UIKit/JFBanner/*.{h,m}','JFKit/UIKit/JFCycleImageView/*.{h,m}','JFKit/UIKit/JFButton/*.{h,m}','JFKit/UIKit/JFAsyncDisplayKit/**/*.{h,m}','JFKit/UIKit/JFPhotoPicker/**/*.{h,m}','JFKit/UIKit/JFPageView/**/*.{h,m}'
+    uikit.dependency 'JFKits/Component'
+    uikit.dependency 'JFKits/Helper'
+    uikit.dependency 'JFKits/Category'
+    uikit.dependency 'JFKits/Macro'
   end
 
   spec.subspec 'Macro' do |macro|
-    macro.source_files = 'JFKit/Macro/*.{h,m}'
+    macro.source_files = 'JFKit/Macro/*.h'
   end
 
   spec.subspec 'Helper' do |helper| 
     helper.source_files = 'JFKit/Helper/*.{h,m}'
+    helper.dependency 'JFKits/Macro'
+    helper.dependency 'JFKits/Category'
   end
 
   spec.subspec 'Component' do |component| 
     component.source_files = 'JFKit/Component/FontAwesome/*.{h,m}','JFKit/Component/JFAsyncFlag/*.{h,m}','JFKit/Component/JFImageDownloader/*.{h,m}','JFKit/Component/ShortMediaCache/*.{h,m}'
+    component.dependency 'JFKits/Category'
   end
 
   spec.subspec 'Category' do |category| 
     category.source_files = 'JFKit/Category/*.{h,m}'
+    category.dependency 'JFKits/Helper'
+    category.dependency 'JFKits/Macro'
+    category.dependency 'JFKits/UIKit'
   end
 
 
