@@ -19,7 +19,7 @@ Pod::Spec.new do |spec|
   spec.source_files = 'JFKit/Macro/*.{h,m}', 'JFKit/UIKit/*.{h,m}', 'JFKit/Helper/*.{h,m}', 'JFKit/Category/*.{h,m}', 'JFKit/Component/*.{h,m}'
 
   spec.resource_bundles = {
-   'FontAwesome' => ['JFKit/Component/FontAwesome.otf']
+   'FontAwesome' => ['JFKit/Component/FontAwesome/FontAwesome.otf']
   }
 
 
