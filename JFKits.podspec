@@ -8,16 +8,18 @@
 
 Pod::Spec.new do |spec|
   spec.name         = "JFKits"
-  spec.version      = "0.1.3.1"
+  spec.version      = "0.1.3.2"
   spec.summary      = "我的工具集"
   spec.homepage     = "https://github.com/fjlprivate/JFKits.git"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "fjlprivate" => "869325397@qq.com" }
   spec.platform     = :ios, "9.0"
   spec.source       = { :git => "https://github.com/fjlprivate/JFKits.git", :tag => "#{spec.version}" }
-  spec.source_files = "JFKit/**/*"
+  # spec.source_files = "JFKit/**/*"
+  spec.source_files = 'JFKit/Macro/*.{h,m}', 'JFKit/UIKit/*.{h,m}', 'JFKit/Helper/*.{h,m}', 'JFKit/Category/*.{h,m}', 'JFKit/Component/*.{h,m}'
+
   spec.resource_bundles = {
-   'JFKits' => ['JFKit/**/*.otf']
+   'FontAwesome' => ['JFKit/Component/FontAwesome.otf']
   }
 
 
