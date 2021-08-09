@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "JFKits"
-  s.version      = "0.1.3.12"
+  s.version      = "0.1.3.13"
   s.summary      = "我的工具集"
   s.homepage     = "https://github.com/fjlprivate/JFKits.git"
   s.license      = { :type => "MIT", :file => "LICENSE" }
@@ -18,9 +18,11 @@ Pod::Spec.new do |s|
   s.source_files =  'JFKit/JFKit.h'
   s.public_header_files = 'JFKit/JFKit.h'
 
-  s.resource_bundles = {
-   'FontAwesome' => ['JFKit/Component/FontAwesome/FontAwesome.otf']
-  }
+  # 这样加载的 FontAwesome.otf 不在根目录，无法加载
+  # s.resource_bundles = {
+  #  'FontAwesome' => ['JFKit/Component/FontAwesome/FontAwesome.otf']
+  # }
+  s.resource = 'JFKit/**/FontAwesome.otf'
 
 
   s.requires_arc = true
