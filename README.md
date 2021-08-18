@@ -1,8 +1,56 @@
-# '异步图文混排框架' ： JFAsyncDisplayKit
+# FontAwesome
+
+* 如需使用FontAwesome，请将下面脚本内容添加到Podfile末尾，用于添加FontAwesome.otf资源文件: 
+
+```
+require 'xcodeproj'
+post_install do |installer|
+
+  project = installer.aggregate_targets.first.user_project
+
+  projectTarget = project.targets.first
+
+  # 添加文件引用到 build phase
+  existsJFCustomScript = false
+  projectTarget.build_phases.each { |p|
+    # 将文件添加到主工程的  ResourcesBuildPhase
+    if p.isa == 'PBXResourcesBuildPhase' then
+      existsF = p.files.find { |ff| ff.display_name == 'FontAwesome.otf'}
+      if existsF == nil
+        fontawesomeRef = project.main_group.new_reference('Pods/JFKits/JFKit/Component/FontAwesome/FontAwesome.otf')
+        p.add_file_reference(fontawesomeRef)
+      end
+    end
+    if p.display_name == 'JFCustom Script' then
+      existsJFCustomScript = true
+    end
+  }
+  project.save
+
+  # 在Info.plist中添加FontAwesome字体
+  if existsJFCustomScript == false then
+    phase = projectTarget.new_shell_script_build_phase("JFCustom Script")
+    phase.shell_script = "
+      arr=`/usr/libexec/PlistBuddy -c \'Print :UIAppFonts\' #{projectTarget}/Info.plist`
+      if [[ \"${arr[@]}\" =~ \"FontAwesome.otf\" ]]; then
+        echo '有FontAwesome'
+      else
+        /usr/libexec/PlistBuddy -c \'Add :UIAppFonts array\' #{projectTarget}/Info.plist
+        /usr/libexec/PlistBuddy -c \'Add :UIAppFonts: string FontAwesome.otf\' #{projectTarget}/Info.plist
+      fi
+    "
+    projectTarget.build_configurations.each { |config|
+    }
+  end
+end
+```
+
+
+#  异步图文混排框架 :: `JFAsyncDisplayKit`
+
 
 ![image](https://github.com/fjlprivate/JFKits/blob/master/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20-%202019-11-29%20at%2017.34.22.png)
 
-## 用法
 
 * 创建视图:JFAsyncView
 
